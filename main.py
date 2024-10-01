@@ -14,7 +14,6 @@ from utils_functions import *
 from problems.graphs.cbo1 import CBO1
 
 from arguments import get_args
-
 import matplotlib.pyplot as plt
 from C_ParetoSelect import Causal_ParetoSelect
 
