@@ -12,7 +12,6 @@ import itertools
 import time 
 
 from utils_functions import *
-
 from problems.common import build_problem, generate_initial_samples, get_cbo_options
 from mobo.algorithms import get_algorithm
 from visualization.data_export import DataExport
