@@ -12,7 +12,7 @@ def get_do_function_name(intervention_variables):
 
 
 def update_all_do_functions(graph, exploration_set, functions, dict_interventions, observational_samples, x_dict_mean, x_dict_var):
-
+    print(dict_interventions)
     mean_functions_list = []
     var_functions_list = []
 

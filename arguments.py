@@ -16,6 +16,8 @@ def get_general_args(args=None):
 
     parser.add_argument('--problem', type=str, default='cbo1', 
         help='optimization problem')
+    parser.add_argument('--exp-set', type=str, default='mis', choices=['mis', 'pomis', 'mobo'], 
+        help='exploration set')
     parser.add_argument('--n-var', type=int, default=2, 
         help='number of design variables')
     parser.add_argument('--n-obj', type=int, default=2, 
@@ -30,19 +32,19 @@ def get_general_args(args=None):
         help='reference point for calculating hypervolume')
     parser.add_argument('--batch-size', type=int, default=10, 
         help='size of the selected batch in one iteration')
-    parser.add_argument('--mode', type=str, default='optimal', choices=['causal_prior', 'int_data', 'optimal'], 
+    parser.add_argument('--mode', type=str, default='causal_prior', choices=['causal_prior', 'int_data', 'optimal'], 
         help='which samples to do the initial iteration with')
 
     parser.add_argument('--seed', type=int, default=0, 
         help='random seed')
+    parser.add_argument('--seeds', type=list, default=range(10), 
+        help='random seeds')
     parser.add_argument('--n-seed', type=int, default=1,
         help='number of random seeds / test runs')
 
-    parser.add_argument('--algo', type=str, default='dgemo',
+    parser.add_argument('--algo', type=str, default='cps',
         help='type of algorithm to use with some predefined arguments, or custom arguments')
 
-    parser.add_argument('--subfolder', type=str, default='default',
-        help='subfolder name for storing results, directly store under result/ as default')
     parser.add_argument('--exp-name', type=str, default=None,
         help='custom experiment name to distinguish between experiments on same problem and same algorithm')
     parser.add_argument('--log-to-file', default=False, action='store_true',
@@ -141,7 +143,7 @@ def get_selection_args(args=None):
     '''
     parser = ArgumentParser()
 
-    parser.add_argument('--selection', type=str, default='dgemo', 
+    parser.add_argument('--selection', type=str, default='cps', 
         help='type of selection method for new batch')
     parser.add_argument('--batch-size', type=int, default=10, 
         help='size of the selected batch in one iteration')

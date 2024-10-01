@@ -27,7 +27,7 @@ class CBO1(GraphStructure):
         self.Z2 = np.asarray(observational_samples['Z2'])[:,np.newaxis]
         self.Y1 = np.asarray(observational_samples['Y1'])[:,np.newaxis]
         self.Y2 = np.asarray(observational_samples['Y2'])[:,np.newaxis]
-
+        self.control_node = np.asarray(observational_samples['control'])[:,np.newaxis]
 
     def define_SEM(self):
 
@@ -36,6 +36,11 @@ class CBO1(GraphStructure):
         
         def fx2(epsilon, **kwargs):
           return epsilon[1]
+
+        # This is just a buffer, so the code works for intervention sets of length one
+        # Note that this does not influence any other variables (i.e. it is parent and childless)
+        def f_control(epsilon, **kwargs):
+          return epsilon[2]
         
         def fz1(epsilon, X1, X2, **kwargs):
           return ((X1-X2)/2)**3
@@ -56,6 +61,7 @@ class CBO1(GraphStructure):
           ('Z2', fz2),
           ('Y1', fy1),
           ('Y2', fy2),
+          ('control', f_control)
         ])
 
         return graph
@@ -65,13 +71,20 @@ class CBO1(GraphStructure):
         return ['Y1', 'Y2'] 
     
 
-    def get_sets(self):
-      MIS = [['X1', 'X2'], ['Z1','Z2']]
+    def get_exploration_sets(self):
+      MIS = [['X1','control'], ['X2','control'], ['Z1', 'control'], ['Z2', 'control'], ['X1', 'X2'], ['Z1','Z2']]
+      POMIS = [['Z1','Z2']]
       manipulative_variables = ['X1', 'X2', 'Z1', 'Z2']
-      return MIS, manipulative_variables
+
+      exploration_sets = {
+         'mis': MIS,
+         'pomis': POMIS,
+         'mobo': manipulative_variables
+      }
+      return exploration_sets
     
 
-    def get_set_BO(self):
+    def get_set_MOBO(self):
       manipulative_variables = ['X1', 'X2', 'Z1', 'Z2']
       return manipulative_variables
     
@@ -83,17 +96,22 @@ class CBO1(GraphStructure):
       min_intervention_z = -1
       max_intervention_z = 2
 
+      min_control = -0.5
+      max_control = 0.5
+
       dict_ranges = OrderedDict ([
           ('X1', [min_intervention_x, max_intervention_x]),
           ('X2', [min_intervention_x, max_intervention_x]),
           ('Z1', [min_intervention_z, max_intervention_z]),
-          ('Z2', [min_intervention_z, max_intervention_z])
+          ('Z2', [min_intervention_z, max_intervention_z]),
+          ('control', [min_control, max_control])
         ])
       
       return dict_ranges
     
 
     def fit_all_models(self):
+        # Required Models for do-calculus functions
 
         functions = {}
         inputs_list = [ 
@@ -120,7 +138,7 @@ class CBO1(GraphStructure):
                           [1.,1.,1., False], [1.,1.,1., False], [1.,1.,1., False], [1.,1.,1., False], [1.,1.,1., False], [1.,1.,1., False]
                         ]
         
-        ## Fit all conditional models
+        ## Fit all models
         for j in range(len(output_list)):
             for k in range(len(inputs_list[j])): 
                   X = inputs_list[j][k]
@@ -134,6 +152,9 @@ class CBO1(GraphStructure):
   
 
     def refit_models(self, observational_samples):
+        # Required Models for do-calculus functions
+        # Refit the models with the new observational data
+
         X1 = np.asarray(observational_samples['X1'])[:,np.newaxis]
         X2 = np.asarray(observational_samples['X2'])[:,np.newaxis]
         Z1 = np.asarray(observational_samples['Z1'])[:,np.newaxis]
@@ -162,7 +183,7 @@ class CBO1(GraphStructure):
                       ]      
         parameter_list = [1.,1.,1., False]
         
-        ## Fit all conditional models
+        ## Fit all models
         for j in range(len(output_list)):
             for k in range(len(inputs_list[j])): 
                   X = inputs_list[j][k]
@@ -175,11 +196,11 @@ class CBO1(GraphStructure):
 
     def get_all_do(self):
         do_dict = {}
-        do_dict['compute_do_X1'] = compute_do_X1
-        do_dict['compute_do_X2'] = compute_do_X2
+        do_dict['compute_do_X1control'] = compute_do_X1
+        do_dict['compute_do_X2control'] = compute_do_X2
         do_dict['compute_do_X1X2'] = compute_do_X1X2
-        do_dict['compute_do_Z1'] = compute_do_Z1
-        do_dict['compute_do_Z2'] = compute_do_Z2
+        do_dict['compute_do_Z1control'] = compute_do_Z1
+        do_dict['compute_do_Z2control'] = compute_do_Z2
         do_dict['compute_do_Z1Z2'] = compute_do_Z1Z2
         return do_dict
   

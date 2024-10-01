@@ -33,11 +33,11 @@ def get_solver(name):
 
 
 def get_selection(name):
-    from .selection import DGEMOSelect
+    from .selection import CPS_Select
 
-    selection = {'dgemo': DGEMOSelect}
+    selection = {'cps': CPS_Select}
 
-    selection['default'] = DGEMOSelect
+    selection['default'] = CPS_Select
 
     return selection[name]
 

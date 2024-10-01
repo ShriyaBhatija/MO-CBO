@@ -4,15 +4,15 @@ from .mobo import MOBO
 High-level algorithm specifications by providing config
 '''
 
-class DGEMO(MOBO):
+class Causal_ParetoSelect(MOBO):
     '''
-    DGEMO
+    Causal ParetoSelect (CPS)
     '''
     config = {
         'surrogate': 'gp',
         'acquisition': 'identity',
         'solver': 'discovery',
-        'selection': 'dgemo',
+        'selection': 'cps',
     }
 
 
@@ -33,7 +33,7 @@ def get_algorithm(name):
     Get class of algorithm by name
     '''
     algo = {
-        'dgemo': DGEMO,
+        'cps': Causal_ParetoSelect,
         'custom': Custom,
     }
     return algo[name]

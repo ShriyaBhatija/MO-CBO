@@ -1,22 +1,22 @@
 import os
-import pandas as pd
 
 
 def get_intervention_set_name(intervention_variables):
     string = ''
     for i in range(len(intervention_variables)):
-        string += str(intervention_variables[i]) 
+        if str(intervention_variables[i]) != 'control':
+            string += str(intervention_variables[i]) 
     return string
 
 
 def get_result_dir(args):
     '''
-    Get directory of result location (result/problem/subfolder/algo/seed/)
+    Get directory of result location (result/problem/algo/seed/)
     '''
-    top_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'result')
+    top_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'result')
     exp_name = '' if args.exp_name is None else '-' + args.exp_name
     algo_name = args.algo + exp_name
-    result_dir = os.path.join(top_dir, args.problem, args.subfolder, algo_name, str(args.seed))
+    result_dir = os.path.join(top_dir, args.problem, algo_name, args.mode, args.exp_set, str(args.seed))
     os.makedirs(result_dir, exist_ok=True)
     return result_dir
 
@@ -26,8 +26,22 @@ def get_problem_dir(args):
     Get problem directory under result directory
     '''
     result_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'result')
-    problem_dir = os.path.join(result_dir, args.problem, args.subfolder)
+    problem_dir = os.path.join(result_dir, args.problem)
     return problem_dir
+
+def get_intervention_sets(args):
+    '''
+    Get names of all intervention sets under the specified directory
+    '''
+    
+    result_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'result')
+    problem_dir = os.path.join(result_dir, args.problem)
+
+    directory_path = f'{problem_dir}/{args.algo}/{args.mode}/{args.exp_set}/{args.seed}/'
+    all_contents = os.listdir(directory_path)
+
+    get_intervention_sets = [name for name in all_contents if os.path.isdir(os.path.join(directory_path, name))]
+    return get_intervention_sets
 
 
 def get_problem_names():

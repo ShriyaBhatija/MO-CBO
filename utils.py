@@ -1,7 +1,36 @@
 import os, sys
 import yaml
+import pandas as pd
 
-from visualization.utils import get_result_dir
+
+
+def get_intervention_set_name(intervention_variables):
+    string = ''
+    for i in range(len(intervention_variables)):
+        if str(intervention_variables[i]) != 'control':
+            string += str(intervention_variables[i]) 
+    return string
+
+
+def get_result_dir(args):
+    '''
+    Get directory of result location (result/problem/algo/seed/)
+    '''
+    top_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'result')
+    exp_name = '' if args.exp_name is None else '-' + args.exp_name
+    algo_name = args.algo + exp_name
+    result_dir = os.path.join(top_dir, args.problem, algo_name, args.mode, args.exp_set, str(args.seed))
+    os.makedirs(result_dir, exist_ok=True)
+    return result_dir
+
+
+def save_experiment_log(args, experiment_log):
+    '''
+    Get directory of result location (result/problem/algo/seed/)
+    '''
+    experiment_log = pd.DataFrame(experiment_log)
+    filepath = os.path.join(get_result_dir(args), 'experiment_log.csv')
+    experiment_log.to_csv(filepath, index=False)
 
 
 def save_args(general_args, framework_args):

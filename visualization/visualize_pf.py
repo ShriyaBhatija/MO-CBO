@@ -15,6 +15,7 @@ def main():
     args = get_vis_args()
     problem_dir = get_problem_dir(args)
     algo_names = get_algo_names(args)
+    algo_names = ['cps']
 
     n_algo = len(algo_names)
     has_family = args.family
@@ -23,7 +24,7 @@ def main():
     # read result csvs
     data_list, paretoEval_list, paretoGP_list = [], [], []
     for algo_name in algo_names:
-        csv_folder = f'{problem_dir}/{algo_name}/{args.seed}/{args.mis}/'
+        csv_folder = f'{problem_dir}/{algo_name}/{args.mode}/{args.exp_set}/{args.seed}/{args.intervention_set}/'
         data_list.append(pd.read_csv(csv_folder + 'EvaluatedSamples.csv'))
         paretoEval_list.append(pd.read_csv(csv_folder + 'ParetoFrontEvaluated.csv'))
 

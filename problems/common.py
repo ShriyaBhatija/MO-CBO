@@ -3,8 +3,6 @@ from pymoo.factory import get_from_list, get_reference_directions
 from problems import *
 from external import lhs
 from .graphs.cbo1 import *
-from .graphs.cbo2 import *
-from .graphs.cbo3 import *
 from .graphs.causal_mobo import *
 
 
@@ -19,9 +17,7 @@ def get_problem_options():
 def get_cbo_options(observational_samples):
 
     problems = {
-        'cbo1': CBO1(observational_samples),
-        'cbo2': CBO2(observational_samples),
-        'cbo3': CBO3(observational_samples)
+        'cbo1': CBO1(observational_samples)
     }
     return problems
 

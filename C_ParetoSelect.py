@@ -1,4 +1,5 @@
-import os 
+import os
+from typing import Any, Dict, List 
 os.environ['OMP_NUM_THREADS'] = '1' # speed up
 import time
 import numpy as np
@@ -16,7 +17,7 @@ from problems.common import build_problem, generate_initial_samples, get_cbo_opt
 from mobo.algorithms import get_algorithm
 from visualization.data_export import DataExport
 from arguments import get_args
-from utils import save_args, setup_logger
+from utils import *
 
 
 
@@ -67,15 +68,15 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, functions,
     
         # initialize data exporter
         exporter[s] = DataExport(optimizer, X_init, Y_init, args)
-
+        
         # optimization
         solution[s] = optimizer.solve(X_init, Y_init)
-
+        
         # export true Pareto front to csv
         if true_pfront is not None:
             exporter.write_truefront_csv(true_pfront)
 
-
+        
 
     #######################################################################################
     ## Loop
@@ -90,7 +91,15 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, functions,
     target_function_list = [None]*len(exploration_set)
     space_list = [None]*len(exploration_set)
     model_list = [None]*len(exploration_set)
-    type_trial = []
+
+    # Hypervolumes in each iteration
+    hv_next_list = np.zeros((args.n_iter + 1, len(exploration_set)))
+
+    
+    experiment_log =  {}
+    experiment_log['type_trial'] = []
+    experiment_log['intervened_set'] = []
+    experiment_log['relative_hv_improvement'] = []
 
     ## Define intervention function
     for s in range(len(exploration_set)):
@@ -115,13 +124,17 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, functions,
         ## At least observe and interve once
         if i == 0:
             uniform = 0.
-        if i == 1:
+        if i >= 1:
             uniform = 1.
 
 
         if uniform < epsilon_coverage:
             observed += 1
-            type_trial.append(0)
+
+            experiment_log['type_trial'].append(0)
+            experiment_log['intervened_set'].append(None)
+            experiment_log['relative_hv_improvement'].append(None)
+
             ## Collect observations and append them to the current observational dataset
             new_observational_samples = observe(num_observation = args.batch_size, 
                                         complete_dataset = full_observational_samples, 
@@ -138,9 +151,9 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, functions,
                                                             observational_samples, x_dict_mean, x_dict_var)
 
 
-
+        
         else:
-            type_trial.append(1)
+            experiment_log['type_trial'].append(1)
             trial_intervened += 1
 
             ## When we decid to interve we need to compute the acquisition functions based on the GP models and decide the variable/variables to intervene
@@ -151,60 +164,61 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, functions,
             X_next_list = [None] * len(exploration_set)
             Y_next_list = [None] * len(exploration_set)
             Y_aquisition_list = [None] * len(exploration_set)
-            hv_next_list = np.zeros((args.n_iter + 1, len(exploration_set)))
 
 
             ## If in the previous trial we have observed we want to update all the BO models as the mean functions and var functions computed 
             ## via the DO calculus are changed 
             ## If in the previous trial we have intervened we want to update only the BO model for the intervention for which we have collected additional data 
-            if type_trial[i-1] == 0:
+            if experiment_log['type_trial'][i-1] == 0:
                 for s in range(len(exploration_set)):
                     #print('Updating model:', s)
-                    model_list[s] = update_BO_models(mean_functions_list[s], var_functions_list[s], data_x_list[s], data_y_list[s], True)
+                    model_list[s] = update_BO_models(mean_functions_list[s], var_functions_list[s], data_x_list[s], data_y_list[s], False)
             else:
                 #print('Updating model:', index)
                 model_to_update = index
                 model_list[index] = update_BO_models(mean_functions_list[index], 
                                                                         var_functions_list[index], 
-                                                                        data_x_list[index], data_y_list[index], True)
-                    
+                                                                        data_x_list[index], data_y_list[index], False)
+              
             ## Get new design samples and corresponding performance
             for s in range(len(exploration_set)):
+                # next batch and the objective functions evaluated
                 X_next_list[s], Y_next_list[s], initial_hv, hv_next_list[int(trial_intervened),s] = next(solution[s])
 
                 if i == 1:
                     hv_next_list[0,s] = initial_hv
 
-                # update & export current status to csv
-                exporter[s].update(X_next_list[s], Y_next_list[s])
-                exporter[s].write_csvs()
-
                 # Relative improvement in hypervolume
                 Y_aquisition_list[s] = (hv_next_list[int(trial_intervened),s] - hv_next_list[int(trial_intervened)-1,s])/hv_next_list[int(trial_intervened)-1,s]
 
             ## Selecting the variables to intervene based on the values of the acquisition functions
-            var_to_intervene = exploration_set[np.where(Y_aquisition_list == np.max(Y_aquisition_list))[0][0]]
             index = np.where(Y_aquisition_list == np.max(Y_aquisition_list))[0][0]
 
-            ## Evaluate the target function for the new batch, i.e. y_new = [y_1,...,y_b]
-            y_new = [target_function_list[index](sample) for sample in X_next_list[index]]
-
-            print('Selected intervention: ', var_to_intervene)
-            print('Selected batch: ', X_next_list[index])
-            print('Target values at batch points: ', y_new)
+            # update & export current status to csv
+            exporter[index].update(X_next_list[index], Y_next_list[index])
+            exporter[index].write_csvs()
 
             ## Append the new data and set the new dataset of the BO model 
             data_x, data_y_x = add_data([data_x_list[index], data_y_list[index]], 
-                                        [X_next_list[index], y_new])
+                                        [X_next_list[index], Y_next_list[index]])
 
             data_x_list[index] = np.vstack((data_x_list[index], X_next_list[index])) 
-            data_y_list[index] = np.vstack((data_y_list[index], y_new))
+            data_y_list[index] = np.vstack((data_y_list[index], Y_next_list[index]))
             
             model_list[index].set_data(data_x, data_y_x)
 
-            ## Optimise BO model given the new data
-            model_list[index].optimize() 
-        
+            ## Optimise MOBO model given the new data
+            model_list[index].optimize()
+
+            # Save the GP model
+            # save_model_path = os.path.join(get_result_dir(args), get_intervention_set_name(exploration_set[index]), 'GPy_model')
+            # model_list[index].model.save_model(save_model_path)
+
+            ## Which intervention set was intervened on
+            experiment_log['intervened_set'].append(exploration_set[index])
+            experiment_log['relative_hv_improvement'].append(Y_aquisition_list[index])
+            save_experiment_log(args, experiment_log)
+
 
     ## Compute total time for the loop
     total_time = time.perf_counter() - start_time

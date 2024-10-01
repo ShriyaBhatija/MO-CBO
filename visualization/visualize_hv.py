@@ -28,7 +28,7 @@ def main():
     for i in range(n_algo):
         for j in range(n_seed):
             if n_seed == 1: j = seed
-            csv_path = f'{problem_dir}/{algo_names[i]}/{j}/EvaluatedSamples.csv'
+            csv_path = f'{problem_dir}/{algo_names[i]}/{j}/{args.mis}/{args.mode}/EvaluatedSamples.csv'
             df = pd.read_csv(csv_path)
             data_list[i].append(df)
             if num_init_samples is None and 'iterID' in df:

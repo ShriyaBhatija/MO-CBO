@@ -24,7 +24,7 @@ class DataExport:
 
         # saving path related
         self.result_dir = get_result_dir(args)
-        self.result_folder = os.path.join(get_intervention_set_name(self.intervention_set), args.mode)
+        self.result_folder = os.path.join(get_intervention_set_name(self.intervention_set))
         
         n_samples = X.shape[0]
 
@@ -169,7 +169,6 @@ class DataExport:
 
         for dataframe, filename in zip(dataframes, filenames):
             path_intervention_set = os.path.join(self.result_dir, self.result_folder)
-            print(path_intervention_set)
             os.makedirs(path_intervention_set, exist_ok=True)
             filepath = os.path.join(path_intervention_set, filename + '.csv')
             dataframe.to_csv(filepath, index=False)
@@ -178,7 +177,7 @@ class DataExport:
         '''
         Export true pareto front to csv files.
         '''
-        problem_dir = os.path.join(self.result_dir, '..', '..') # result/problem/subfolder/
+        problem_dir = os.path.join(self.result_dir, '..') # result/problem/
         filepath = os.path.join(problem_dir, 'TrueParetoFront.csv')
 
         if os.path.exists(filepath): return
@@ -190,3 +189,5 @@ class DataExport:
 
         export_tf = pd.DataFrame(data=d)
         export_tf.to_csv(filepath, index=False)
+
+        

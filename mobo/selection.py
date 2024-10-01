@@ -46,9 +46,9 @@ class Selection(ABC):
         pass
 
 
-class DGEMOSelect(Selection):
+class CPS_Select(Selection):
     '''
-    Selection method for DGEMO algorithm
+    Selection method for CPS algorithm
     '''
     has_family = True
 
