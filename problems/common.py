@@ -75,8 +75,8 @@ def build_problem(name, observational_samples, n_var, n_obj, n_init_sample, mis=
     if name.startswith('cbo'):
         assert mis is not None, 'intervention set must be provided for CBO problems'
         problem = get_problem(name, graph=get_cbo_options(observational_samples)[name], intervention_set=mis)
-        print(problem)
-        pareto_front = None
+        print('========== Calculating true Front ==========')
+        pareto_front = problem.pareto_front()
 
     else:
         try:

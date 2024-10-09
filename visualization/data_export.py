@@ -31,8 +31,7 @@ class DataExport:
         # compute initial hypervolume
         pfront, pidx = find_pareto_front(Y, return_index=True)
         pset = X[pidx]
-        if args.ref_point is None:
-            args.ref_point = np.max(Y, axis=0)
+        args.ref_point = np.max(Y, axis=0)
         hv_value = calc_hypervolume(pfront, ref_point=args.ref_point)
         
         # init data frame
@@ -178,7 +177,7 @@ class DataExport:
         Export true pareto front to csv files.
         '''
         problem_dir = os.path.join(self.result_dir, '..') # result/problem/
-        filepath = os.path.join(problem_dir, 'TrueParetoFront.csv')
+        filepath = os.path.join(problem_dir, 'TrueCausalParetoFront.csv')
 
         if os.path.exists(filepath): return
 

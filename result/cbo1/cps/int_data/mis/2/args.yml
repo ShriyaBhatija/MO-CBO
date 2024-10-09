@@ -1,0 +1,77 @@
+general:
+  problem: cbo1
+  exp_set: mis
+  n_var: 2
+  n_obj: 2
+  n_init_sample_obs: 100
+  n_init_sample_int: 20
+  n_iter: 20
+  ref_point: !!python/object/apply:numpy.core.multiarray._reconstruct
+    args:
+    - !!python/name:numpy.ndarray ''
+    - !!python/tuple
+      - 0
+    - !!binary |
+      Yg==
+    state: !!python/tuple
+    - 1
+    - !!python/tuple
+      - 2
+    - !!python/object/apply:numpy.dtype
+      args:
+      - f8
+      - false
+      - true
+      state: !!python/tuple
+      - 3
+      - <
+      - null
+      - null
+      - null
+      - -1
+      - -1
+      - 0
+    - false
+    - !!binary |
+      Aq+YAapLK0BaiavfjTBbQA==
+  batch_size: 10
+  mode: int_data
+  seed: 2
+  seeds: !!python/object/apply:builtins.range
+  - 0
+  - 10
+  - 1
+  n_seed: 1
+  algo: cps
+  exp_name: null
+  log_to_file: false
+  n_process: 8
+surrogate:
+  surrogate: gp
+  n_spectral_pts: 100
+  nu: 5
+  mean_sample: false
+  n_var: 2
+  n_obj: 2
+acquisition:
+  acquisition: identity
+solver:
+  solver: discovery
+  pop_size: 100
+  n_gen: 10
+  pop_init_method: random
+  n_process: 8
+  batch_size: 20
+  n_cell: null
+  cell_size: 10
+  buffer_origin: null
+  buffer_origin_constant: 0.01
+  delta_b: 0.2
+  label_cost: 10
+  delta_p: 10.0
+  delta_s: 0.3
+  n_grid_sample: 100
+  n_obj: 2
+selection:
+  selection: cps
+  batch_size: 10

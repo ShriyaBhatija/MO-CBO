@@ -18,37 +18,26 @@ def get_general_args(args=None):
         help='optimization problem')
     parser.add_argument('--exp-set', type=str, default='mis', choices=['mis', 'pomis', 'mobo'], 
         help='exploration set')
-    parser.add_argument('--n-var', type=int, default=2, 
-        help='number of design variables')
-    parser.add_argument('--n-obj', type=int, default=2, 
-        help='number of objectives')
+    parser.add_argument('--type_cost', default = 1, type = int, help = 'cost structure')
     parser.add_argument('--n-init-sample-obs', type=int, default=100, 
         help='number of initial observational samples')
     parser.add_argument('--n-init-sample-int', type=int, default=20, 
         help='number of initial interventional samples')
-    parser.add_argument('--n-iter', type=int, default=10, 
+    parser.add_argument('--n-iter', type=int, default=20, 
         help='number of optimization iterations')
-    parser.add_argument('--ref-point', type=float, nargs='+', default=None, 
-        help='reference point for calculating hypervolume')
-    parser.add_argument('--batch-size', type=int, default=10, 
-        help='size of the selected batch in one iteration')
-    parser.add_argument('--mode', type=str, default='causal_prior', choices=['causal_prior', 'int_data', 'optimal'], 
-        help='which samples to do the initial iteration with')
-
-    parser.add_argument('--seed', type=int, default=0, 
-        help='random seed')
-    parser.add_argument('--seeds', type=list, default=range(10), 
-        help='random seeds')
-    parser.add_argument('--n-seed', type=int, default=1,
-        help='number of random seeds / test runs')
 
     parser.add_argument('--algo', type=str, default='cps',
         help='type of algorithm to use with some predefined arguments, or custom arguments')
+    parser.add_argument('--mode', type=str, default='int_data', choices=['causal_prior', 'int_data'], 
+        help='which samples to do the initial iteration with')
+    parser.add_argument('--batch-size', type=int, default=10, 
+        help='size of the selected batch in one iteration')
+    
+    parser.add_argument('--seed', type=int, default=0, 
+        help='random seed')
+    parser.add_argument('--seeds', type=list, default=[1,2,3,4,5,6,7,9], 
+        help='random seeds')
 
-    parser.add_argument('--exp-name', type=str, default=None,
-        help='custom experiment name to distinguish between experiments on same problem and same algorithm')
-    parser.add_argument('--log-to-file', default=False, action='store_true',
-        help='log output to file rather than print by stdout')
     parser.add_argument('--n-process', type=int, default=cpu_count(),
         help='number of processes to be used for parallelization')
 
@@ -135,6 +124,7 @@ def get_solver_args(args=None):
 
     args, _ = parser.parse_known_args(args)
     return args
+
 
 
 def get_selection_args(args=None):

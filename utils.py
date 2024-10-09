@@ -12,12 +12,25 @@ def get_intervention_set_name(intervention_variables):
     return string
 
 
+
+def calculate_batch_cost(intervention_set, costs, intervention_batch):
+    '''
+    Calculate cost for a batch of interventions
+    '''
+    current_cost = 0
+    for i in range(len(intervention_batch)):
+        for s, var in enumerate(intervention_set):
+            current_cost += costs[var](intervention_batch[i][s])
+
+    return current_cost
+
+
 def get_result_dir(args):
     '''
     Get directory of result location (result/problem/algo/seed/)
     '''
     top_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'result')
-    exp_name = '' if args.exp_name is None else '-' + args.exp_name
+    exp_name = ''
     algo_name = args.algo + exp_name
     result_dir = os.path.join(top_dir, args.problem, algo_name, args.mode, args.exp_set, str(args.seed))
     os.makedirs(result_dir, exist_ok=True)
@@ -46,18 +59,3 @@ def save_args(general_args, framework_args):
     os.makedirs(os.path.dirname(args_path), exist_ok=True)
     with open(args_path, 'w') as f:
         yaml.dump(all_args, f, default_flow_style=False, sort_keys=False)
-
-
-def setup_logger(args):
-    '''
-    Log to file if needed
-    '''
-    logger = None
-
-    if args.log_to_file:
-        result_dir = get_result_dir(args)
-        log_path = os.path.join(result_dir, 'log.txt')
-        logger = open(log_path, 'w')
-        sys.stdout = logger
-    
-    return logger

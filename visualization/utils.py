@@ -14,7 +14,7 @@ def get_result_dir(args):
     Get directory of result location (result/problem/algo/seed/)
     '''
     top_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'result')
-    exp_name = '' if args.exp_name is None else '-' + args.exp_name
+    exp_name = ''
     algo_name = args.algo + exp_name
     result_dir = os.path.join(top_dir, args.problem, algo_name, args.mode, args.exp_set, str(args.seed))
     os.makedirs(result_dir, exist_ok=True)
@@ -70,17 +70,18 @@ def get_algo_names(args):
     return sorted(algo_names)
 
 
-defaultColors = [
+defaultColours = [
     '#1f77b4',  # muted blue
     '#ff7f0e',  # safety orange
-    '#2ca02c',  # cooked asparagus green
     '#d62728',  # brick red
+    '#2ca02c',  # cooked asparagus green
+    '#e377c2',  # raspberry yogurt pink
+    '#17becf',  # blue-teal
+    '#bcbd22',  # curry yellow-green
     '#9467bd',  # muted purple
     '#8c564b',  # chestnut brown
     '#e377c2',  # raspberry yogurt pink
     '#7f7f7f',  # middle gray
-    '#bcbd22',  # curry yellow-green
-    '#17becf',  # blue-teal
     '#fd3216',  # Light24 list
     '#ea1b85',  # more below
     '#7d7803',

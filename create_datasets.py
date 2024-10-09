@@ -9,7 +9,7 @@ from utils_functions import *
 
 parser = argparse.ArgumentParser(description='create_datasets')
 parser.add_argument('--experiment', default = 'cbo1', type = str, help = 'experiment')
-parser.add_argument('--exp-set', type=str, default='mis', choices=['mis', 'pomis', 'mobo'], help='exploration set')
+parser.add_argument('--exp-set', type=str, default='pomis', choices=['mis', 'pomis', 'mobo'], help='exploration set')
 parser.add_argument('--obs_num_samples', default=1000, type=int, help='number of observational samples to be generated')
 parser.add_argument('--int_num_samples', default=20, type=int, help='number of interventional samples to be generated')
 
@@ -26,7 +26,7 @@ def main(seed):
 
 
     # Create save folder if it doesn't exist
-    pathlib.Path('Data/' + str(args.experiment) + f'/{seed}').mkdir(parents=True, exist_ok=True)
+    pathlib.Path('Data/' + str(args.experiment) + f'/{args.exp_set}/{seed}').mkdir(parents=True, exist_ok=True)
 
 
     if experiment == 'cbo1':
@@ -46,7 +46,7 @@ def main(seed):
         
     # Save as pkl file as in the folder
     # Save it using a protocol compatible with Python 3.7
-    observational_samples.to_pickle('./Data/' + str(args.experiment) + f'/{seed}/' + 'observations.pkl', protocol=4)
+    observational_samples.to_pickle('./Data/' + str(args.experiment) + f'/{args.exp_set}/{seed}/' + 'observations.pkl', protocol=4)
 
 
     interventional_data = [] 
@@ -79,7 +79,7 @@ def main(seed):
     interventional_data = np.array(interventional_data, dtype=object)
         
     # Save as npy file as in the folder
-    np.save('./Data/' + str(args.experiment) + f'/{seed}/' + f'interventional_data.npy', interventional_data)
+    np.save('./Data/' + str(args.experiment) + f'/{args.exp_set}/{seed}/' + f'interventional_data.npy', interventional_data)
 
 
 

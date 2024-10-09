@@ -15,6 +15,7 @@ from GPy.kern import RBF
 from GPy.models.gp_regression import GPRegression
 
 from .cbo1_DoFunctions import *
+from .cbo1_CostFunctions import define_costs
 
 
 class CBO1(GraphStructure):
@@ -74,10 +75,12 @@ class CBO1(GraphStructure):
     def get_exploration_sets(self):
       MIS = [['X1','control'], ['X2','control'], ['Z1', 'control'], ['Z2', 'control'], ['X1', 'X2'], ['Z1','Z2']]
       POMIS = [['Z1','Z2']]
-      manipulative_variables = ['X1', 'X2', 'Z1', 'Z2']
+      SMIS = [['X1','X2'], ['Z1','Z2']]
+      manipulative_variables = [['X1', 'X2', 'Z1', 'Z2']]
 
       exploration_sets = {
          'mis': MIS,
+         'smis': SMIS, 
          'pomis': POMIS,
          'mobo': manipulative_variables
       }
@@ -94,7 +97,7 @@ class CBO1(GraphStructure):
       max_intervention_x = 2
 
       min_intervention_z = -1
-      max_intervention_z = 2
+      max_intervention_z = 3
 
       min_control = -0.5
       max_control = 0.5
@@ -144,7 +147,6 @@ class CBO1(GraphStructure):
                   X = inputs_list[j][k]
                   Y = output_list[j]
                   parameters = parameter_list[j+k]
-                  print(name_list[j][k])
                   functions[name_list[j][k]] = fit_single_GP_model(X, Y, parameters)
     
         return functions
@@ -191,7 +193,11 @@ class CBO1(GraphStructure):
                   functions[name_list[j][k]] = fit_single_GP_model(X, Y, parameter_list)
     
         return functions
+    
 
+    def get_cost_structure(self, type_cost):
+        costs = define_costs(type_cost)
+        return costs
 
 
     def get_all_do(self):
