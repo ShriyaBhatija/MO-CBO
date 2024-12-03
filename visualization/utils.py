@@ -73,15 +73,15 @@ def get_algo_names(args):
 defaultColours = [
     '#1f77b4',  # muted blue
     '#ff7f0e',  # safety orange
+    '#e377c2',  # raspberry yogurt pink
     '#d62728',  # brick red
     '#2ca02c',  # cooked asparagus green
-    '#e377c2',  # raspberry yogurt pink
     '#17becf',  # blue-teal
     '#bcbd22',  # curry yellow-green
     '#9467bd',  # muted purple
     '#8c564b',  # chestnut brown
-    '#e377c2',  # raspberry yogurt pink
-    '#7f7f7f',  # middle gray
+    #'#e377c2',  # raspberry yogurt pink
+    #'#7f7f7f',  # middle gray
     '#fd3216',  # Light24 list
     '#ea1b85',  # more below
     '#7d7803',

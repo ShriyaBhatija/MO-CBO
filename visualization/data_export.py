@@ -176,7 +176,7 @@ class DataExport:
         '''
         Export true pareto front to csv files.
         '''
-        problem_dir = os.path.join(self.result_dir, '..') # result/problem/
+        problem_dir = os.path.join(self.result_dir, '..','..') # result/problem/
         filepath = os.path.join(problem_dir, 'TrueCausalParetoFront.csv')
 
         if os.path.exists(filepath): return

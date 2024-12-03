@@ -1,8 +1,8 @@
 ## Import basic packages
 import numpy as np
 
-from GPy.kern import RBF
-from GPy.models.gp_regression import GPRegression
+#from GPy.kern import RBF
+#from GPy.models.gp_regression import GPRegression
 
 
 
@@ -57,9 +57,11 @@ def add_data(original, new):
     return data_x, data_y  
 
 
+'''
 def fit_single_GP_model(X, Y, parameter_list, ard = False):
     kernel = RBF(X.shape[1], ARD = parameter_list[3], lengthscale=parameter_list[0], variance = parameter_list[1]) 
     gp = GPRegression(X = X, Y = Y, kernel = kernel, noise_var= parameter_list[2])
     gp.likelihood.variance.fix(1e-2)
     gp.optimize()
     return gp
+'''

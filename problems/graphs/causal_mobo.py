@@ -71,7 +71,7 @@ class CausalMOBO(Problem):
       points = anp.vstack([x1_grid.ravel(), x2_grid.ravel()]).T
 
       target_function = Intervention_function(get_interventional_dict(set),
-									model = self.graph.define_SEM(), targets = self.graph.get_targets())
+									model = self.graph.define_SEM(), targets = self.graph.get_targets(), num_samples=10000)
     
       for i in range(points.shape[0]):
         target_value = target_function(points[i])

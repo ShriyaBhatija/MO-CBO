@@ -1,22 +1,15 @@
 import os
-from typing import Any, Dict, List 
 os.environ['OMP_NUM_THREADS'] = '1' # speed up
 import time
 import numpy as np
 import pandas as pd
-from matplotlib import pylab as plt
-from collections import OrderedDict
-from matplotlib import cm
-import scipy
-import itertools
 import time 
 
 from utils_functions import *
 
-from problems.common import build_problem, generate_initial_samples, get_cbo_options
+from problems.common import build_problem
 from mobo.algorithms import get_algorithm
 from visualization.data_export import DataExport
-from arguments import get_args
 from utils import *
 
 
@@ -25,21 +18,19 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, fun
 
     ## Initialise dicts to store values over trials and assign initial values
     x_dict_mean, x_dict_var, dict_interventions = initialise_dicts(exploration_set)
-
+    print
     ## Define the mean functions and var functions given the current set of observational data. 
     mean_functions_list, var_functions_list = update_all_do_functions(graph, exploration_set, functions, dict_interventions, observational_samples, x_dict_mean, x_dict_var)
-
 
     ############################  Set up for the Pareto optimisation
     solution = [None] * len(exploration_set)
     exporter = [None] * len(exploration_set)
 
     for s, set in enumerate(exploration_set):
-
         # build problem, get initial samples
         problem, true_pfront, X_init, Y_init = build_problem(args.problem, observational_samples, len(set), len(graph.get_targets()), args.n_init_sample_int, set, args.n_process)
         args.n_var, args.n_obj = problem.n_var, problem.n_obj
-        
+       
         if args.mode == 'causal_prior':
             mask = np.ones(len(observational_samples[set[0]]), dtype=bool)
             for var in set:
@@ -53,23 +44,24 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, fun
             # Append causal effects from observational data to the interventional data
             X_init = np.concatenate((X_init_obs, X_init_int), axis=0)
             Y_init = np.concatenate((Y_init_obs, Y_init_int), axis=0)
+        
         elif args.mode == 'int_data':
             X_init, Y_init = interventional_data[s][-2:]
-        
+
         # initialize optimizer
         optimizer = get_algorithm(args.algo)(problem, set, args.n_iter, None, framework_args)
-    
+
         # initialize data exporter
         exporter[s] = DataExport(optimizer, X_init, Y_init, args)
-        
+
         # optimization
         solution[s] = optimizer.solve(X_init, Y_init)
-        
+
         # export true Pareto front to csv
         if s == 0:
             if true_pfront is not None:
                 exporter[s].write_truefront_csv(true_pfront)
-
+    
         
 
     #######################################################################################
@@ -196,6 +188,7 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, fun
                 # Relative improvement in hypervolume
                 Y_aquisition_list[s] = (hv_next_list[int(trial_intervened),s] - hv_next_list[int(trial_intervened)-1,s])/hv_next_list[int(trial_intervened)-1,s]
 
+                
             index = np.where(Y_aquisition_list == np.max(Y_aquisition_list))[0][0]
 
 

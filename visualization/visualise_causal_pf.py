@@ -55,14 +55,19 @@ def main():
 
     # Extract x, y values and colors from the filtered points
     pareto_x_values = [point[1][0] for point in pareto_points]
-    paretp_y_values = [point[1][1] for point in pareto_points]
+    pareto_y_values = [point[1][1] for point in pareto_points]
     colours = [colours[point[0]] for point in pareto_points]
 
     # Create a scatter plot with colors based on intervention sets
-    plt.figure(figsize=(8, 5))
-    plt.scatter(true_front['f1'], true_front['f2'], c='lightgrey', s=60)
-    plt.scatter(pareto_x_values, paretp_y_values, c=colours, s=60, edgecolors= 'black')
-    plt.tick_params(axis='both', which='major', labelsize=18)
+    plt.figure(figsize=(9, 5))
+    plt.xlim(-3, 56) 
+    plt.ylim(-2, 27)
+    # Increase the thickness of the plot border (spines)
+    for spine in plt.gca().spines.values():
+        spine.set_linewidth(1.5)
+    plt.scatter(true_front['f1'], true_front['f2'], c='lightgray', s=90)
+    plt.scatter(pareto_x_values, pareto_y_values, c=colours, s=90, edgecolors='black', linewidth=0.6)
+    plt.tick_params(axis='both', which='major', labelsize=20)
     plt.show()
 
 

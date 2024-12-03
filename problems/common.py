@@ -2,14 +2,13 @@ import numpy as np
 from pymoo.factory import get_from_list, get_reference_directions
 from problems import *
 from external import lhs
-from .graphs.cbo1 import *
 from .graphs.causal_mobo import *
 
 
 def get_problem_options():
 
     problems = [
-        ('cbo', CausalMOBO)
+        ('mo-cbo', CausalMOBO)
     ]
     return problems
 
@@ -17,14 +16,16 @@ def get_problem_options():
 def get_cbo_options(observational_samples):
 
     problems = {
-        'cbo1': CBO1(observational_samples)
+        #'mo-cbo1': MO_CBO1(observational_samples),
+        #'mo-cbo2': MO_CBO2(observational_samples),
+        'mo-cbo3': MO_CBO3(observational_samples)
     }
     return problems
 
 
 def get_problem(name, *args, d={}, **kwargs):
-    if name.startswith('cbo'):
-        return get_from_list(get_problem_options(), 'cbo'.lower(), args, {**d, **kwargs})
+    if name.startswith('mo-cbo'):
+        return get_from_list(get_problem_options(), 'mo-cbo'.lower(), args, {**d, **kwargs})
     else:
         return get_from_list(get_problem_options(), name.lower(), args, {**d, **kwargs})
 
@@ -72,11 +73,11 @@ def build_problem(name, observational_samples, n_var, n_obj, n_init_sample, mis=
         pareto_front: the true pareto front of the problem (if defined, otherwise None)
     '''
     # build problem
-    if name.startswith('cbo'):
-        assert mis is not None, 'intervention set must be provided for CBO problems'
+    if name.startswith('mo-cbo'):
+        assert mis is not None, 'intervention set must be provided for MO-CBO problems'
         problem = get_problem(name, graph=get_cbo_options(observational_samples)[name], intervention_set=mis)
-        print('========== Calculating true Front ==========')
-        pareto_front = problem.pareto_front()
+        #pareto_front = problem.pareto_front()
+        pareto_front = None
 
     else:
         try:

@@ -43,7 +43,7 @@ def main(args, framework_args):
     dict_ranges = graph.get_interventional_ranges()
 
     ## Compute observation coverage
-    alpha_coverage, hull_obs, coverage_total = compute_coverage(observational_samples, manipulative_variables, dict_ranges)
+    #alpha_coverage, hull_obs, coverage_total = compute_coverage(observational_samples, manipulative_variables, dict_ranges)
 
     # Interventional data
     interventional_data = np.load(f'./Data/{args.problem}/{args.exp_set}/{args.seed}/interventional_data.npy', allow_pickle=True)
@@ -60,6 +60,6 @@ if __name__ == '__main__':
     # load arguments
     args, framework_args = get_args()
 
-    for seed in args.seeds:
+    for seed in range(0,1):
         args.seed = seed
         main(args, framework_args)
