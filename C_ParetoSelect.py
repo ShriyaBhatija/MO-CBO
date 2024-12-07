@@ -18,7 +18,7 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, fun
 
     ## Initialise dicts to store values over trials and assign initial values
     x_dict_mean, x_dict_var, dict_interventions = initialise_dicts(exploration_set)
-    print
+    
     ## Define the mean functions and var functions given the current set of observational data. 
     mean_functions_list, var_functions_list = update_all_do_functions(graph, exploration_set, functions, dict_interventions, observational_samples, x_dict_mean, x_dict_var)
 
@@ -56,11 +56,14 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, fun
 
         # optimization
         solution[s] = optimizer.solve(X_init, Y_init)
+        print(X_init, Y_init)
 
         # export true Pareto front to csv
         if s == 0:
             if true_pfront is not None:
                 exporter[s].write_truefront_csv(true_pfront)
+        
+        print('done')
     
         
 
@@ -101,7 +104,10 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, fun
 
     ############################# LOOP
     start_time = time.perf_counter()
-    for i in range(args.n_iter):
+    #for i in range(args.n_iter):
+    i = -1
+    while np.sum(experiment_log['cost']) < 800:
+        i += 1
         print('Optimization step', i)
         ## Decide to observe or intervene and then recompute the obs coverage
         #coverage_obs = update_hull(observational_samples, manipulative_variables)
@@ -184,7 +190,7 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, fun
 
                 # Calculate cost of the interventions X_next_list[s]
                 current_cost[s] = calculate_batch_cost(exploration_set[s],costs, X_next_list[s])
-
+                
                 # Relative improvement in hypervolume
                 Y_aquisition_list[s] = (hv_next_list[int(trial_intervened),s] - hv_next_list[int(trial_intervened)-1,s])/hv_next_list[int(trial_intervened)-1,s]
 
@@ -213,12 +219,13 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, fun
             # model_list[index].model.save_model(save_model_path)
 
             ## Which intervention set was intervened on
-            experiment_log['intervened_set'].append(exploration_set[index])
-            experiment_log['relative_hv_improvement'].append(Y_aquisition_list[index])
-            experiment_log['previous_hv'].append(hv_next_list[int(trial_intervened)-1,index])
-            experiment_log['current_hv'].append(hv_next_list[int(trial_intervened),index])
-            experiment_log['cost'].append(current_cost[index])
-            save_experiment_log(args, experiment_log)
+            if np.sum(experiment_log['cost']) <= 800:
+                experiment_log['intervened_set'].append(get_intervention_set_name(exploration_set[index]))
+                experiment_log['relative_hv_improvement'].append(Y_aquisition_list[index])
+                experiment_log['previous_hv'].append(hv_next_list[int(trial_intervened)-1,index])
+                experiment_log['current_hv'].append(hv_next_list[int(trial_intervened),index])
+                experiment_log['cost'].append(current_cost[index])
+                save_experiment_log(args, experiment_log)
 
 
     ## Compute total time for the loop

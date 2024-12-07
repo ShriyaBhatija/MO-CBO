@@ -34,13 +34,20 @@ def main():
         colours[intervention_set] = defaultColours[i]
 
     # True causal Pareto front 
-    true_front = pd.read_csv(f'{problem_dir}/{args.algo}/{args.mode}/' + 'TrueCausalParetoFront.csv')
+    #true_front = pd.read_csv(f'{problem_dir}/{args.algo}/{args.mode}/' + 'TrueCausalParetoFront.csv')
 
     all_pareto_points = []
 
     # read result csvs 
     for intervention_set in intervention_sets:
         csv_folder = f'{problem_dir}/{args.algo}/{args.mode}/{args.exp_set}/{args.seed}/{intervention_set}/'
+
+        if intervention_set == 'empty':
+            points = pd.read_csv(csv_folder + 'sample.csv')
+            for _, row in points.iterrows():
+                all_pareto_points.append((intervention_set, [row['Pareto_f1'], row['Pareto_f2']]))
+            continue
+    
         paretoEval = pd.read_csv(csv_folder + 'ParetoFrontEvaluated.csv')
         max_iterID = max(list(set(paretoEval['iterID'])))
         
@@ -60,14 +67,19 @@ def main():
 
     # Create a scatter plot with colors based on intervention sets
     plt.figure(figsize=(9, 5))
-    plt.xlim(-3, 56) 
-    plt.ylim(-2, 27)
+    #plt.xlim(-3, 52) 
+    #plt.ylim(-2, 27)
+    #plt.xlim(-2, 38) 
+    #plt.ylim(11, 104)
+    plt.xlabel(r'$Y_1$', fontsize=24, labelpad=10) 
+    plt.ylabel(r'$Y_2$', fontsize=24, labelpad=14) 
     # Increase the thickness of the plot border (spines)
     for spine in plt.gca().spines.values():
-        spine.set_linewidth(1.5)
-    plt.scatter(true_front['f1'], true_front['f2'], c='lightgray', s=90)
+        spine.set_linewidth(1.8)
+    #plt.scatter(true_front['f1'], true_front['f2'], c='lightgray', s=90)
     plt.scatter(pareto_x_values, pareto_y_values, c=colours, s=90, edgecolors='black', linewidth=0.6)
     plt.tick_params(axis='both', which='major', labelsize=20)
+    plt.tight_layout() # Adjust layout to ensure everything fits
     plt.show()
 
 

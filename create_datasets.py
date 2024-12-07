@@ -8,7 +8,7 @@ from utils_functions import *
 
 
 parser = argparse.ArgumentParser(description='create_datasets')
-parser.add_argument('--experiment', default = 'mo-cbo3', type = str, help = 'experiment')
+parser.add_argument('--experiment', default = 'mo-cbo2', type = str, help = 'experiment')
 parser.add_argument('--exp-set', type=str, default='pomis', choices=['pomis', 'mis', 'mobo'], help='exploration set')
 parser.add_argument('--obs_num_samples', default=100, type=int, help='number of observational samples to be generated')
 parser.add_argument('--int_num_samples', default=20, type=int, help='number of interventional samples to be generated')
@@ -32,12 +32,12 @@ def main(seed):
         graph = MO_CBO1(observational_samples)
 
     if experiment == 'mo-cbo2':
-        observational_samples = OrderedDict([('U1', []), ('U2', []), ('F', []), ('A', []), ('B', []), ('C', []), ('D', []), ('E', []), ('Y1', []), ('Y2', []), ('control', [])])
+        observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('X4', []), ('X5', []), ('X6', []), ('X7', []), ('X8', []), ('Y1', []), ('Y2', [])])
         graph = MO_CBO2(observational_samples)
 
-    if experiment == 'mo-cbo3':
-        observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('X4', []), ('X5', []), ('X6', []), ('X7', []), ('X8', []), ('Y1', []), ('Y2', []), ('control', [])])
-        graph = MO_CBO3(observational_samples)
+    if experiment == 'mo-cbo-health':
+        observational_samples = OrderedDict([('age', []), ('bmi', []), ('statin', []), ('aspirin', []), ('cancer', []), ('psa', []), ('control', [])])
+        graph = Health(observational_samples)
 
 
     targets = graph.get_targets()
@@ -55,7 +55,7 @@ def main(seed):
     # Save it using a protocol compatible with Python 3.7
     observational_samples.to_pickle('./Data/' + str(args.experiment) + f'/{args.exp_set}/{seed}/' + 'observations.pkl', protocol=4)
 
-
+    
     interventional_data = [] 
 
     for index, variables in enumerate(exploration_set):

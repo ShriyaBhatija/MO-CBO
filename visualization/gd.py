@@ -39,7 +39,7 @@ def generational_distance(A, Z, p=2):
     # Ensure inputs are numpy arrays
     A = np.array(A)
     Z = np.array(Z)
-    
+
     # Compute the distance of each point in A to the closest point in Z
     distances = []
     for a in A:
@@ -47,8 +47,10 @@ def generational_distance(A, Z, p=2):
         min_distance = np.min(np.linalg.norm(Z - a, ord=p, axis=1))
         distances.append(min_distance ** p)  # Raise to power `p`
 
+        #print(f"a: {a}, z: {Z[np.argmin(np.linalg.norm(Z - a, ord=p, axis=1))]}, dist: {min_distance}")
+
     # Compute the average and apply the final root
-    return (np.sum(distances) / len(A)) ** (1 / p)
+    return ((np.sum(distances)) / len(A))**(1/2)
 
 
 
@@ -63,50 +65,42 @@ def main():
     # True causal Pareto front 
     true_front = np.asarray(pd.read_csv(f'{problem_dir}/{args.algo}/{args.mode}/' + 'TrueCausalParetoFront.csv'))
 
-    cost = len(np.asarray(pd.read_csv(f'{problem_dir}/{args.algo}/{args.mode}/{args.exp_set}/{args.seed}/' + 'experiment_log.csv')['cost']))
+    gd = []
+    costs = []
+    
+    for seed in range(0,1):
+        all_pareto_points = []
+        args.seed = seed
+        for intervention_set in intervention_sets:
+            pareto_points = np.array((len(intervention_sets), 2))
+
+            csv_folder = f'{problem_dir}/{args.algo}/{args.mode}/{args.exp_set}/{args.seed}/{intervention_set}/'
+            # if directory does not exist, skip
+            if not os.path.exists(csv_folder):
+                continue
+            paretoEval = pd.read_csv(csv_folder + 'ParetoFrontEvaluated.csv')
+            max_iterID = max(list(set(paretoEval['iterID'])))
+
+            # Get the points from the Pareto front of the chosen iteration (i.e. the complete approximation)
+            points = paretoEval[paretoEval['iterID'] == max_iterID]
+            for _, row in points.iterrows():
+                all_pareto_points.append([row['Pareto_f1'], row['Pareto_f2']])
+
+        # Calculate Pareto efficient points
+        pareto_flags = is_pareto_optimal(np.array([point for point in all_pareto_points]))
+        pareto_points = np.asarray([value for value, flag in zip(all_pareto_points, pareto_flags) if flag])
+        gd.append(generational_distance(pareto_points, true_front))
+
+        cost = np.sum(np.asarray(pd.read_csv(f'{problem_dir}/{args.algo}/{args.mode}/{args.exp_set}/{args.seed}/' + 'experiment_log.csv')['cost']))
+        costs.append(cost)
+
+    
+    mean = np.mean(gd)
+    print(gd)
+    print(mean)
+    cost = np.mean(costs)
     print(cost)
 
-    
-    all_pareto_points = []
-
-    gd_mean_iterations = []
-    gd_var_iterations = []
-    gd_std_iterations = []
-
-    n_iterations = 19
-
-    for iteration in range(0, n_iterations):
-
-        gd_seeds = []
-
-        for seed in range(0,9):
-            args.seed = seed
-            for intervention_set in intervention_sets:
-                pareto_points = np.array((len(intervention_sets), 2))
-
-                csv_folder = f'{problem_dir}/{args.algo}/{args.mode}/{args.exp_set}/{args.seed}/{intervention_set}/'
-                paretoEval = pd.read_csv(csv_folder + 'ParetoFrontEvaluated.csv')
-                max_iterID = max(list(set(paretoEval['iterID'])))
-                
-                if max_iterID >= iteration:
-                    iterID = iteration
-                else:
-                    iterID = max_iterID
-
-                # Get the points from the Pareto front of the chosen iteration (i.e. the complete approximation)
-                points = paretoEval[paretoEval['iterID'] == iterID]
-                for _, row in points.iterrows():
-                    all_pareto_points.append([row['Pareto_f1'], row['Pareto_f2']])
-
-            # Calculate Pareto efficient points
-            pareto_flags = is_pareto_optimal(np.array([point for point in all_pareto_points]))
-            pareto_points = np.asarray([value for value, flag in zip(all_pareto_points, pareto_flags) if flag])
-        
-            gd_seeds.append(generational_distance(true_front, pareto_points))
-    
-        gd_mean_iterations.append(np.mean(gd_seeds))
-        gd_var_iterations.append(np.var(gd_seeds))
-        gd_std_iterations.append(np.sqrt(gd_var_iterations))
 
 
 

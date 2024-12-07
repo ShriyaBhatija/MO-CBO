@@ -5,167 +5,193 @@ sys.path.append("..")
 import numpy as np
 from collections import OrderedDict
 
-## Define a cost variable for each intervention
-def cost_A_fix_equal(intervention_value, **kwargs):
-    fix_cost = 1.
-    return fix_cost
-
-def cost_B_fix_equal(intervention_value, **kwargs):
-    fix_cost = 1.
-    return fix_cost
-
-def cost_C_fix_equal(intervention_value, **kwargs):
-    fix_cost = 1.
-    return fix_cost
-
-def cost_D_fix_equal(intervention_value, **kwargs):
-    fix_cost = 1.
-    return fix_cost
-
-def cost_E_fix_equal(intervention_value, **kwargs):
-    fix_cost = 1.
-    return fix_cost
-
-def cost_F_fix_equal(intervention_value, **kwargs):
-    fix_cost = 1.
-    return fix_cost
-
-def cost_control_fix_equal(intervention_value, **kwargs):
-    return 0.
-
 
 ## Define a cost variable for each intervention
-def cost_A_fix_different(intervention_value, **kwargs):
+def cost_X1_fix_equal(intervention_value, **kwargs):
     fix_cost = 1.
     return fix_cost
 
-def cost_B_fix_different(intervention_value, **kwargs):
+def cost_X2_fix_equal(intervention_value, **kwargs):
+    fix_cost = 1.
+    return fix_cost
+
+def cost_X3_fix_equal(intervention_value, **kwargs):
+    fix_cost = 1.
+    return fix_cost
+
+def cost_X4_fix_equal(intervention_value, **kwargs):
+    fix_cost = 1.
+    return fix_cost
+
+def cost_X5_fix_equal(intervention_value, **kwargs):
+    fix_cost = 1.
+    return fix_cost
+
+def cost_X6_fix_equal(intervention_value, **kwargs):
+    fix_cost = 1.
+    return fix_cost
+
+def cost_X7_fix_equal(intervention_value, **kwargs):
+    fix_cost = 1.
+    return fix_cost
+
+def cost_X8_fix_equal(intervention_value, **kwargs):
+    fix_cost = 1.
+    return fix_cost
+
+
+
+## Define a cost variable for each intervention
+def cost_X1_fix_different(intervention_value, **kwargs):
+    fix_cost = 1.
+    return fix_cost
+
+def cost_X2_fix_different(intervention_value, **kwargs):
     fix_cost = 10.
     return fix_cost
 
-def cost_C_fix_different(intervention_value, **kwargs):
-    fix_cost = 2.
-    return fix_cost
-
-def cost_D_fix_different(intervention_value, **kwargs):
+def cost_X3_fix_different(intervention_value, **kwargs):
     fix_cost = 5.
     return fix_cost
 
-def cost_E_fix_different(intervention_value, **kwargs):
+def cost_X4_fix_different(intervention_value, **kwargs):
     fix_cost = 20.
     return fix_cost
 
-def cost_F_fix_different(intervention_value, **kwargs):
+def cost_X5_fix_different(intervention_value, **kwargs):
     fix_cost = 3.
     return fix_cost
 
-def cost_control_fix_different(intervention_value, **kwargs):
-    return 0.
+def cost_X6_fix_different(intervention_value, **kwargs):
+    fix_cost = 3.
+    return fix_cost
+
+def cost_X7_fix_different(intervention_value, **kwargs):
+    fix_cost = 3.
+    return fix_cost
+
+def cost_X8_fix_different(intervention_value, **kwargs):
+    fix_cost = 3.
+    return fix_cost
 
 
 
 ## Define a cost variable for each intervention
-def cost_A_fix_different_variable(intervention_value, **kwargs):
+def cost_X1_fix_different_variable(intervention_value, **kwargs):
     fix_cost = 1.
     return np.sum(np.abs(intervention_value)) + fix_cost
 
-def cost_B_fix_different_variable(intervention_value, **kwargs):
+def cost_X2_fix_different_variable(intervention_value, **kwargs):
     fix_cost = 10.
     return np.sum(np.abs(intervention_value)) + fix_cost
 
-def cost_C_fix_different_variable(intervention_value, **kwargs):
-    fix_cost = 2.
-    return np.sum(np.abs(intervention_value)) + fix_cost
-
-def cost_D_fix_different_variable(intervention_value, **kwargs):
+def cost_X3_fix_different_variable(intervention_value, **kwargs):
     fix_cost = 5.
     return np.sum(np.abs(intervention_value)) + fix_cost
 
-def cost_E_fix_different_variable(intervention_value, **kwargs):
+def cost_X4_fix_different_variable(intervention_value, **kwargs):
     fix_cost = 20.
     return np.sum(np.abs(intervention_value)) + fix_cost
 
-def cost_F_fix_different_variable(intervention_value, **kwargs):
+def cost_X5_fix_different_variable(intervention_value, **kwargs):
     fix_cost = 3.
     return np.sum(np.abs(intervention_value)) + fix_cost
 
-def cost_control_fix_different_variable(intervention_value, **kwargs):
-    return 0.
+def cost_X6_fix_different_variable(intervention_value, **kwargs):
+    fix_cost = 3.
+    return np.sum(np.abs(intervention_value)) + fix_cost
+
+def cost_X7_fix_different_variable(intervention_value, **kwargs):    
+    fix_cost = 3.
+    return np.sum(np.abs(intervention_value)) + fix_cost
+
+def cost_X8_fix_different_variable(intervention_value, **kwargs):
+    fix_cost = 3.
+    return np.sum(np.abs(intervention_value)) + fix_cost
 
 
 
 ## Define a cost variable for each intervention
-def cost_A_fix_equal_variable(intervention_value, **kwargs):
+def cost_X1_fix_equal_variable(intervention_value, **kwargs):
     fix_cost = 1.
     return np.sum(np.abs(intervention_value)) + fix_cost
 
-def cost_B_fix_equal_variable(intervention_value, **kwargs):
+def cost_X2_fix_equal_variable(intervention_value, **kwargs):
     fix_cost = 1.
     return np.sum(np.abs(intervention_value)) + fix_cost
 
-def cost_C_fix_equal_variable(intervention_value, **kwargs):
+def cost_X3_fix_equal_variable(intervention_value, **kwargs):
     fix_cost = 1.
     return np.sum(np.abs(intervention_value)) + fix_cost
 
-def cost_D_fix_equal_variable(intervention_value, **kwargs):
+def cost_X4_fix_equal_variable(intervention_value, **kwargs):
     fix_cost = 1.
     return np.sum(np.abs(intervention_value)) + fix_cost
 
-def cost_E_fix_equal_variable(intervention_value, **kwargs):
+def cost_X5_fix_equal_variable(intervention_value, **kwargs):
     fix_cost = 1.
     return np.sum(np.abs(intervention_value)) + fix_cost
 
-def cost_F_fix_equal_variable(intervention_value, **kwargs):
+def cost_X6_fix_equal_variable(intervention_value, **kwargs):
     fix_cost = 1.
     return np.sum(np.abs(intervention_value)) + fix_cost
 
-def cost_control_fix_equal_variable(intervention_value, **kwargs):
-    return 0.
+def cost_X7_fix_equal_variable(intervention_value, **kwargs):
+    fix_cost = 1.
+    return np.sum(np.abs(intervention_value)) + fix_cost
 
+def cost_X8_fix_equal_variable(intervention_value, **kwargs):
+    fix_cost = 1.
+    return np.sum(np.abs(intervention_value)) + fix_cost
 
 
 def define_costs(type_cost):
     if type_cost == 1:
         costs = OrderedDict ([
-        ('A', cost_A_fix_equal),
-        ('B', cost_B_fix_equal),
-        ('C', cost_C_fix_equal),
-        ('D', cost_D_fix_equal),
-        ('E', cost_E_fix_equal),
-        ('F', cost_F_fix_equal),
-        ('control', cost_control_fix_equal),
+        ('X1', cost_X1_fix_equal),
+        ('X2', cost_X2_fix_equal),
+        ('X3', cost_X3_fix_equal),
+        ('X4', cost_X4_fix_equal),
+        ('X5', cost_X5_fix_equal),
+        ('X6', cost_X6_fix_equal),
+        ('X7', cost_X7_fix_equal),
+        ('X8', cost_X8_fix_equal)
             ])
+        
     if type_cost == 2:
         costs = OrderedDict ([
-        ('A', cost_A_fix_different),
-        ('B', cost_B_fix_different),
-        ('C', cost_C_fix_different),
-        ('D', cost_D_fix_different),
-        ('E', cost_E_fix_different),
-        ('F', cost_F_fix_different),
-        ('control', cost_control_fix_different),
+        ('X1', cost_X1_fix_different),
+        ('X2', cost_X2_fix_different),
+        ('X3', cost_X3_fix_different),
+        ('X4', cost_X4_fix_different),
+        ('X5', cost_X5_fix_different),
+        ('X6', cost_X6_fix_different),
+        ('X7', cost_X7_fix_different),
+        ('X8', cost_X8_fix_different)
             ])
 
     if type_cost == 3:
         costs = OrderedDict ([
-        ('A', cost_A_fix_different_variable),
-        ('B', cost_B_fix_different_variable),
-        ('C', cost_C_fix_different_variable),
-        ('D', cost_D_fix_different_variable),
-        ('E', cost_E_fix_different_variable),
-        ('F', cost_F_fix_different_variable),
-        ('control', cost_control_fix_different_variable),
+        ('X1', cost_X1_fix_different_variable),
+        ('X2', cost_X2_fix_different_variable),
+        ('X3', cost_X3_fix_different_variable),
+        ('X4', cost_X4_fix_different_variable),
+        ('X5', cost_X5_fix_different_variable),
+        ('X6', cost_X6_fix_different_variable),
+        ('X7', cost_X7_fix_different_variable),
+        ('X8', cost_X8_fix_different_variable)
             ])
 
     if type_cost == 4:
         costs = OrderedDict ([
-        ('A', cost_A_fix_equal_variable),
-        ('B', cost_B_fix_equal_variable),
-        ('C', cost_C_fix_equal_variable),
-        ('D', cost_D_fix_equal_variable),
-        ('E', cost_E_fix_equal_variable),
-        ('F', cost_F_fix_equal_variable),
-        ('control', cost_control_fix_equal_variable),
+        ('X1', cost_X1_fix_equal_variable),
+        ('X2', cost_X2_fix_equal_variable),
+        ('X3', cost_X3_fix_equal_variable),
+        ('X4', cost_X4_fix_equal_variable),
+        ('X5', cost_X5_fix_equal_variable),
+        ('X6', cost_X6_fix_equal_variable),
+        ('X7', cost_X7_fix_equal_variable),
+        ('X8', cost_X8_fix_equal_variable)
             ])
 
     return costs

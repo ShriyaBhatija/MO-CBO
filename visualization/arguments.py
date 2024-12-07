@@ -7,7 +7,7 @@ Arguments for visualization
 def get_vis_args():
     parser = ArgumentParser()
 
-    parser.add_argument('--problem', type=str, default = 'mo-cbo3',
+    parser.add_argument('--problem', type=str, default = 'mo-cbo2',
         help='optimization problem')
     parser.add_argument('--exp-set', type=str, default = 'pomis', choices=['mis', 'pomis', 'mobo'],
         help='exploration set')
@@ -15,9 +15,9 @@ def get_vis_args():
         help='which samples to do the initial iteration with')
     parser.add_argument('--algo', type=str, default='cps',
         help='type of algorithm to use with some predefined arguments, or custom arguments')
-    parser.add_argument('--seed', type=int, default=7,
+    parser.add_argument('--seed', type=int, default=0,
         help='seed / test run')
-    parser.add_argument('--n-seed', type=int, default=1,
+    parser.add_argument('--n-seed', type=int, default=5,
         help='number of total seeds / test runs')
     parser.add_argument('--n-iter', type=int, default=20, 
         help='number of optimization iterations')

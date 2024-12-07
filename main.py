@@ -52,7 +52,7 @@ def main(args, framework_args):
     data_x_list, data_y_list = define_initial_data_CBO(interventional_data, args.batch_size, exploration_set, seed)
 
     # Run the algorithm
-    Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, functions, full_observational_samples, observational_samples, interventional_data, dict_ranges, data_x_list, data_y_list)
+    Causal_ParetoSelect(args,framework_args, graph, exploration_set, costs, functions, full_observational_samples, observational_samples, interventional_data, dict_ranges, data_x_list, data_y_list)
 
 
 

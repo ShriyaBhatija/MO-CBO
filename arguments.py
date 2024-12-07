@@ -14,16 +14,16 @@ def get_general_args(args=None):
     '''
     parser = ArgumentParser()
 
-    parser.add_argument('--problem', type=str, default='mo-cbo3', 
+    parser.add_argument('--problem', type=str, default='mo-cbo2', 
         help='optimization problem')
-    parser.add_argument('--exp-set', type=str, default='mobo', choices=['mis', 'pomis', 'mobo'], 
+    parser.add_argument('--exp-set', type=str, default='pomis', choices=['mis', 'pomis', 'mobo'], 
         help='exploration set')
     parser.add_argument('--type_cost', default = 1, type = int, help = 'cost structure')
     parser.add_argument('--n-init-sample-obs', type=int, default=10, 
         help='number of initial observational samples')
     parser.add_argument('--n-init-sample-int', type=int, default=20, 
         help='number of initial interventional samples')
-    parser.add_argument('--n-iter', type=int, default=20, 
+    parser.add_argument('--n-iter', type=int, default=100, 
         help='number of optimization iterations')
 
     parser.add_argument('--algo', type=str, default='cps',

@@ -10,127 +10,113 @@ from .graph import GraphStructure
 from .mocbo2_CostFunctions import define_costs
 
 
+
 class MO_CBO2(GraphStructure):
-    """
-    An instance of the class graph giving the graph structure in the synthetic example 
     
-    Parameters
-    ----------
-    """
     def __init__(self, observational_samples):
-        self.A = np.asarray(observational_samples['A'])[:,np.newaxis]
-        self.B = np.asarray(observational_samples['B'])[:,np.newaxis]
-        self.C = np.asarray(observational_samples['C'])[:,np.newaxis]
-        self.D = np.asarray(observational_samples['D'])[:,np.newaxis]
-        self.E = np.asarray(observational_samples['E'])[:,np.newaxis]
-        self.F = np.asarray(observational_samples['F'])[:,np.newaxis]
+                
+        self.X1 = np.asarray(observational_samples['X1'])[:,np.newaxis]
+        self.X2 = np.asarray(observational_samples['X2'])[:,np.newaxis]
+        self.X3 = np.asarray(observational_samples['X3'])[:,np.newaxis]
+        self.X4 = np.asarray(observational_samples['X4'])[:,np.newaxis]
+        self.X5 = np.asarray(observational_samples['X5'])[:,np.newaxis]
+        self.X6 = np.asarray(observational_samples['X6'])[:,np.newaxis]
+        self.X7 = np.asarray(observational_samples['X7'])[:,np.newaxis]
+        self.X8 = np.asarray(observational_samples['X8'])[:,np.newaxis]
         self.Y1 = np.asarray(observational_samples['Y1'])[:,np.newaxis]
         self.Y2 = np.asarray(observational_samples['Y2'])[:,np.newaxis]
 
     def define_SEM(self):
 
-        def fU1(epsilon, **kwargs):
-          return epsilon[0]
+        def fU(epsilon, **kwargs):
+          #return np.random.normal(-4, 0.1, 1)[0]
+          return np.random.choice([-4, 4], p=[0.5, 0.5])
 
-        def fU2(epsilon, **kwargs):
+        def fx4(epsilon, U, **kwargs):
+          return (epsilon[0]/20)**2 + U
+
+        def fx5(epsilon, **kwargs):
           return epsilon[1]
 
-        def fF(epsilon, **kwargs):
-          return epsilon[9]
+        def fx7(epsilon, **kwargs):
+          return epsilon[2]
 
-        def fA(epsilon, U1, F, **kwargs):
-          return F**2 + U1 + epsilon[2]
+        def fx8(epsilon, **kwargs):
+          return epsilon[3]
 
-        def fB(epsilon, U2, **kwargs):
-          return U2 + epsilon[3]
+        def fx6(epsilon, X5, X7, X8, **kwargs):
+          return np.exp(X5+X7+X8-30) + epsilon[4]
 
-        def fC(epsilon, B, **kwargs):
-          return np.exp(-B) + epsilon[4]
-
-        def fD(epsilon, C, **kwargs):
-          return np.exp(-C)/10. + epsilon[5]
-
-        def fE(epsilon, A, C, **kwargs):
-          return A + C + epsilon[6]
-
-        def fY1(epsilon, D, E, U1, U2, **kwargs):
-          return (D+E)**2 + U1 + np.exp(-U2) + epsilon[7]
+        def fx1(epsilon, X4, **kwargs):
+          return X4/2 + 0.1*epsilon[5]
         
-        def fY2(epsilon, D, E, **kwargs):
-           return (D+E-10)**2+ epsilon[8]
-
-        # This is just a buffer, so the code works for intervention sets of length one
-        # Note that this does not influence any other variables (i.e. it is parent and childless)
-        def f_control(epsilon, **kwargs):
-          return epsilon[6]*0
+        def fx2(epsilon, X5, X6, **kwargs):
+          return np.exp(X5+X6-10) + epsilon[6]
         
+        def fx3(epsilon, X5, X7, **kwargs):
+          return np.log(1+(X5+X7)/10) + epsilon[7]
+
+        def fy1(epsilon, X1, X2, U, **kwargs):
+          return np.log(1+X1**2) + 2*X2**2 - X1*X2*(U/2) + epsilon[8]**2
+
+        def fy2(epsilon, X2, X3, **kwargs):
+          return np.sin(X2**2) - X3**2 - X2*X3 + 50 + epsilon[9]**2
+
 
         graph = OrderedDict ([
-              ('U1', fU1),
-              ('U2', fU2),
-              ('F', fF),
-              ('A', fA),
-              ('B', fB),
-              ('C', fC),
-              ('D', fD),
-              ('E', fE),
-              ('Y1', fY1),
-              ('Y2', fY2),
-              ('control', f_control)
-            ])
-        return graph
+          ('U', fU),
+          ('X4', fx4),
+          ('X5', fx5),
+          ('X7', fx7),
+          ('X8', fx8),
+          ('X6', fx6),
+          ('X1', fx1),
+          ('X2', fx2),
+          ('X3', fx3),
+          ('Y1', fy1),
+          ('Y2', fy2),
+        ])
 
+        return graph
+    
 
     def get_targets(self):
         return ['Y1', 'Y2'] 
     
 
     def get_exploration_sets(self):
-        MIS = [['B', 'control'], ['D', 'control'], ['E', 'control'], ['B', 'D'], ['B', 'E'], ['D', 'E']]
-        POMIS = [['B', 'control'], ['D', 'control'], ['E', 'control'], ['B', 'D'], ['D', 'E']]
-        POMIS = [['B', 'D']]
-        manipulative_variables = [['B', 'D', 'E']]
+        POMIS = [['X1', 'X2', 'X3'], ['X2', 'X3']]
+        manipulative_variables = [['X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8']]
 
         exploration_sets = {
-         'mis': MIS,
-         'pomis': POMIS,
-         'mobo': manipulative_variables
+            'pomis': POMIS,
+            'mobo': manipulative_variables
         }
         return exploration_sets
-
-
-
-    def get_set_MOBO(self):
-        manipulative_variables = ['B', 'D', 'E']
-        return manipulative_variables
-
-
-    def get_interventional_ranges(self):
-        min_intervention_e = -1
-        max_intervention_e = 1
-
-        min_intervention_b = -4
-        max_intervention_b = 1
-
-        min_intervention_d = -5
-        max_intervention_d = 5
-
-        min_intervention_f = -4
-        max_intervention_f = 4
-
-        min_control = -0.5
-        max_control = 0.5
-
-        dict_ranges = OrderedDict ([
-          ('E', [min_intervention_e, max_intervention_e]),
-          ('B', [min_intervention_b, max_intervention_b]),
-          ('D', [min_intervention_d, max_intervention_d]),
-          ('F', [min_intervention_f, max_intervention_f]),
-          ('control', [min_control, max_control])
-        ])
-        return dict_ranges
     
 
+    def get_set_MOBO(self):
+        manipulative_variables = ['X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8']
+        return manipulative_variables
+    
+
+    def get_interventional_ranges(self):
+        min_intervention = 0
+        max_intervention = 5
+
+        dict_ranges = OrderedDict ([
+            ('X1', [min_intervention-2, max_intervention]),
+            ('X2', [min_intervention, max_intervention]),
+            ('X3', [min_intervention, max_intervention]),
+            ('X4', [min_intervention-4, max_intervention]),
+            ('X5', [min_intervention, max_intervention]),
+            ('X6', [min_intervention, max_intervention]),
+            ('X7', [min_intervention, max_intervention]),
+            ('X8', [min_intervention, max_intervention])
+        ])
+      
+        return dict_ranges
+    
     def fit_all_models(self):
        pass
 
@@ -143,4 +129,3 @@ class MO_CBO2(GraphStructure):
     def get_cost_structure(self, type_cost):
         costs = define_costs(type_cost)
         return costs
-

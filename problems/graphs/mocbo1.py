@@ -85,7 +85,7 @@ class MO_CBO1(GraphStructure):
 
     def get_interventional_ranges(self):
       min_intervention_x = -1
-      max_intervention_x = 2
+      max_intervention_x = 1
 
       min_intervention_z = -1
       max_intervention_z = 3

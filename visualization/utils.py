@@ -6,6 +6,7 @@ def get_intervention_set_name(intervention_variables):
     for i in range(len(intervention_variables)):
         if str(intervention_variables[i]) != 'control':
             string += str(intervention_variables[i]) 
+            print(string)
     return string
 
 
@@ -71,19 +72,20 @@ def get_algo_names(args):
 
 
 defaultColours = [
-    '#1f77b4',  # muted blue
+    '#bc7c75',  # lighter chestnut brown
+    '#4a90e2',  # lighter muted blue
     '#ff7f0e',  # safety orange
-    '#e377c2',  # raspberry yogurt pink
+    '#ff3216',  # bright red
     '#d62728',  # brick red
     '#2ca02c',  # cooked asparagus green
     '#17becf',  # blue-teal
+    '#e377c2',  # raspberry yogurt pink
     '#bcbd22',  # curry yellow-green
     '#9467bd',  # muted purple
-    '#8c564b',  # chestnut brown
-    #'#e377c2',  # raspberry yogurt pink
     #'#7f7f7f',  # middle gray
-    '#fd3216',  # Light24 list
+    '#1f77b4',  # muted blue
     '#ea1b85',  # more below
+    '#fd3216',  # Light24 list
     '#7d7803',
     '#ff8fa6',
     '#aeeeee',

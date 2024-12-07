@@ -34,7 +34,7 @@ class Solver:
 
         # setup algorithm
         algo = self.algo_type(sampling=sampling, **self.algo_kwargs)
-
+        
         # optimization
         res = minimize(problem, algo, ('n_gen', self.n_gen))
 

@@ -7,7 +7,8 @@ from numpy.random import randn
 
 def sample_from_model(model, epsilon = None):
   if epsilon is None:
-     epsilon = np.random.normal(0, 0.1, len(model))
+    epsilon = np.random.normal(0, 0.1, len(model))
+    #epsilon = np.random.normal(0, 1, len(model))
   sample = {}
   for variable, function in model.items():
     sample[variable] = function(epsilon, **sample)
