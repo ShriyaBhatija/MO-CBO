@@ -25,10 +25,10 @@ class Health(GraphStructure):
     def define_SEM(self):
 
         def f_age(epsilon, **kwargs):
-          return np.random.normal(65, 1, 1)[0]
+          return np.random.normal(65, 0.5, 1)[0]
         
         def f_bmi(epsilon, age, **kwargs):
-          return 27.0 - 0.01*age + np.random.uniform(0, 0.7, 1)[0]
+          return 27.0 - 0.01*age + np.random.normal(0, 0.7, 1)[0]
         
         def f_aspirin(epsilon, age, bmi, **kwargs):
           return 1 / (1 + np.exp(-1*(-8.0 + 0.10*age + 0.03*bmi)))
@@ -69,10 +69,12 @@ class Health(GraphStructure):
               ['statin', 'aspirin'], ['statin', 'bmi'], ['aspirin', 'bmi'],
               ['aspirin', 'statin', 'bmi']
               ]
+      POMIS = [['aspirin', 'statin', 'bmi']]
       manipulative_variables = [['aspirin', 'statin', 'bmi']]
 
       exploration_sets = {
           'mis': MIS,
+          'pomis': POMIS,
           'mobo': manipulative_variables
       }
       return exploration_sets

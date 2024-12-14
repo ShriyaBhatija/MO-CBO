@@ -14,9 +14,9 @@ def get_general_args(args=None):
     '''
     parser = ArgumentParser()
 
-    parser.add_argument('--problem', type=str, default='mo-cbo1', 
+    parser.add_argument('--problem', type=str, default='mo-cbo-health', 
         help='optimization problem')
-    parser.add_argument('--exp-set', type=str, default='mobo', choices=['mis', 'pomis', 'mobo'], 
+    parser.add_argument('--exp-set', type=str, default='pomis', choices=['mis', 'pomis', 'mobo'], 
         help='exploration set')
     parser.add_argument('--type_cost', default = 1, type = int, help = 'cost structure')
     parser.add_argument('--n-init-sample-obs', type=int, default=10, 

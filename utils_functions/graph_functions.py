@@ -48,7 +48,7 @@ def intervene_dict(model, **interventions):
 
 
 #EDITED to support our multi-objective optimisation framework
-def Intervention_function(*interventions, model, targets, num_samples = 2):
+def Intervention_function(*interventions, model, targets, num_samples = 1000):
 
     def compute_target_function_fcn(value):
         num_interventions = len(interventions[0])
@@ -60,7 +60,7 @@ def Intervention_function(*interventions, model, targets, num_samples = 2):
         
         samples = [sample_from_model(mutilated_model) for _ in range(num_samples)]
         samples = pd.DataFrame(samples)
-
+        print(samples)
         result = np.array([np.mean(samples[target]) for target in targets])
         return result
 

@@ -8,8 +8,8 @@ from utils_functions import *
 
 
 parser = argparse.ArgumentParser(description='create_datasets')
-parser.add_argument('--experiment', default = 'mo-cbo1', type = str, help = 'experiment')
-parser.add_argument('--exp-set', type=str, default='mis', choices=['pomis', 'mis', 'mobo'], help='exploration set')
+parser.add_argument('--experiment', default = 'mo-cbo-health', type = str, help = 'experiment')
+parser.add_argument('--exp-set', type=str, default='pomis', choices=['pomis', 'mis', 'mobo'], help='exploration set')
 parser.add_argument('--obs_num_samples', default=100, type=int, help='number of observational samples to be generated')
 parser.add_argument('--int_num_samples', default=20, type=int, help='number of interventional samples to be generated')
 
@@ -112,5 +112,5 @@ def main(seed):
 
 
 if __name__ == '__main__':
-    for seed in range(0,10):
+    for seed in range(0,1):
         main(seed)
