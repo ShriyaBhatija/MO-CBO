@@ -40,7 +40,7 @@ class CausalMOBO(Problem):
     return anp.asarray(f)
   
 
-  def _calc_pareto_front(self, n_pareto_points=100):
+  def _calc_pareto_front(self, n_pareto_points=20):
     '''
     Calculate the true causal Pareto front by evaluating the target function for each intervention set 
     and filtering the Pareto optimal points
@@ -56,7 +56,7 @@ class CausalMOBO(Problem):
     if 'pomis' in self.graph.get_exploration_sets():
       exploration_set = self.graph.get_exploration_sets()['pomis']
     else:
-      exploration_set = self.graph.get_exploration_sets()['mis']
+      exploration_set = self.graph.get_exploration_sets()['mobo']
 
     f = []
 
@@ -71,9 +71,10 @@ class CausalMOBO(Problem):
       points = anp.vstack([x1_grid.ravel(), x2_grid.ravel()]).T
 
       target_function = Intervention_function(get_interventional_dict(set),
-									model = self.graph.define_SEM(), targets = self.graph.get_targets(), num_samples=10000)
+									model = self.graph.define_SEM(), targets = self.graph.get_targets(), num_samples=1000)
     
       for i in range(points.shape[0]):
+        print(f'{i}/{points.shape[0]}')
         target_value = target_function(points[i])
         f.append(target_value)
 

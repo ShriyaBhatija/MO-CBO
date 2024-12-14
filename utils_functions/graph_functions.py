@@ -4,15 +4,14 @@ import pandas as pd
 from numpy.random import randn
 
 
-
 def sample_from_model(model, epsilon = None):
-  if epsilon is None:
-    epsilon = np.random.normal(0, 0.1, len(model))
-    #epsilon = np.random.normal(0, 1, len(model))
-  sample = {}
-  for variable, function in model.items():
-    sample[variable] = function(epsilon, **sample)
-  return sample
+    if epsilon is None:
+        #epsilon = np.random.normal(0, 0.5, len(model))
+        epsilon = np.random.normal(0, 1, len(model))
+    sample = {}
+    for variable, function in model.items():
+        sample[variable] = function(epsilon, **sample)
+    return sample
   
 
 def intervene(*interventions, model):
@@ -49,16 +48,16 @@ def intervene_dict(model, **interventions):
 
 
 #EDITED to support our multi-objective optimisation framework
-def Intervention_function(*interventions, model, targets, num_samples = 100):
+def Intervention_function(*interventions, model, targets, num_samples = 2):
 
     def compute_target_function_fcn(value):
         num_interventions = len(interventions[0])
 
         for i in range(num_interventions):
             interventions[0][list(interventions[0].keys())[i]] = value[i]
-    
-        mutilated_model = intervene_dict(model, **interventions[0])
 
+        mutilated_model = intervene_dict(model, **interventions[0])
+        
         samples = [sample_from_model(mutilated_model) for _ in range(num_samples)]
         samples = pd.DataFrame(samples)
 

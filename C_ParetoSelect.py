@@ -62,8 +62,7 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, fun
         if s == 0:
             if true_pfront is not None:
                 exporter[s].write_truefront_csv(true_pfront)
-        
-        print('done')
+    
     
         
 
@@ -219,7 +218,10 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, fun
             # model_list[index].model.save_model(save_model_path)
 
             ## Which intervention set was intervened on
-            if np.sum(experiment_log['cost']) <= 800:
+            if (np.sum(experiment_log['cost'])+current_cost[index]) > 800:
+                break
+
+            if (np.sum(experiment_log['cost'])+current_cost[index]) <= 800:
                 experiment_log['intervened_set'].append(get_intervention_set_name(exploration_set[index]))
                 experiment_log['relative_hv_improvement'].append(Y_aquisition_list[index])
                 experiment_log['previous_hv'].append(hv_next_list[int(trial_intervened)-1,index])

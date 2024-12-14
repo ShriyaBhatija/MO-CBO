@@ -54,7 +54,7 @@ def generational_distance(A, Z, p=2):
     return ((np.sum(distances)) / len(A))**(1/2)
 
 
-def calculate_metrics(args, problem_dir, true_front, exp_set):
+def calculate_metrics(args, problem_dir, true_front, exp_set, n_targets):
     args.exp_set = exp_set
 
     # Determine the minimum number of iterations across all seeds
@@ -90,7 +90,10 @@ def calculate_metrics(args, problem_dir, true_front, exp_set):
                     # Get the points from the Pareto front of the last iteration (i.e. the complete approximation)
                     points = paretoEval[paretoEval['iterID'] == iterID]
                     for _, row in points.iterrows():
-                        all_pareto_points.append([row['Pareto_f1'], row['Pareto_f2']])
+                        if n_targets == 2:
+                            all_pareto_points.append([row['Pareto_f1'], row['Pareto_f2']])
+                        elif n_targets == 3:
+                            all_pareto_points.append([row['Pareto_f1'], row['Pareto_f2'], row['Pareto_f3']])
 
             else:
                 intervention_set = np.asarray((experiment_log['intervened_set']))[iterID]
@@ -103,7 +106,10 @@ def calculate_metrics(args, problem_dir, true_front, exp_set):
                     # Get the points from the Pareto front of the last iteration (i.e. the complete approximation)
                     points = paretoEval[paretoEval['iterID'] == n]
                     for _, row in points.iterrows():
-                        all_pareto_points.append([row['Pareto_f1'], row['Pareto_f2']])
+                        if n_targets == 2:
+                            all_pareto_points.append([row['Pareto_f1'], row['Pareto_f2']])
+                        elif n_targets == 3:
+                            all_pareto_points.append([row['Pareto_f1'], row['Pareto_f2'], row['Pareto_f3']])
             
             # Calculate Pareto efficient points
             pareto_flags = is_pareto_optimal(np.array([point for point in all_pareto_points]))
@@ -127,6 +133,7 @@ def main():
 
     # True causal Pareto front 
     true_front = np.asarray(pd.read_csv(f'{problem_dir}/{args.algo}/{args.mode}/' + 'TrueCausalParetoFront.csv'))
+    n_targets = true_front.shape[1]
 
     # Plotting
     plt.figure(figsize=(10, 6))
@@ -134,9 +141,8 @@ def main():
     for spine in plt.gca().spines.values():
         spine.set_linewidth(1.5)
 
-    for exp_set in ['mobo', 'pomis']:
-        print(exp_set)
-        gd, igd, costs = calculate_metrics(args, problem_dir, true_front, exp_set)
+    for exp_set in ['pomis', 'mobo']:
+        gd, igd, costs = calculate_metrics(args, problem_dir, true_front, exp_set, n_targets)
 
         gd_avg, gd_std = np.mean(gd, axis=1), np.std(gd, axis=1)
         igd_avg, igd_std = np.mean(igd, axis=1), np.std(igd, axis=1)
@@ -160,11 +166,11 @@ def main():
 
         # Plot GD
         #plt.plot(costs_avg, gd_avg, label=f'{legend_labels[exp_set]}', marker=None, linestyle='-', color=color_map[exp_set], linewidth=2)
-        #plt.fill_between(costs_avg, gd_avg - gd_std*0.4, gd_avg + gd_std*0.4, alpha=0.2, color=color_map[exp_set])
+        #plt.fill_between(costs_avg, gd_avg - gd_std*0.6, gd_avg + gd_std*0.6, alpha=0.2, color=color_map[exp_set])
 
         # Plot IGD
         plt.plot(costs_avg, igd_avg, label=f'{legend_labels[exp_set]}', marker=None, linestyle='-', color=color_map[exp_set], linewidth=2)
-        plt.fill_between(costs_avg, igd_avg - igd_std*0.4, igd_avg + igd_std*0.4, alpha=0.2, color=color_map[exp_set])
+        plt.fill_between(costs_avg, igd_avg - igd_std*0.6, igd_avg + igd_std*0.6, alpha=0.2, color=color_map[exp_set])
         
     
     # Labels and title

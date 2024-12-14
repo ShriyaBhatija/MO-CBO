@@ -46,6 +46,7 @@ class MO_CBO1(GraphStructure):
         # Note that this does not influence any other variables (i.e. it is parent and childless)
         def f_control(epsilon, **kwargs):
           return epsilon[6]*0
+        
 
         graph = OrderedDict ([
           ('X3', fx3),
@@ -66,7 +67,9 @@ class MO_CBO1(GraphStructure):
 
     def get_exploration_sets(self):
       MIS = [['X1', 'control'], ['X2', 'control'], ['X3', 'control'], ['X4', 'control'], 
-             ['X1', 'X2'], ['X3', 'X4'], ['X2', 'X3'], ['X1', 'X4']]
+             ['X1', 'X2'], ['X1', 'X3'], ['X1', 'X4'], ['X2', 'X3'], ['X2', 'X4'],['X3', 'X4'],
+             ['X1','X3','X4'], ['X2','X3','X4']
+             ]
       POMIS = [['X1','X2']]
       manipulative_variables = [['X1', 'X2', 'X3', 'X4']]
 

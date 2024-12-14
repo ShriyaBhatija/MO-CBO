@@ -25,8 +25,7 @@ class Health(GraphStructure):
     def define_SEM(self):
 
         def f_age(epsilon, **kwargs):
-          return np.random.normal(65, 2, 1)[0]
-          #return 65
+          return np.random.normal(65, 1, 1)[0]
         
         def f_bmi(epsilon, age, **kwargs):
           return 27.0 - 0.01*age + np.random.uniform(0, 0.7, 1)[0]
@@ -38,10 +37,10 @@ class Health(GraphStructure):
           return 1 / (1 + np.exp(-1*(-13.0 + 0.10*age + 0.20*bmi)))
 
         def f_cancer(epsilon, age, bmi, aspirin, statin, **kwargs):
-          return 1 / (1 + np.exp(-1*(-2.2 - 0.05*age + 0.01*bmi - 0.04*statin + 0.02*aspirin)))
+          return 1 / (1 + np.exp(-1*(2.2 - 0.05*age + 0.01*bmi - 0.04*statin + 0.02*aspirin)))
 
         def f_psa(epsilon, age, bmi, aspirin, statin, cancer, **kwargs):
-          return 6.8 + 0.04*age - 0.15*bmi - 0.60*statin + 0.55*aspirin + 1.0*cancer + np.random.normal(0, 0.7, 1)[0]
+          return 6.8 + 0.04*age - 0.15*bmi - 0.60*statin + 0.55*aspirin + 1.0*cancer + np.random.normal(0, 0.4, 1)[0]
         
         # This is just a buffer, so the code works for intervention sets of length one
         # Note that this does not influence any other variables (i.e. it is parent and childless)
@@ -66,20 +65,21 @@ class Health(GraphStructure):
     
 
     def get_exploration_sets(self):
-      MIS = [['bmi', 'control'], ['statin', 'control'], ['aspirin', 'control'],
-             ['bmi', 'statin'], ['bmi', 'aspirin'], ['statin', 'aspirin'],
-             ['bmi', 'statin', 'aspirin']]
-      manipulative_variables = [['bmi', 'statin', 'aspirin']]
+      MIS = [['statin','control'], ['aspirin', 'control'], ['bmi', 'control'],
+              ['statin', 'aspirin'], ['statin', 'bmi'], ['aspirin', 'bmi'],
+              ['aspirin', 'statin', 'bmi']
+              ]
+      manipulative_variables = [['aspirin', 'statin', 'bmi']]
 
       exploration_sets = {
-         'mis': MIS,
-         'mobo': manipulative_variables
+          'mis': MIS,
+          'mobo': manipulative_variables
       }
       return exploration_sets
     
 
     def get_set_MOBO(self):
-      manipulative_variables = ['bmi', 'statin', 'aspirin']
+      manipulative_variables = ['aspirin', 'statin', 'bmi']
       return manipulative_variables
     
 

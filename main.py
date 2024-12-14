@@ -17,7 +17,7 @@ def main(args, framework_args):
     seed = args.seed
     np.random.seed(args.seed)
 
-    ## Import the data
+    ## Import the datac
     full_observational_samples = pd.read_pickle(f'./Data/{args.problem}/{args.exp_set}/{args.seed}/observations.pkl')
     observational_samples = full_observational_samples[:args.n_init_sample_obs]
 

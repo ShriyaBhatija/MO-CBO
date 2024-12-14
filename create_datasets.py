@@ -8,8 +8,8 @@ from utils_functions import *
 
 
 parser = argparse.ArgumentParser(description='create_datasets')
-parser.add_argument('--experiment', default = 'mo-cbo2', type = str, help = 'experiment')
-parser.add_argument('--exp-set', type=str, default='pomis', choices=['pomis', 'mis', 'mobo'], help='exploration set')
+parser.add_argument('--experiment', default = 'mo-cbo1', type = str, help = 'experiment')
+parser.add_argument('--exp-set', type=str, default='mis', choices=['pomis', 'mis', 'mobo'], help='exploration set')
 parser.add_argument('--obs_num_samples', default=100, type=int, help='number of observational samples to be generated')
 parser.add_argument('--int_num_samples', default=20, type=int, help='number of interventional samples to be generated')
 
@@ -39,13 +39,17 @@ def main(seed):
         observational_samples = OrderedDict([('age', []), ('bmi', []), ('statin', []), ('aspirin', []), ('cancer', []), ('psa', []), ('control', [])])
         graph = Health(observational_samples)
 
+    if experiment == 'mo-cbo3':
+        observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('Y1', []), ('Y2', []), ('Y3', []), ('control', [])])
+        graph = MO_CBO3(observational_samples)
+
 
     targets = graph.get_targets()
     exploration_set = graph.get_exploration_sets()[args.exp_set]
         
     list_interventional_ranges = graph.get_interventional_ranges()
 
-
+    
     observational_samples = pd.DataFrame([])
     for i in range(obs_num_samples):
         sample = sample_from_model(model = graph.define_SEM())
@@ -54,7 +58,6 @@ def main(seed):
     # Save as pkl file as in the folder
     # Save it using a protocol compatible with Python 3.7
     observational_samples.to_pickle('./Data/' + str(args.experiment) + f'/{args.exp_set}/{seed}/' + 'observations.pkl', protocol=4)
-
     
     interventional_data = [] 
 

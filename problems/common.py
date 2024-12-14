@@ -17,8 +17,9 @@ def get_cbo_options(observational_samples):
 
     problems = {
         #'mo-cbo1': MO_CBO1(observational_samples),
-        'mo-cbo2': MO_CBO2(observational_samples),
-        #'mo-cbo-health': Health(observational_samples)
+        #'mo-cbo2': MO_CBO2(observational_samples),
+        'mo-cbo-health': Health(observational_samples),
+        #'mo-cbo3': MO_CBO3(observational_samples)
     }
     return problems
 

@@ -101,14 +101,20 @@ class MO_CBO2(GraphStructure):
     
 
     def get_interventional_ranges(self):
+        min_intervention_x1 = -2
+        max_intervention_x1 = 5
+
+        min_intervention_x4 = -4
+        max_intervention_x4 = 5
+
         min_intervention = 0
         max_intervention = 5
 
         dict_ranges = OrderedDict ([
-            ('X1', [min_intervention-2, max_intervention]),
+            ('X1', [min_intervention_x1, max_intervention_x1]),
             ('X2', [min_intervention, max_intervention]),
             ('X3', [min_intervention, max_intervention]),
-            ('X4', [min_intervention-4, max_intervention]),
+            ('X4', [min_intervention_x4, max_intervention_x4]),
             ('X5', [min_intervention, max_intervention]),
             ('X6', [min_intervention, max_intervention]),
             ('X7', [min_intervention, max_intervention]),
