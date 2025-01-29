@@ -16,30 +16,18 @@ def get_general_args(args=None):
 
     parser.add_argument('--problem', type=str, default='mo-cbo-health', 
         help='optimization problem')
-    parser.add_argument('--exp-set', type=str, default='pomis', choices=['mis', 'pomis', 'mobo'], 
+    parser.add_argument('--exp-set', type=str, default='mobo', choices=['mis', 'pomis', 'mobo'], 
         help='exploration set')
     parser.add_argument('--type_cost', default = 1, type = int, help = 'cost structure')
-    parser.add_argument('--n-init-sample-obs', type=int, default=10, 
-        help='number of initial observational samples')
-    parser.add_argument('--n-init-sample-int', type=int, default=20, 
+    parser.add_argument('--n-init-sample-int', type=int, default=5, 
         help='number of initial interventional samples')
     parser.add_argument('--n-iter', type=int, default=100, 
         help='number of optimization iterations')
-
-    parser.add_argument('--algo', type=str, default='cps',
-        help='type of algorithm to use with some predefined arguments, or custom arguments')
     parser.add_argument('--mode', type=str, default='int_data', choices=['causal_prior', 'int_data'], 
         help='which samples to do the initial iteration with')
-    parser.add_argument('--batch-size', type=int, default=10, 
-        help='size of the selected batch in one iteration')
     
     parser.add_argument('--seed', type=int, default=0, 
         help='random seed')
-    parser.add_argument('--seeds', type=list, default=[1,2,3,4,5,6,7,9], 
-        help='random seeds')
-
-    parser.add_argument('--n-process', type=int, default=cpu_count(),
-        help='number of processes to be used for parallelization')
 
     args, _ = parser.parse_known_args(args)
     return args
@@ -135,7 +123,7 @@ def get_selection_args(args=None):
 
     parser.add_argument('--selection', type=str, default='cps', 
         help='type of selection method for new batch')
-    parser.add_argument('--batch-size', type=int, default=10, 
+    parser.add_argument('--batch-size', type=int, default=5, 
         help='size of the selected batch in one iteration')
 
     args, _ = parser.parse_known_args(args)

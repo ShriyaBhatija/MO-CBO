@@ -1,8 +1,8 @@
 import autograd.numpy as anp
 
 from problems.problem import Problem
-from utils_functions.graph_functions import Intervention_function
-from utils_functions.utils import get_interventional_dict
+from helpers.graph_functions import Intervention_function
+from helpers.utils import get_interventional_dict
 
 
 '''
@@ -40,7 +40,7 @@ class CausalMOBO(Problem):
     return anp.asarray(f)
   
 
-  def _calc_pareto_front(self, n_pareto_points=20):
+  def _calc_pareto_front(self, n_pareto_points=100):
     '''
     Calculate the true causal Pareto front by evaluating the target function for each intervention set 
     and filtering the Pareto optimal points
@@ -55,6 +55,8 @@ class CausalMOBO(Problem):
     
     if 'pomis' in self.graph.get_exploration_sets():
       exploration_set = self.graph.get_exploration_sets()['pomis']
+    elif 'mis' in self.graph.get_exploration_sets():
+      exploration_set = self.graph.get_exploration_sets()['mis']
     else:
       exploration_set = self.graph.get_exploration_sets()['mobo']
 
@@ -64,14 +66,12 @@ class CausalMOBO(Problem):
       xl =[self.graph.get_interventional_ranges()[variable][0] for variable in set]
       xu =[self.graph.get_interventional_ranges()[variable][1] for variable in set] 
 
-      x1_range = anp.linspace(xl[0], xu[0], n_pareto_points)
-      x2_range = anp.linspace(xl[1], xu[1], n_pareto_points)
-
-      x1_grid, x2_grid = anp.meshgrid(x1_range, x2_range)
-      points = anp.vstack([x1_grid.ravel(), x2_grid.ravel()]).T
+      ranges = [anp.linspace(xl[i], xu[i], n_pareto_points) for i in range(len(set))]
+      grids = anp.meshgrid(*ranges)
+      points = anp.vstack([grid.ravel() for grid in grids]).T
 
       target_function = Intervention_function(get_interventional_dict(set),
-									model = self.graph.define_SEM(), targets = self.graph.get_targets(), num_samples=1000)
+									model = self.graph.define_SEM(), targets = self.graph.get_targets(), num_samples=1)
     
       for i in range(points.shape[0]):
         print(f'{i}/{points.shape[0]}')

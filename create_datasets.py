@@ -1,17 +1,18 @@
 import argparse
-import pathlib 
+import pathlib
+from typing import OrderedDict 
 import numpy as np
 import pandas as pd
 
 from problems import *
-from utils_functions import *
+from helpers import *
 
 
 parser = argparse.ArgumentParser(description='create_datasets')
 parser.add_argument('--experiment', default = 'mo-cbo-health', type = str, help = 'experiment')
-parser.add_argument('--exp-set', type=str, default='pomis', choices=['pomis', 'mis', 'mobo'], help='exploration set')
+parser.add_argument('--exp-set', type=str, default='mobo', choices=['pomis', 'mis', 'mobo'], help='exploration set')
 parser.add_argument('--obs_num_samples', default=100, type=int, help='number of observational samples to be generated')
-parser.add_argument('--int_num_samples', default=20, type=int, help='number of interventional samples to be generated')
+parser.add_argument('--int_num_samples', default=5, type=int, help='number of interventional samples to be generated')
 
 def main(seed):
     args = parser.parse_args()
@@ -37,7 +38,7 @@ def main(seed):
 
     if experiment == 'mo-cbo-health':
         observational_samples = OrderedDict([('age', []), ('bmi', []), ('statin', []), ('aspirin', []), ('cancer', []), ('psa', []), ('control', [])])
-        graph = Health(observational_samples)
+        graph = Health()
 
     if experiment == 'mo-cbo3':
         observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('Y1', []), ('Y2', []), ('Y3', []), ('control', [])])
@@ -81,10 +82,11 @@ def main(seed):
             vars = np.zeros((len(interventions), len(targets)))
 
             for i in range(0, len(interventions)):
+                print(i)
                 intervention = [{var: interventions[i, j] for j, var in enumerate(variables)}]
                 #new_model = intervene(*intervention, model=graph.define_SEM())
                 for j, target in enumerate(targets):
-                    means[i,j], vars[i,j] = compute_target_function(*intervention, model=graph.define_SEM(), target_variable=target, num_samples=10000)
+                    means[i,j], vars[i,j] = compute_target_function(*intervention, model=graph.define_SEM(), target_variable=target, num_samples=1000)
 
             interventional_data[index].append(means)
 

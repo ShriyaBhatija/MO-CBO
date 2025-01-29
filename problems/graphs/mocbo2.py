@@ -2,9 +2,7 @@ import sys
 sys.path.append("..") 
 
 from collections import OrderedDict
-import autograd.numpy as anp
 import numpy as np
-import pandas as pd
 
 from .graph import GraphStructure
 from .mocbo2_CostFunctions import define_costs
@@ -12,24 +10,10 @@ from .mocbo2_CostFunctions import define_costs
 
 
 class MO_CBO2(GraphStructure):
-    
-    def __init__(self, observational_samples):
-                
-        self.X1 = np.asarray(observational_samples['X1'])[:,np.newaxis]
-        self.X2 = np.asarray(observational_samples['X2'])[:,np.newaxis]
-        self.X3 = np.asarray(observational_samples['X3'])[:,np.newaxis]
-        self.X4 = np.asarray(observational_samples['X4'])[:,np.newaxis]
-        self.X5 = np.asarray(observational_samples['X5'])[:,np.newaxis]
-        self.X6 = np.asarray(observational_samples['X6'])[:,np.newaxis]
-        self.X7 = np.asarray(observational_samples['X7'])[:,np.newaxis]
-        self.X8 = np.asarray(observational_samples['X8'])[:,np.newaxis]
-        self.Y1 = np.asarray(observational_samples['Y1'])[:,np.newaxis]
-        self.Y2 = np.asarray(observational_samples['Y2'])[:,np.newaxis]
 
     def define_SEM(self):
 
         def fU(epsilon, **kwargs):
-          #return np.random.normal(-4, 0.1, 1)[0]
           return np.random.choice([-4, 4], p=[0.5, 0.5])
 
         def fx4(epsilon, U, **kwargs):
@@ -123,14 +107,6 @@ class MO_CBO2(GraphStructure):
       
         return dict_ranges
     
-    def fit_all_models(self):
-       pass
-
-    def refit_models(self, observational_samples):
-       pass
-
-    def get_all_do(self):
-       pass
     
     def get_cost_structure(self, type_cost):
         costs = define_costs(type_cost)
