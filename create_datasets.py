@@ -9,7 +9,7 @@ from helpers import *
 
 
 parser = argparse.ArgumentParser(description='create_datasets')
-parser.add_argument('--experiment', default = 'mo-cbo-health', type = str, help = 'experiment')
+parser.add_argument('--experiment', default = 'mo-cbo1', type = str, help = 'experiment')
 parser.add_argument('--exp-set', type=str, default='mobo', choices=['pomis', 'mis', 'mobo'], help='exploration set')
 parser.add_argument('--obs_num_samples', default=100, type=int, help='number of observational samples to be generated')
 parser.add_argument('--int_num_samples', default=5, type=int, help='number of interventional samples to be generated')
@@ -30,11 +30,11 @@ def main(seed):
 
     if experiment == 'mo-cbo1':
         observational_samples = OrderedDict([('X1', []), ('X2', []), ('X3', []), ('X4', []), ('Y1', []), ('Y2', []), ('control', [])])
-        graph = MO_CBO1(observational_samples)
+        graph = MO_CBO1()
 
     if experiment == 'mo-cbo2':
-        observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('X4', []), ('X5', []), ('X6', []), ('X7', []), ('X8', []), ('Y1', []), ('Y2', [])])
-        graph = MO_CBO2(observational_samples)
+        observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('X4', []), ('Y1', []), ('Y2', [])])
+        graph = MO_CBO2()
 
     if experiment == 'mo-cbo-health':
         observational_samples = OrderedDict([('age', []), ('bmi', []), ('statin', []), ('aspirin', []), ('cancer', []), ('psa', []), ('control', [])])
@@ -42,7 +42,7 @@ def main(seed):
 
     if experiment == 'mo-cbo3':
         observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('Y1', []), ('Y2', []), ('Y3', []), ('control', [])])
-        graph = MO_CBO3(observational_samples)
+        graph = MO_CBO3()
 
 
     targets = graph.get_targets()
@@ -114,5 +114,5 @@ def main(seed):
 
 
 if __name__ == '__main__':
-    for seed in range(0,1):
+    for seed in range(0,10):
         main(seed)

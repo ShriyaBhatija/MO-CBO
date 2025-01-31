@@ -26,9 +26,8 @@ def main(args, framework_args):
     # run the algorithm
     Causal_ParetoSelect(args,framework_args, graph, exploration_set, costs, interventional_data)
 
-
 if __name__ == '__main__': 
-    for seed in range(8,10):
+    for seed in range(0,10):
         args, framework_args = get_args()
         args.seed = seed
         main(args, framework_args)

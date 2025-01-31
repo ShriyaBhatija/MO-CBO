@@ -1,3 +1,10 @@
+"""
+This code was originally published by the following individual:
+    Copyright (c) 2020 Yunsheng Tian
+    GitHub: https://github.com/yunshengtian/DGEMO?tab=MIT-1-ov-file
+"""
+
+
 from abc import ABC, abstractmethod
 import numpy as np
 from scipy.spatial import Delaunay

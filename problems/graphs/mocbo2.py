@@ -17,43 +17,27 @@ class MO_CBO2(GraphStructure):
           return np.random.choice([-4, 4], p=[0.5, 0.5])
 
         def fx4(epsilon, U, **kwargs):
-          return (epsilon[0]/20)**2 + U
-
-        def fx5(epsilon, **kwargs):
-          return epsilon[1]
-
-        def fx7(epsilon, **kwargs):
-          return epsilon[2]
-
-        def fx8(epsilon, **kwargs):
-          return epsilon[3]
-
-        def fx6(epsilon, X5, X7, X8, **kwargs):
-          return np.exp(X5+X7+X8-30) + epsilon[4]
+          return epsilon[0]**2 + U
 
         def fx1(epsilon, X4, **kwargs):
-          return X4/2 + 0.1*epsilon[5]
+          return X4/2 + epsilon[1]**2
         
-        def fx2(epsilon, X5, X6, **kwargs):
-          return np.exp(X5+X6-10) + epsilon[6]
+        def fx2(epsilon, **kwargs):
+          return epsilon[2]**2
         
-        def fx3(epsilon, X5, X7, **kwargs):
-          return np.log(1+(X5+X7)/10) + epsilon[7]
+        def fx3(epsilon, **kwargs):
+          return epsilon[3]**2
 
         def fy1(epsilon, X1, X2, U, **kwargs):
-          return np.log(1+X1**2) + 2*X2**2 - X1*X2*(U/2) + epsilon[8]**2
+          return np.log(1+X1**2) + 2*X2**2 - X1*X2*(U/2) + epsilon[4]
 
         def fy2(epsilon, X2, X3, **kwargs):
-          return np.sin(X2**2) - X3**2 - X2*X3 + 50 + epsilon[9]**2
+          return np.sin(X2**2) - X3**2 - X2*X3 + 50 + epsilon[5]
 
 
         graph = OrderedDict ([
           ('U', fU),
           ('X4', fx4),
-          ('X5', fx5),
-          ('X7', fx7),
-          ('X8', fx8),
-          ('X6', fx6),
           ('X1', fx1),
           ('X2', fx2),
           ('X3', fx3),
@@ -70,7 +54,7 @@ class MO_CBO2(GraphStructure):
 
     def get_exploration_sets(self):
         POMIS = [['X1', 'X2', 'X3'], ['X2', 'X3']]
-        manipulative_variables = [['X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8']]
+        manipulative_variables = [['X1', 'X2', 'X3', 'X4']]
 
         exploration_sets = {
             'pomis': POMIS,
@@ -80,29 +64,16 @@ class MO_CBO2(GraphStructure):
     
 
     def get_set_MOBO(self):
-        manipulative_variables = ['X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8']
+        manipulative_variables = ['X1', 'X2', 'X3', 'X4']
         return manipulative_variables
     
 
     def get_interventional_ranges(self):
-        min_intervention_x1 = -2
-        max_intervention_x1 = 5
-
-        min_intervention_x4 = -4
-        max_intervention_x4 = 5
-
-        min_intervention = 0
-        max_intervention = 5
-
         dict_ranges = OrderedDict ([
-            ('X1', [min_intervention_x1, max_intervention_x1]),
-            ('X2', [min_intervention, max_intervention]),
-            ('X3', [min_intervention, max_intervention]),
-            ('X4', [min_intervention_x4, max_intervention_x4]),
-            ('X5', [min_intervention, max_intervention]),
-            ('X6', [min_intervention, max_intervention]),
-            ('X7', [min_intervention, max_intervention]),
-            ('X8', [min_intervention, max_intervention])
+            ('X1', [-2, 5]),
+            ('X2', [0, 5]),
+            ('X3', [0, 5]),
+            ('X4', [-4, 5])
         ])
       
         return dict_ranges

@@ -14,9 +14,9 @@ def get_problem_options():
 def get_cbo_options():
 
     problems = {
-        #'mo-cbo1': MO_CBO1(),
-        #'mo-cbo2': MO_CBO2(),
-        #'mo-cbo3': MO_CBO3(),
+        'mo-cbo1': MO_CBO1(),
+        'mo-cbo2': MO_CBO2(),
+        'mo-cbo3': MO_CBO3(),
         'mo-cbo-health': Health(),
     }
     return problems
@@ -29,11 +29,6 @@ def get_problem(*args, d={}, **kwargs):
 def build_problem(name, mis):
     '''
     Build optimization problem from name, get initial samples
-    Input:
-        name: name of the problem
-    Output:
-        problem: the optimization problem
-        pareto_front: the true pareto front of the problem (if defined, otherwise None)
     ''' 
     try:
         problem = get_problem(graph=get_cbo_options()[name], intervention_set=mis)

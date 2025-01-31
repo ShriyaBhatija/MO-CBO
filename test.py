@@ -70,25 +70,25 @@ for seed in range(0,10):
 import pandas as pd
 
 #interventional_data = np.load(f'./Data/mo-cbo3/pomis/0/interventional_data.npy', allow_pickle=True)
-#interventional_data = np.load(f'./Data/mo-cbo1/mobo/0/interventional_data.npy', allow_pickle=True)
+interventional_data = np.load(f'./Data/mo-cbo2/mobo/0/interventional_data.npy', allow_pickle=True)
 #observational_data = pd.read_pickle(f'./Data/mo-cbo3/pomis/0/observations.pkl')
 #print(interventional_data)
 #print(observational_data)
 #print(interventional_data_new[1][3])
 #print(interventional_data[1][3])
 
-#print(interventional_data)
+print(interventional_data)
 
 #ef f_cancer(age, bmi, aspirin, statin):
 #  return 1 / (1 + np.exp(-1*(2.2 - 0.05*age + 0.01*bmi - 0.04*statin + 0.02*aspirin)))
 
 #print(f_cancer(65, 25, 0, 1)) 
 
-from scipy.stats import truncnorm
+#from scipy.stats import truncnorm
 
-def truncated_normal(mean=0, sd=1, low=-1, upp=2):
-            return truncnorm(
-                (low - mean) / sd, (upp - mean) / sd, loc=mean, scale=sd).rvs()
+#def truncated_normal(mean=0, sd=1, low=-1, upp=2):
+            #return truncnorm(
+            #    (low - mean) / sd, (upp - mean) / sd, loc=mean, scale=sd).rvs()
 
-print(truncated_normal(0, 1, -1, 2))
+#print(truncated_normal(0, 1, -1, 2))
 

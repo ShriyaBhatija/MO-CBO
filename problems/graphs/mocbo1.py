@@ -30,11 +30,6 @@ class MO_CBO1(GraphStructure):
         def fy2(epsilon, X1, X2, **kwargs):
           return (X1+X2-10)**2 + epsilon[5]
         
-        # This is just a buffer, so the code works for intervention sets of length one
-        # Note that this does not influence any other variables (i.e. it is parent and childless)
-        def f_control(epsilon, **kwargs):
-          return epsilon[6]*0
-        
 
         graph = OrderedDict ([
           ('X3', fx3),
@@ -42,8 +37,7 @@ class MO_CBO1(GraphStructure):
           ('X1', fx1),
           ('X2', fx2),
           ('Y1', fy1),
-          ('Y2', fy2),
-          ('control', f_control)
+          ('Y2', fy2)
         ])
 
         return graph
@@ -54,15 +48,10 @@ class MO_CBO1(GraphStructure):
     
 
     def get_exploration_sets(self):
-      MIS = [['X1', 'control'], ['X2', 'control'], ['X3', 'control'], ['X4', 'control'], 
-             ['X1', 'X2'], ['X1', 'X3'], ['X1', 'X4'], ['X2', 'X3'], ['X2', 'X4'],['X3', 'X4'],
-             ['X1','X3','X4'], ['X2','X3','X4']
-             ]
       POMIS = [['X1','X2']]
       manipulative_variables = [['X1', 'X2', 'X3', 'X4']]
 
       exploration_sets = {
-         'mis': MIS,
          'pomis': POMIS,
          'mobo': manipulative_variables
       }
@@ -79,29 +68,16 @@ class MO_CBO1(GraphStructure):
       max_intervention_x = 1
 
       min_intervention_z = -1
-      max_intervention_z = 3
-
-      min_control = -0.5
-      max_control = 0.5
+      max_intervention_z = 2
 
       dict_ranges = OrderedDict ([
           ('X1', [min_intervention_z, max_intervention_z]),
           ('X2', [min_intervention_z, max_intervention_z]),
           ('X3', [min_intervention_x, max_intervention_x]),
-          ('X4', [min_intervention_x, max_intervention_x]),
-          ('control', [min_control, max_control])
+          ('X4', [min_intervention_x, max_intervention_x])
         ])
       
       return dict_ranges  
-    
-    def fit_all_models(self):
-        pass
-    
-    def get_all_do(self):
-        pass
-    
-    def refit_models(self):
-        pass
     
     
     def get_cost_structure(self, type_cost):

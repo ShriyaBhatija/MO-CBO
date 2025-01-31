@@ -14,7 +14,7 @@ def get_general_args(args=None):
     '''
     parser = ArgumentParser()
 
-    parser.add_argument('--problem', type=str, default='mo-cbo-health', 
+    parser.add_argument('--problem', type=str, default='mo-cbo1', 
         help='optimization problem')
     parser.add_argument('--exp-set', type=str, default='mobo', choices=['mis', 'pomis', 'mobo'], 
         help='exploration set')

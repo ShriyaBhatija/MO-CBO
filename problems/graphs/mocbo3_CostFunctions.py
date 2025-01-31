@@ -21,7 +21,6 @@ def cost_X3_fix_equal(intervention_value, **kwargs):
 
 
 
-## Define a cost variable for each intervention
 def cost_X1_fix_different(intervention_value, **kwargs):
     fix_cost = 1.
     return fix_cost
@@ -36,7 +35,6 @@ def cost_X3_fix_different(intervention_value, **kwargs):
 
 
 
-## Define a cost variable for each intervention
 def cost_X1_fix_different_variable(intervention_value, **kwargs):
     fix_cost = 1.
     return np.sum(np.abs(intervention_value)) + fix_cost
@@ -51,7 +49,6 @@ def cost_X3_fix_different_variable(intervention_value, **kwargs):
 
 
 
-## Define a cost variable for each intervention
 def cost_X1_fix_equal_variable(intervention_value, **kwargs):
     fix_cost = 1.
     return np.sum(np.abs(intervention_value)) + fix_cost

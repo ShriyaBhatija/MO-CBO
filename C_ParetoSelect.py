@@ -2,7 +2,7 @@ import numpy as np
 
 from problems.common import build_problem, calc_causal_pareto_front
 from mobo.algorithms import get_algorithm
-from visualisation.data_export import DataExport
+from visualization.data_export import DataExport
 from helpers import *
 from utils import *
 
@@ -65,7 +65,7 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, int
 
 
     i = 0
-    while np.sum(experiment_log['cost']) < 130:
+    while np.sum(experiment_log['cost']) < 805:
         print('Optimization step', i)
 
         # Initialize a new row for this iteration
@@ -98,7 +98,7 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, int
         exporter[index].write_csvs()
             
         # break loop if interventional budget is exhausted
-        if (np.sum(experiment_log['cost'])+current_cost[index]) > 130:
+        if (np.sum(experiment_log['cost'])+current_cost[index]) > 805:
             break
         
         # log iteration
