@@ -84,7 +84,7 @@ from collections import OrderedDict
 import autograd.numpy as anp
 from .graph import GraphStructure
 
-class CUSTOM_PROBLEM(GraphStructure):
+class MyProblem(GraphStructure):
     def define_SEM(self):
         def fx1(epsilon, **kwargs):
           return epsilon[0]
@@ -124,14 +124,11 @@ class CUSTOM_PROBLEM(GraphStructure):
         return costs
 ````
 
-2. In `problems/__init__.py`, add your custom problem as `.graphs.myproblem import CUSTOM_PROBLEM`
-3. In `problems/common.py`, add an abbreviation of your custom problem to the function `get_cbo_options()`, e.g. `custom: CUSTOM_PROBLEM()`
-4. Create the observational and interventional datasets that will be used by the algorithm. For this run
+2. In `problems/__init__.py`, add the line `.graphs.myproblem import CUSTOM_PROBLEM`
+3. In `problems/common.py`, append a tuple `('myproblem', MyProblem)` to the problems variable in `get_problem_options()` such that this problem is callable from command line arguments
+4. Create the observational and interventional datasets that will be used in the algorithm. Here, run for example
   ````
-  create_datasets.py --problem custom --exp-set mobo --seed 0
+  create_datasets.py --problem myproblem --exp-set mobo --seed 0
   ````
-   
-
-## Citation
-Master's thesis jointly conducted at the Technical University of Munich and University of Cambridge. If you find our repository helpful for your work, please cite our paper:
-TBA 
+to save the data in the folder `Data/myproblem/mobo/0`.
+ 
