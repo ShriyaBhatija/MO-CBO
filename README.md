@@ -1,5 +1,5 @@
 # Multi-Objective Causal Bayesian Optimisation (MO-CBO)
-This repository constitutes the Master's thesis of [Shriya Bhatija](www.linkedin.com/in/shriya-bhatija-565699155), which was conducted under joint supervision at the University of Cambridge and the Technical University of Munich (TUM).
+This repository is associated with the Master's thesis of [Shriya Bhatija](www.linkedin.com/in/shriya-bhatija-565699155), conducted under joint supervision at the University of Cambridge and the Technical University of Munich (TUM).
 
 [[Thesis]](assets/THESIS.pdf)
 
