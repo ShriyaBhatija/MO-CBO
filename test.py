@@ -17,9 +17,9 @@ def solution(S):
   return len(codes)
 
 '''
-import autograd.numpy as anp
-import numpy as np
-from numpy.random import randn
+#import autograd.numpy as anp
+#import numpy as np
+#from numpy.random import randn
 #from pymoo.problems.multi import *
 #from pymoo.visualization.scatter import Scatter
 
@@ -67,17 +67,17 @@ for seed in range(0,10):
   df.to_csv(csv_file_path, index=False) 
 '''
 
-import pandas as pd
+#import pandas as pd
 
 #interventional_data = np.load(f'./Data/mo-cbo3/pomis/0/interventional_data.npy', allow_pickle=True)
-interventional_data = np.load(f'./Data/mo-cbo2/mobo/0/interventional_data.npy', allow_pickle=True)
+#interventional_data = np.load(f'./Data/mo-cbo2/mobo/0/interventional_data.npy', allow_pickle=True)
 #observational_data = pd.read_pickle(f'./Data/mo-cbo3/pomis/0/observations.pkl')
 #print(interventional_data)
 #print(observational_data)
 #print(interventional_data_new[1][3])
 #print(interventional_data[1][3])
 
-print(interventional_data)
+#print(interventional_data)
 
 #ef f_cancer(age, bmi, aspirin, statin):
 #  return 1 / (1 + np.exp(-1*(2.2 - 0.05*age + 0.01*bmi - 0.04*statin + 0.02*aspirin)))
@@ -91,4 +91,3 @@ print(interventional_data)
             #    (low - mean) / sd, (upp - mean) / sd, loc=mean, scale=sd).rvs()
 
 #print(truncated_normal(0, 1, -1, 2))
-
