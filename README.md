@@ -50,7 +50,6 @@ conda activate mo-cbo
 ````
 
 ## Getting started
-### Basic Usage
 
 Run the main file with some specified arguments, e.g. problem name, exploration set, batch size and seed:
 ````
@@ -64,6 +63,7 @@ For demonstration purposes, we also run this experiment for the problem mo-cbo2,
 ````
 python visualize/visualize_pf_all.py --problem mo-cbo1 --seed 0
 ````
+The Pareto front visualisations are 
 
 
 
