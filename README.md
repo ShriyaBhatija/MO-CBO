@@ -1,7 +1,7 @@
 # Multi-Objective Causal Bayesian Optimization
 My research theme is multi-objective Bayesian optimisation for finding optimal interventions on structural causal graphs. 
 
-![Alt text](assets/mo_cbo_visual.png)
+![Alt text](assets/mo_cbo_visual.pdf)
 
 ## Code structure
 
