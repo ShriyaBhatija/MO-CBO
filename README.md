@@ -77,7 +77,7 @@ The resulting visualisations are:
 
 If you are interested in implementing your own custom problem, please do the following steps:
 
-1. Create the file `problems/graphs/myproblem.py` where the structural causal model will be defined. The function
+1. Create the file `problems/graphs/myproblem.py` where the structural causal model will be defined. The function `define_SEM()` defines the structural equations between the nodes, `get_targets()` returns the target variables and `get_exploration_sets()` returns the exploration sets for baseline and MO-CBO. Moreover, `get_set_MOBO` gives all manipulative variables, `get_interventional_ranges()` specifies the domains of the interventions and `get_cost_structure()` defines the penality or cost for each intervention performed.
 
 ````
 from collections import OrderedDict
