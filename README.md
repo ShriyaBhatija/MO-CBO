@@ -74,7 +74,7 @@ python visualize/plots_gd_cost.py --problem mo-cbo1 --metric igd
 ````
 The resulting visualisations are:
 
-<img src="assets/performances.png" width="750">
+<img src="assets/performances.png" width="500">
 
 ## Custom Problem Setup 
 
