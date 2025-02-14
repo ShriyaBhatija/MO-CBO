@@ -39,10 +39,15 @@ main.py --- main execution file for the mo-cbo algorithm
 ````
 
 ## Requirements
-• Python version: tested in Python 3.7.7
-• Operating system: tested in Ubuntu 18.04
+Python version: tested in Python 3.7.7
 
-Install the environment by conda and activate:
+Operating system: tested in macOS Sonoma 14.4.1
+
+Install the environment using [miniconda](https://docs.anaconda.com/miniconda/) and activate it:
+````
+conda env create -f environment.yml
+conda activate mo-cbo
+````
 
 
 
