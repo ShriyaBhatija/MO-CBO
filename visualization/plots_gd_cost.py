@@ -117,30 +117,27 @@ def main():
             'mobo': 'orange'
             }
 
-        # Plot GD
-        #plt.plot(costs_avg, gd_avg, label=f'{legend_labels[exp_set]}', marker=None, linestyle='-', color=color_map[exp_set], linewidth=2)
-        #plt.fill_between(costs_avg, gd_avg - gd_std, gd_avg + gd_std, alpha=0.2, color=color_map[exp_set])
-
-        # Plot IGD
-        plt.plot(costs_avg, igd_avg, label=f'{legend_labels[exp_set]}', marker=None, linestyle='-', color=color_map[exp_set], linewidth=3)
-        plt.fill_between(costs_avg, igd_avg - igd_std, igd_avg + igd_std, alpha=0.2, color=color_map[exp_set])
+        if args.metric == 'gd':
+            plt.plot(costs_avg, gd_avg, label=f'{legend_labels[exp_set]}', marker=None, linestyle='-', color=color_map[exp_set], linewidth=2)
+            plt.fill_between(costs_avg, gd_avg - gd_std, gd_avg + gd_std, alpha=0.2, color=color_map[exp_set])
+        elif args.metric == 'igd':
+            plt.plot(costs_avg, igd_avg, label=f'{legend_labels[exp_set]}', marker=None, linestyle='-', color=color_map[exp_set], linewidth=3)
+            plt.fill_between(costs_avg, igd_avg - igd_std, igd_avg + igd_std, alpha=0.2, color=color_map[exp_set])
     
-    # Health - IGD&GD
-    plt.xlim(0,110)
-    plt.xticks(fontname = "STIXGeneral")
-    plt.yticks(np.arange(0.0, 0.21, 0.1), fontname = "STIXGeneral")
-
-    # Synthetic2 - IGD&GD
-    #plt.xlim(0,180)
-    #plt.ylim(bottom=0)
-    #plt.xticks(fontname = "STIXGeneral")
-    #plt.yticks(np.arange(0, 21, 5), fontname = "STIXGeneral")
-
-    # Synthetic1 - GD
-    #plt.xlim(0,140)
-    #plt.ylim(bottom=0)
-    #plt.xticks(np.arange(0, 140, 25), fontname = "STIXGeneral")
-    #plt.yticks(fontname = "STIXGeneral")
+    if args.problem == 'mo-cbo1':
+        plt.xlim(0,140)
+        plt.ylim(bottom=0)
+        plt.xticks(np.arange(0, 140, 25), fontname = "STIXGeneral")
+        plt.yticks(fontname = "STIXGeneral")
+    elif args.problem == 'mo-cbo-health':
+        plt.xlim(0,110)
+        plt.xticks(fontname = "STIXGeneral")
+        plt.yticks(np.arange(0.0, 0.21, 0.1), fontname = "STIXGeneral")
+    elif args.problem == 'mo-cbo2':
+        plt.xlim(0,180)
+        plt.ylim(bottom=0)
+        plt.xticks(fontname = "STIXGeneral")
+        plt.yticks(np.arange(0, 21, 5), fontname = "STIXGeneral")
 
     
     #plt.xlabel('cumulative intervention cost', fontsize=38)
