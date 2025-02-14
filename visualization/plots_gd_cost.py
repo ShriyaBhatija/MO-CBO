@@ -107,7 +107,7 @@ def main():
 
         # Legend labels mapping
         legend_labels = {
-            'pomis': 'mo-cbo',
+            'pomis': 'mo-cbo (ours)',
             'mobo': 'mobo'
             }
 
@@ -126,9 +126,9 @@ def main():
         plt.fill_between(costs_avg, igd_avg - igd_std, igd_avg + igd_std, alpha=0.2, color=color_map[exp_set])
     
     # Health - IGD&GD
-    #plt.xlim(0,110)
-    #plt.xticks(fontname = "STIXGeneral")
-    #plt.yticks(np.arange(0.0, 0.21, 0.1), fontname = "STIXGeneral")
+    plt.xlim(0,110)
+    plt.xticks(fontname = "STIXGeneral")
+    plt.yticks(np.arange(0.0, 0.21, 0.1), fontname = "STIXGeneral")
 
     # Synthetic2 - IGD&GD
     #plt.xlim(0,180)
@@ -137,10 +137,10 @@ def main():
     #plt.yticks(np.arange(0, 21, 5), fontname = "STIXGeneral")
 
     # Synthetic1 - GD
-    plt.xlim(0,140)
-    plt.ylim(bottom=0)
-    plt.xticks(np.arange(0, 140, 25), fontname = "STIXGeneral")
-    plt.yticks(fontname = "STIXGeneral")
+    #plt.xlim(0,140)
+    #plt.ylim(bottom=0)
+    #plt.xticks(np.arange(0, 140, 25), fontname = "STIXGeneral")
+    #plt.yticks(fontname = "STIXGeneral")
 
     
     #plt.xlabel('cumulative intervention cost', fontsize=38)
@@ -148,7 +148,7 @@ def main():
    
     plt.rcParams['mathtext.fontset'] = 'stix'
     plt.rcParams['font.family'] = 'STIXGeneral'
-    plt.legend(fontsize=38) 
+    plt.legend(fontsize=40) 
     plt.tick_params(axis='both', which='major', labelsize=38)
     plt.show()
 

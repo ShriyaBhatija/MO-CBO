@@ -1,3 +1,10 @@
+"""
+This code was originally published by the following individual:
+    Copyright (c) 2020 Yunsheng Tian
+    GitHub: https://github.com/yunshengtian/DGEMO?tab=MIT-1-ov-file
+"""
+
+
 from time import time
 import numpy as np
 from pymoo.factory import get_performance_indicator
