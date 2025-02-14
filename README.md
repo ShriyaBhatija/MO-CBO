@@ -55,10 +55,7 @@ Run the main file with some specified arguments, e.g. problem name, exploration 
 ````
 python main.py --problem mo-cbo1 --exp-set mobo --batch-size 5 --seed 0
 ````
-For more arguments, we refer to *arguments.py*. The results of this experiment will be stored in the following directory:
-````
-result/mo-cbo1/int_data/mobo/0/
-````
+For more arguments, we refer to *arguments.py*. The results of this experiment will be stored in ```` result/mo-cbo1/int_data/mobo/0/````.
 For demonstration purposes, we also run this experiment for the problem mo-cbo2, repeating it for both exploration sets named *mobo* (baseline) and *mo-cbo* (ours). Note that mo-cbo1 and mo-cbo2 are synthetic structural causal models that were specifically designed for this new type of problem class. We visualise the results by running:
 ````
 python visualize/visualize_pf_all.py --problem mo-cbo1 --seed 0
@@ -78,6 +75,62 @@ The resulting visualisations are:
 
 ## Custom Problem Setup 
 
+If you are interested in implementing your own custom problem, please do the following steps:
+
+1. Create the file `problems/graphs/myproblem.py` where the structural causal model will be defined. The function
+
+````
+from collections import OrderedDict
+import autograd.numpy as anp
+from .graph import GraphStructure
+
+class CUSTOM_PROBLEM(GraphStructure):
+    def define_SEM(self):
+        def fx1(epsilon, **kwargs):
+          return epsilon[0]
+        def fx2(epsilon, X1, **kwargs):
+          return X1 + epsilon[1]
+        def fy1(epsilon, X2, **kwargs):
+          return X2 + epsilon[2]
+        def fy2(epsilon, X2, **kwargs):
+          return X2 - epsilon[3]
+
+        graph = OrderedDict ([
+          ('X1', fx1),
+          ('X2', fx2),
+          ('Y1', fy1),
+          ('Y2', fy2),
+        ])
+        return graph
+    
+    def get_targets(self):
+        return ['Y1', 'Y2'] 
+    
+    def get_exploration_sets(self):
+      exploration_sets = {'mo-cbo': [['X2']],'mobo': [['X1', 'X2']]}
+      return exploration_sets
+
+    def get_set_MOBO(self):
+      return ['X1', 'X2']
+    
+    def get_interventional_ranges(self):
+      dict_ranges = OrderedDict ([
+          ('X1', [-1, 1]),
+          ('X2', [2, 4]) ])
+      return dict_ranges  
+    
+    def get_cost_structure(self, type_cost):
+        costs = OrderedDict ([('X1', 1),('X2', 1),])
+        return costs
+````
+
+2. In `problems/__init__.py`, add your custom problem as `.graphs.myproblem import CUSTOM_PROBLEM`
+3. In `problems/common.py`, add an abbreviation of your custom problem to the function `get_cbo_options()`, e.g. `custom: CUSTOM_PROBLEM()`
+4. Create the observational and interventional datasets that will be used by the algorithm. For this run
+  ````
+  create_datasets.py --problem custom --exp-set mobo --seed 0
+  ````
+   
 
 ## Citation
 Master's thesis jointly conducted at the Technical University of Munich and University of Cambridge. If you find our repository helpful for your work, please cite our paper:
