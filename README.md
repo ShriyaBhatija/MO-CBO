@@ -49,6 +49,22 @@ conda env create -f environment.yml
 conda activate mo-cbo
 ````
 
+## Getting started
+### Basic Usage
+
+Run the main file with some specified arguments, e.g. problem name, exploration set, batch size and seed:
+````
+python main.py --problem mo-cbo1 --exp-set mobo --batch-size 5 --seed 0
+````
+For more arguments, we refer to *arguments.py*. The results of this experiment will be stored in the following directory:
+````
+result/mo-cbo1/int_data/mobo/0/
+````
+For demonstration purposes, we also run this experiment for the problem mo-cbo2, repeating it for both exploration sets named *mobo* (baseline) and *mo-cbo* (ours). Note that mo-cbo1 and mo-cbo2 are synthetic structural causal models that were specifically designed for this new type of problem class. We visualise the results by running:
+````
+python visualize/visualize_pf_all.py --problem mo-cbo1 --seed 0
+````
+
 
 
 
