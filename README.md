@@ -64,6 +64,7 @@ For demonstration purposes, we also run this experiment for the problem mo-cbo2,
 python visualize/visualize_pf_all.py --problem mo-cbo1 --seed 0
 ````
 The Pareto front visualisations are 
+<img src="assets/Pf_visual.png" width="800">
 
 
 
