@@ -63,10 +63,18 @@ For demonstration purposes, we also run this experiment for the problem mo-cbo2,
 ````
 python visualize/visualize_pf_all.py --problem mo-cbo1 --seed 0
 ````
-The Pareto front visualisations are 
-<img src="assets/Pf_visual.png" width="1000">
+The resulting Pareto front visualisations are:
 
+<img src="assets/pf_visual.png" width="750">
 
+We repeat these experiments across 10 random seeds to report averaged performance metrices that can be visualised by running:
+````
+python visualize/plots_gd_cost.py --problem mo-cbo1 --metric gd
+python visualize/plots_gd_cost.py --problem mo-cbo1 --metric igd
+````
+The resulting visualisations are:
+
+<img src="assets/performances.png" width="750">
 
 ## Custom Problem Setup 
 
