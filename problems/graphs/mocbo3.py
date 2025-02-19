@@ -52,11 +52,11 @@ class MO_CBO3(GraphStructure):
     
 
     def get_exploration_sets(self):
-      POMIS = [['X1','X2'], ['X1', 'X2', 'X3']]
+      mo_cbo = [['X1','X2'], ['X1', 'X2', 'X3']]
       manipulative_variables = [['X1', 'X2', 'X3']]
 
       exploration_sets = {
-         'pomis': POMIS,
+         'mo-cbo': mo_cbo,
          'mobo': manipulative_variables
       }
       return exploration_sets

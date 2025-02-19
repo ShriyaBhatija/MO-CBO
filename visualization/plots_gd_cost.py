@@ -96,7 +96,7 @@ def main():
     for spine in plt.gca().spines.values():
         spine.set_linewidth(1.5)
 
-    for exp_set in ['pomis', 'mobo']:
+    for exp_set in ['mo-cbo', 'mobo']:
         gd, igd, costs = calculate_metrics(args, problem_dir, true_front, exp_set, n_targets)
 
         gd_avg, gd_std = np.mean(gd, axis=1), np.std(gd, axis=1)
@@ -107,13 +107,13 @@ def main():
 
         # Legend labels mapping
         legend_labels = {
-            'pomis': 'mo-cbo (ours)',
+            'mo-cbo': 'mo-cbo (ours)',
             'mobo': 'mobo'
             }
 
         # Color mapping
         color_map = {
-            'pomis': 'blue',
+            'mo-cbo': 'blue',
             'mobo': 'orange'
             }
 

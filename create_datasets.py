@@ -9,8 +9,9 @@ from helpers import *
 
 
 parser = argparse.ArgumentParser(description='create_datasets')
-parser.add_argument('--experiment', default = 'mo-cbo1', type = str, help = 'experiment')
-parser.add_argument('--exp-set', type=str, default='mobo', choices=['pomis', 'mis', 'mobo'], help='exploration set')
+parser.add_argument('--problem', default = 'mo-cbo1', type = str, help = 'problem name')
+parser.add_argument('--exp-set', type=str, default='mobo', choices=['mo-cbo', 'mis', 'mobo'], help='exploration set')
+parser.add_argument('--seed', default = 0, type = int, help = 'random seed')
 parser.add_argument('--obs_num_samples', default=100, type=int, help='number of observational samples to be generated')
 parser.add_argument('--int_num_samples', default=5, type=int, help='number of interventional samples to be generated')
 
@@ -20,27 +21,27 @@ def main(seed):
     np.random.seed(seed=seed)
 
     ## Set the parameters
-    experiment = args.experiment
+    problem = args.problem
     obs_num_samples = args.obs_num_samples
     int_num_samples = args.int_num_samples
 
 
     # Create save folder if it doesn't exist
-    pathlib.Path('Data/' + str(args.experiment) + f'/{args.exp_set}/{seed}').mkdir(parents=True, exist_ok=True)
+    pathlib.Path('Data/' + str(args.problem) + f'/{args.exp_set}/{seed}').mkdir(parents=True, exist_ok=True)
 
-    if experiment == 'mo-cbo1':
+    if problem == 'mo-cbo1':
         observational_samples = OrderedDict([('X1', []), ('X2', []), ('X3', []), ('X4', []), ('Y1', []), ('Y2', []), ('control', [])])
         graph = MO_CBO1()
 
-    if experiment == 'mo-cbo2':
+    if problem == 'mo-cbo2':
         observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('X4', []), ('Y1', []), ('Y2', [])])
         graph = MO_CBO2()
 
-    if experiment == 'mo-cbo-health':
+    if problem == 'mo-cbo-health':
         observational_samples = OrderedDict([('age', []), ('bmi', []), ('statin', []), ('aspirin', []), ('cancer', []), ('psa', []), ('control', [])])
         graph = Health()
 
-    if experiment == 'mo-cbo3':
+    if problem == 'mo-cbo3':
         observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('Y1', []), ('Y2', []), ('Y3', []), ('control', [])])
         graph = MO_CBO3()
 
@@ -58,7 +59,7 @@ def main(seed):
         
     # Save as pkl file as in the folder
     # Save it using a protocol compatible with Python 3.7
-    observational_samples.to_pickle('./Data/' + str(args.experiment) + f'/{args.exp_set}/{seed}/' + 'observations.pkl', protocol=4)
+    observational_samples.to_pickle('./Data/' + str(args.problem) + f'/{args.exp_set}/{seed}/' + 'observations.pkl', protocol=4)
     
     interventional_data = [] 
 
@@ -109,10 +110,10 @@ def main(seed):
     interventional_data = np.array(interventional_data, dtype=object)
         
     # Save as npy file as in the folder
-    np.save('./Data/' + str(args.experiment) + f'/{args.exp_set}/{seed}/' + f'interventional_data.npy', interventional_data)
+    np.save('./Data/' + str(args.problem) + f'/{args.exp_set}/{seed}/' + f'interventional_data.npy', interventional_data)
 
 
 
 if __name__ == '__main__':
-    for seed in range(0,10):
-        main(seed)
+    args = parser.parse_args()
+    main(args.seed)

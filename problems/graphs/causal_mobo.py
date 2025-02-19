@@ -53,8 +53,8 @@ class CausalMOBO(Problem):
           is_efficient[i] = True 
       return is_efficient
     
-    if 'pomis' in self.graph.get_exploration_sets():
-      exploration_set = self.graph.get_exploration_sets()['pomis']
+    if 'mo-cbo' in self.graph.get_exploration_sets():
+      exploration_set = self.graph.get_exploration_sets()['mo-cbo']
     elif 'mis' in self.graph.get_exploration_sets():
       exploration_set = self.graph.get_exploration_sets()['mis']
     else:

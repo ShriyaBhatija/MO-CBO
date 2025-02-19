@@ -69,11 +69,11 @@ class Health(GraphStructure):
     
 
     def get_exploration_sets(self):
-      POMIS = [['bmi', 'aspirin']]
+      mo_cbo = [['bmi', 'aspirin']]
       manipulative_variables = [['ci', 'weight', 'bmi', 'aspirin']]
 
       exploration_sets = {
-          'pomis': POMIS,
+          'mo-cbo': mo_cbo,
           'mobo': manipulative_variables
       }
       return exploration_sets

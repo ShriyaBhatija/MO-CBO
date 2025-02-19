@@ -1,6 +1,7 @@
-name: mo_cbo
+name: mo_cbo_copy
 channels:
   - defaults
+  - conda-forge
 dependencies:
   - _libgcc_mutex=0.1
   - astroid=2.3.3
@@ -111,4 +112,3 @@ dependencies:
       - typing-extensions==4.7.1
       - urllib3==1.25.8
       - zipp==3.15.0
-prefix: /Users/shriyabhatija/miniconda3/envs/mo_cbo
