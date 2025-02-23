@@ -1,4 +1,4 @@
-name: mo_cbo_copy
+name: mo_cbo
 channels:
   - defaults
   - conda-forge
