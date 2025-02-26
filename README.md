@@ -65,7 +65,7 @@ docker run -t mocbo
 
 You can entry the docker environment using:
 ```bash
-docker run --entrypoint /bin/bash -t mocbo
+docker run -i --entrypoint /bin/bash -t mocbo
 ```
 
 Subsequently, run the main file with some specified arguments, e.g. problem name, exploration set, batch size and seed:
