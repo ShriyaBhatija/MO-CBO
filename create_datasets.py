@@ -32,18 +32,19 @@ def main(seed):
     if problem == 'mo-cbo1':
         observational_samples = OrderedDict([('X1', []), ('X2', []), ('X3', []), ('X4', []), ('Y1', []), ('Y2', []), ('control', [])])
         graph = MO_CBO1()
-
-    if problem == 'mo-cbo2':
+    elif problem == 'mo-cbo2':
         observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('X4', []), ('Y1', []), ('Y2', [])])
         graph = MO_CBO2()
-
-    if problem == 'mo-cbo-health':
+    elif problem == 'mo-cbo-health':
         observational_samples = OrderedDict([('age', []), ('bmi', []), ('statin', []), ('aspirin', []), ('cancer', []), ('psa', []), ('control', [])])
         graph = Health()
-
-    if problem == 'mo-cbo3':
+    elif problem == 'mo-cbo3':
         observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('Y1', []), ('Y2', []), ('Y3', []), ('control', [])])
         graph = MO_CBO3()
+    elif problem == 'mo-cbo-econ':
+        graph = MO_CBO3()
+        observational_samples = {key: [] for key, val in  graph.define_SEM().items()}
+    
 
 
     targets = graph.get_targets()

@@ -13,7 +13,6 @@ def main(args, framework_args):
 
     # get the graph
     graph = get_cbo_options()[f'{args.problem}']
-
     # define the exploration set
     exploration_set = graph.get_exploration_sets()[args.exp_set]
 

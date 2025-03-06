@@ -3,6 +3,7 @@ import autograd.numpy as anp
 from problems.problem import Problem
 from helpers.graph_functions import Intervention_function
 from helpers.utils import get_interventional_dict
+from tqdm import tqdm
 
 
 '''
@@ -73,8 +74,8 @@ class CausalMOBO(Problem):
       target_function = Intervention_function(get_interventional_dict(set),
 									model = self.graph.define_SEM(), targets = self.graph.get_targets(), num_samples=1)
     
-      for i in range(points.shape[0]):
-        print(f'{i}/{points.shape[0]}')
+      for i in tqdm(range(points.shape[0])):
+        #print(f'{i}/{points.shape[0]}')
         target_value = target_function(points[i])
         f.append(target_value)
 

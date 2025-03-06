@@ -58,7 +58,7 @@ docker build . -t mocbo
 
 To run the example optimisation use:
 ````bash
-docker run -t mocbo
+docker run -t mocbo && conda activate mo_cbo
 ````
 
 ## Getting started
