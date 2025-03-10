@@ -140,7 +140,7 @@ class SCM_Economics(GraphStructure):
         # TODO: Define exploration sets for the economic SCM.
         exploration_sets = {
             'mo-cbo': [['X2', 'X4'], ['X6','X2', 'X4']],  # placeholder
-            'mobo': ['X2',  'X4', 'X5', 'X6']  # placeholder
+            'mobo': [['X2',  'X4', 'X6']]  # placeholder
         }
         return exploration_sets
 

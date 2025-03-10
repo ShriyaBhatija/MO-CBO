@@ -49,11 +49,11 @@ class SCM_Credit(GraphStructure):
         
         def fX7(epsilon, X6, **kwargs):
             # Savings = -4 + 1.5 * (0 if X6<=0 else X6) + U7
-            return -4 + 1.5 * (anp.where(X6 <= 0, 0, X6)) + epsilon[6]
+            return -4 + 1.5 * (np.where(X6 <= 0, 0, X6)) + epsilon[6]
         
         def fY(epsilon, X4, X5, X6, X7, **kwargs):
             # Output probability = 1 / (1 + exp(-0.3*(-X4 - X5 + X6 + X7 + X6 * X7)))
-            return 1 / (1 + anp.exp(-0.3 * (-X4 - X5 + X6 + X7 + X6 * X7)))
+            return 1 / (1 + np.exp(-0.3 * (-X4 - X5 + X6 + X7 + X6 * X7)))
             # Note: No epsilon term is added here.
         
         graph = OrderedDict([

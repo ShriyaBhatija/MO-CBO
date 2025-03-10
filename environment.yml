@@ -3,6 +3,7 @@ channels:
   - defaults
   - conda-forge
 dependencies:
+  - tqdm=4.64
   - blas=1.0
   - ca-certificates=2020.1.1
   - certifi=2019.11.28

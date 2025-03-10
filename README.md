@@ -145,7 +145,7 @@ class MyProblem(GraphStructure):
 3. In `problems/common.py`, append a tuple `('myproblem', MyProblem)` to the problems variable in `get_problem_options()` such that this problem is callable from command line arguments
 4. Create the observational and interventional datasets that will be used in the algorithm. Here, run for example
   ````bash
-  create_datasets.py --problem myproblem --exp-set mobo --seed 0
+  python3 create_datasets.py --problem myproblem --exp-set mobo --seed 0
   ````
 to save the data in the folder `Data/myproblem/mobo/0`.
  
