@@ -117,4 +117,6 @@ def main(seed):
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    main(args.seed)
+    for seed in range(0,10):
+        args.seed = seed
+        main(args.seed)

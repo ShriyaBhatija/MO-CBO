@@ -158,7 +158,7 @@ class SCM_Economics(GraphStructure):
         #   X5 = 0.898 * X4 + U5                                            (Electricity Investment)
         #   X6 = 0.783 * X5 + U6                                            (Investment Other)
         #   (Energy Source Structure X1, Electricity Consumption X4, Power Investment X5, Other Investment X6, Informatization Level X2, Employment X7)
-        return ['X2','X4', 'X5', 'X6']
+        return ['X2','X4', 'X6']
 
     def get_interventional_ranges(self):
         # TODO: Specify interventional ranges for each manipulable variable.
@@ -167,7 +167,6 @@ class SCM_Economics(GraphStructure):
             ('X2', [0, 1]), # TODO, check whether this is a sound range
             #('X3', [None, None]),
             ('X4', [0, 100000*3]), # TODO: cross check whether this makes sense for china's energy grid
-            ('X5', [0, 18000]),
             ('X6', [0, 18000]),
             # ('X7', [0, 1400000000/10000]),
             # ('X8', [None, None]),
