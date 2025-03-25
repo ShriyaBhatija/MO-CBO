@@ -43,16 +43,33 @@ Python version: tested in Python 3.7.7
 
 Operating system: tested in macOS Sonoma 14.4.1
 
-Install the environment using [miniconda](https://docs.anaconda.com/miniconda/) and activate it:
-````
-conda env create -f environment.yml
-conda activate mo-cbo
+Install docker [docker](https://docs.anaconda.com/miniconda/) to use the environment.
+
+We provide a docker image in a public repository:
+```bash
+docker pull pauldavidzuercher/mocbo
+docker tag pauldavidzuercher/mocbo mocbo
+```
+
+Alternatively, you can build it from source:
+```bash
+docker build . -t mocbo
+```
+
+To run the example optimisation use:
+````bash
+docker run -t mocbo
 ````
 
 ## Getting started
 
-Run the main file with some specified arguments, e.g. problem name, exploration set, batch size and seed:
-````
+You can entry the docker environment using:
+```bash
+docker run -i --entrypoint /bin/bash -t mocbo
+```
+
+Subsequently, run the main file with some specified arguments, e.g. problem name, exploration set, batch size and seed:
+````bash
 python main.py --problem mo-cbo1 --exp-set mobo --batch-size 5 --seed 0
 ````
 For more arguments, we refer to *arguments.py*. The results of this experiment will be stored in ` result/mo-cbo1/int_data/mobo/0/`.
@@ -65,7 +82,7 @@ The resulting Pareto front visualisations are:
 <img src="assets/pf_visual.png" width="750">
 
 We repeat these experiments across 10 random seeds to report averaged performance metrics that can be visualised by running:
-````
+````bash
 python visualize/plots_gd_cost.py --problem mo-cbo1 --metric gd
 python visualize/plots_gd_cost.py --problem mo-cbo1 --metric igd
 ````
@@ -79,7 +96,7 @@ If you are interested in implementing your own custom problem, please do the fol
 
 1. Create the file `problems/graphs/myproblem.py` where the structural causal model will be defined. The function `define_SEM()` defines the structural equations between the nodes, `get_targets()` returns the target variables and `get_exploration_sets()` returns the exploration sets for the baseline as well as MO-CBO. Moreover, `get_set_MOBO()` gives all manipulative variables, `get_interventional_ranges()` specifies the domains of the interventions and `get_cost_structure()` defines the penality or cost for each intervention performed.
 
-````
+````python
 from collections import OrderedDict
 import autograd.numpy as anp
 from .graph import GraphStructure
@@ -127,7 +144,7 @@ class MyProblem(GraphStructure):
 2. In `problems/__init__.py`, add the line `.graphs.myproblem import MyProblem`
 3. In `problems/common.py`, append a tuple `('myproblem', MyProblem)` to the problems variable in `get_problem_options()` such that this problem is callable from command line arguments
 4. Create the observational and interventional datasets that will be used in the algorithm. Here, run for example
-  ````
+  ````bash
   create_datasets.py --problem myproblem --exp-set mobo --seed 0
   ````
 to save the data in the folder `Data/myproblem/mobo/0`.
