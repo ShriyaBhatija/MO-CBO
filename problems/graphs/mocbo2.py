@@ -7,9 +7,20 @@ import numpy as np
 from .graph import GraphStructure
 from .mocbo2_CostFunctions import define_costs
 
-
+from ..causal_models.model import CausalDiagram
+from ..causal_models.where_do import MISs, bruteforce_POMISs
 
 class MO_CBO2(GraphStructure):
+    def __init__(self):
+      super().__init__()
+
+      X1, X2, X3, X4, Y1, Y2 = 'X1', 'X2', 'X3', 'X4', 'Y1', 'Y2'
+      U_X4Y1 = 'U'
+
+      self.G = CausalDiagram({'X1', 'X2', 'X3', 'X4', 'Y1', 'Y2'}, [(X4, X1), (X3, Y2), (X2, Y2), (X1, Y1)], [(X4, Y1, U_X4Y1)])
+      self.Y = sorted([node for node in self.G.V if node.startswith('Y')])
+      self.X = sorted([node for node in self.G.V if not node.startswith('Y')])
+
 
     def define_SEM(self):
 
@@ -48,24 +59,21 @@ class MO_CBO2(GraphStructure):
         return graph
     
 
-    def get_targets(self):
-        return ['Y1', 'Y2'] 
-    
-
     def get_exploration_sets(self):
-        mo_cbo = [['X1', 'X2', 'X3'], ['X2', 'X3']]
-        manipulative_variables = [['X1', 'X2', 'X3', 'X4']]
+      mo_cbo = bruteforce_POMISs(self.G, self.Y)
+      mo_cbo = sorted([sorted(list(set)) for set in mo_cbo])
 
-        exploration_sets = {
-            'mo-cbo': mo_cbo,
-            'mobo': manipulative_variables
-        }
-        return exploration_sets
-    
+      mis = MISs(self.G, self.Y)
+      mis = [sorted(list(set)) for set in mis]
 
-    def get_set_MOBO(self):
-        manipulative_variables = ['X1', 'X2', 'X3', 'X4']
-        return manipulative_variables
+      manipulative_variables = [self.X]
+
+      exploration_sets = {
+          'mo-cbo': mo_cbo,
+          'mis': mis,
+          'mobo': manipulative_variables
+      }
+      return exploration_sets
     
 
     def get_interventional_ranges(self):

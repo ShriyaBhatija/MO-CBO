@@ -9,7 +9,7 @@ from helpers import *
 
 
 parser = argparse.ArgumentParser(description='create_datasets')
-parser.add_argument('--problem', default = 'mo-cbo1', type = str, help = 'problem name')
+parser.add_argument('--problem', default = 'mo-cbo2', type = str, help = 'problem name')
 parser.add_argument('--exp-set', type=str, default='mo-cbo', choices=['mo-cbo', 'mis', 'mobo'], help='exploration set')
 parser.add_argument('--seed', default = 0, type = int, help = 'random seed')
 parser.add_argument('--obs_num_samples', default=100, type=int, help='number of observational samples to be generated')
