@@ -10,7 +10,7 @@ from helpers import *
 
 parser = argparse.ArgumentParser(description='create_datasets')
 parser.add_argument('--problem', default = 'mo-cbo1', type = str, help = 'problem name')
-parser.add_argument('--exp-set', type=str, default='mobo', choices=['mo-cbo', 'mis', 'mobo'], help='exploration set')
+parser.add_argument('--exp-set', type=str, default='mo-cbo', choices=['mo-cbo', 'mis', 'mobo'], help='exploration set')
 parser.add_argument('--seed', default = 0, type = int, help = 'random seed')
 parser.add_argument('--obs_num_samples', default=100, type=int, help='number of observational samples to be generated')
 parser.add_argument('--int_num_samples', default=5, type=int, help='number of interventional samples to be generated')
@@ -30,7 +30,7 @@ def main(seed):
     pathlib.Path('Data/' + str(args.problem) + f'/{args.exp_set}/{seed}').mkdir(parents=True, exist_ok=True)
 
     if problem == 'mo-cbo1':
-        observational_samples = OrderedDict([('X1', []), ('X2', []), ('X3', []), ('X4', []), ('Y1', []), ('Y2', []), ('control', [])])
+        observational_samples = OrderedDict([('X1', []), ('X2', []), ('X3', []), ('X4', []), ('Y1', []), ('Y2', [])])
         graph = MO_CBO1()
 
     if problem == 'mo-cbo2':
@@ -46,7 +46,7 @@ def main(seed):
         graph = MO_CBO3()
 
 
-    targets = graph.get_targets()
+    targets = graph.Y
     exploration_set = graph.get_exploration_sets()[args.exp_set]
         
     list_interventional_ranges = graph.get_interventional_ranges()
@@ -83,7 +83,6 @@ def main(seed):
             vars = np.zeros((len(interventions), len(targets)))
 
             for i in range(0, len(interventions)):
-                print(i)
                 intervention = [{var: interventions[i, j] for j, var in enumerate(variables)}]
                 #new_model = intervene(*intervention, model=graph.define_SEM())
                 for j, target in enumerate(targets):

@@ -15,9 +15,9 @@ def get_cbo_options():
 
     problems = {
         'mo-cbo1': MO_CBO1(),
-        'mo-cbo2': MO_CBO2(),
-        'mo-cbo3': MO_CBO3(),
-        'mo-cbo-health': Health(),
+        #'mo-cbo2': MO_CBO2(),
+        #'mo-cbo3': MO_CBO3(),
+        #'mo-cbo-health': Health(),
     }
     return problems
 

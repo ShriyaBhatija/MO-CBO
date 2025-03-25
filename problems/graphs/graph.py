@@ -9,15 +9,7 @@ class GraphStructure:
         raise NotImplementedError("Subclass should implement this.")
     
     @abc.abstractmethod
-    def get_targets():
-        raise NotImplementedError("Subclass should implement this.")
-    
-    @abc.abstractmethod
     def get_exploration_sets():
-        raise NotImplementedError("Subclass should implement this.")
-    
-    @abc.abstractmethod
-    def get_set_MOBO():
         raise NotImplementedError("Subclass should implement this.")
     
     @abc.abstractmethod

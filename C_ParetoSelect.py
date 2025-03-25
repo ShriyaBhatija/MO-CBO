@@ -14,7 +14,7 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, int
     ############################  Set up for the Pareto front optimisation
     
     if not os.path.isfile(os.path.join(get_problem_dir(args), 'TrueCausalParetoFront.csv')):
-        true_front = calc_causal_pareto_front(args.problem, graph.get_set_MOBO())
+        true_front = calc_causal_pareto_front(args.problem, graph.X)
         write_truefront_csv(args, true_front)
 
     solution = [None] * len(exploration_set)
@@ -61,7 +61,7 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, int
     target_function_list = [None]*len(exploration_set)
     for s in range(len(exploration_set)):
         target_function_list[s] = Intervention_function(get_interventional_dict(exploration_set[s]),
-                                                model = graph.define_SEM(), targets=graph.get_targets())
+                                                model = graph.define_SEM(), targets=graph.Y)
 
 
     i = 0

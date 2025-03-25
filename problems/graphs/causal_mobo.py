@@ -11,7 +11,7 @@ Custom Pymoo Problem class for causal multi-objective optimisation problems.
 class CausalMOBO(Problem):
   def __init__(self, graph, intervention_set, **kwargs):
     super().__init__(n_var=len(intervention_set), 
-                    n_obj=len(graph.get_targets()), 
+                    n_obj=len(graph.Y), 
                     n_constr=0, 
                     xl=[graph.get_interventional_ranges()[variable][0] for variable in intervention_set], 
                     xu=[graph.get_interventional_ranges()[variable][1] for variable in intervention_set], 
@@ -31,7 +31,7 @@ class CausalMOBO(Problem):
       interventions[variable] = x[:,i]
 
     target_function = Intervention_function(get_interventional_dict(self.intervention_set),
-									model = self.graph.define_SEM(), targets = self.graph.get_targets())
+									model = self.graph.define_SEM(), targets = self.graph.Y)
             
     f = []
     for i in range(x.shape[0]):
@@ -58,7 +58,7 @@ class CausalMOBO(Problem):
     elif 'mis' in self.graph.get_exploration_sets():
       exploration_set = self.graph.get_exploration_sets()['mis']
     else:
-      exploration_set = self.graph.get_exploration_sets()['mobo']
+      raise ValueError('MISs for the causal Pareto front calculation are not specified')
 
     f = []
 
@@ -71,7 +71,7 @@ class CausalMOBO(Problem):
       points = anp.vstack([grid.ravel() for grid in grids]).T
 
       target_function = Intervention_function(get_interventional_dict(set),
-									model = self.graph.define_SEM(), targets = self.graph.get_targets(), num_samples=1)
+									model = self.graph.define_SEM(), targets = self.graph.Y, num_samples=1)
     
       for i in range(points.shape[0]):
         print(f'{i}/{points.shape[0]}')
