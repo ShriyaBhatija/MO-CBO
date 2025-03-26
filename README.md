@@ -1,11 +1,6 @@
 # Multi-Objective Causal Bayesian Optimisation (MO-CBO)
-This repository is associated with the Master's thesis of [Shriya Bhatija](https://www.linkedin.com/in/shriya-bhatija-565699155), conducted under joint supervision at the University of Cambridge and the Technical University of Munich (TUM).
+This repository is associated with the paper [Multi-Objective Causal Bayesian Optimization](https://arxiv.org/pdf/2502.14755), jointly written at the University of Cambridge and the Technical University of Munich (TUM).
 
-[[Thesis]](assets/THESIS.pdf)
-
-Supervisor: [Matthias Althoff](https://www.ce.cit.tum.de/cps/members/prof-dr-ing-matthias-althoff/)
-
-Advisors: [Jakob Thumm](https://jakob-thumm.com), [Paul-David Zuercher](https://pauldavidzuercher.com), [Thomas Bohné](https://www.ifm.eng.cam.ac.uk/people/tmb35/)
 
 #### Abstract
 We propose multi-objective causal Bayesian optimisation (MO-CBO), a new problem class for identifying Pareto-optimal interventions that simultaneously optimise multiple target variables within a known causal graph. MO-CBO extends the [causal Bayesian optimisation (CBO)](https://proceedings.mlr.press/v108/aglietti20a/aglietti20a.pdf) family of methods to support optimisation on causal models with multiple outcomes. We prove that any mo-cbo problem can be decomposed into a series of traditional multi-objective optimisation tasks, and introduce Causal ParetoSelect, an algorithm that sequentially balances exploration across these tasks using relative hypervolume improvement. Our methodology generalises multi-objective Bayesian optimisation to perform causally-informed function evaluations, instead of neglecting known causal relationships. By establishing graphical criteria, we enforce Causal ParetoSelect to explore only potentially optimal sets of variables to intervene upon. We validate our approach on both synthetic and real-world causal graphs, demonstrating its superiority over traditional multi-objective Bayesian optimisation.
