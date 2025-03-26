@@ -40,7 +40,7 @@ class CausalMOBO(Problem):
     return anp.asarray(f)
   
 
-  def _calc_pareto_front(self, n_pareto_points=100):
+  def _calc_pareto_front(self, n_pareto_points=50):
     '''
     Calculate the true causal Pareto front by evaluating the target function for each intervention set 
     and filtering the Pareto optimal points
@@ -55,6 +55,7 @@ class CausalMOBO(Problem):
     
     if 'mo-cbo' in self.graph.get_exploration_sets():
       exploration_set = self.graph.get_exploration_sets()['mo-cbo']
+      exploration_set = [['X1', 'X2', 'X3']]
     elif 'mis' in self.graph.get_exploration_sets():
       exploration_set = self.graph.get_exploration_sets()['mis']
     else:

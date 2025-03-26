@@ -40,10 +40,10 @@ class MO_CBO2(GraphStructure):
           return epsilon[3]**2
 
         def fy1(epsilon, X1, X2, U, **kwargs):
-          return np.log(1+X1**2) + 2*X2**2 - X1*X2*(U/2) + epsilon[4]
+          return np.log(1+X1**2) + 2*X2**2 - 0*X1*X2*(U/2) + 0*epsilon[4]
 
         def fy2(epsilon, X2, X3, **kwargs):
-          return np.sin(X2**2) - X3**2 - X2*X3 + 50 + epsilon[5]
+          return np.sin(X2**2) - X3**2 - X2*X3 + 50 + 0*epsilon[5]
 
 
         graph = OrderedDict ([
