@@ -80,10 +80,10 @@ class SCM_Economics(GraphStructure):
                     0.293 * X2 + 0.527 * Y1 + 0.169 * X4 + 0.411 * X1)
         
         graph = OrderedDict([
-            ('X1', fX1),
-            ('X2', fX2),
-            ('X3', fX3),
             ('X4', fX4),
+            ('X1', fX1),
+            ('X3', fX3),
+            ('X2', fX2),
             ('X5', fX5),
             ('X6', fX6),
             ('X7', fX7),
@@ -110,13 +110,12 @@ class SCM_Economics(GraphStructure):
 
     def get_interventional_ranges(self):
         dict_ranges = OrderedDict([
-            ('X1', [0, 10]),
-            ('X2', [0, 10]),
-            ('X3', [0, 10]),
-            ('X6', [0, 10]),
-            ('X7', [0, 10]),
-            ('X9', [0, 10]),
-            ('X11', [0, 10])
+            ('X2', [0, 100]),
+            ('X3', [0, 100]),
+            ('X6', [0, 10000000]),
+            ('X7', [0, 100]),
+            ('X9', [0, 20000]),
+            ('X11', [0, 500000])
         ])
         return dict_ranges
 
