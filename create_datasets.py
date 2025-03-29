@@ -126,8 +126,17 @@ def main(seed):
     # Save as npy file as in the folder
     np.save('./Data/' + str(args.problem) + f'/{args.exp_set}/{seed}/' + f'interventional_data.npy', interventional_data)
 
-
+def log_to_file(msg:str):
+    with open("./run_log.log", "a") as f:
+        f.write(msg)
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    main(args.seed)
+    for seed in range (0, 10):
+        try:
+            args.seed = seed
+            main(args.seed)
+            log_to_file("Seed {seed}, success")
+            
+        except Exception as e:
+            log_to_file(f"Seed {seed} error: 'str(e)'\n")
