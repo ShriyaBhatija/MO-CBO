@@ -41,7 +41,7 @@ class CausalMOBO(Problem):
     return anp.asarray(f)
   
 
-  def _calc_pareto_front(self, n_pareto_points=100):
+  def _calc_pareto_front(self, n_pareto_points=50):
     '''
     Calculate the true causal Pareto front by evaluating the target function for each intervention set 
     and filtering the Pareto optimal points

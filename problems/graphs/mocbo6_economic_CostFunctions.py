@@ -25,11 +25,12 @@ def define_costs(type_cost):
     """
     # Define a configuration for each cost type:
     cost_config = {
-        1: {"costs": {"X1": 1, "X2": 1, "X4": 1, "X5": 1, "X6":1, "X7":1}, "variable": False},
-        2: {"costs": {"X1": 2, "X2": 3, "X4": 5, "X5": 7, "X6":9, "X7":11}, "variable": False},
-        3: {"costs": {"X1": 2, "X2": 3, "X4": 5, "X5": 7, "X6":9, "X7":11}, "variable": True},
-        4: {"costs": {"X1": 1, "X2": 1, "X4": 1, "X5": 1, "X6":1, "X7":1}, "variable": True},
+        1: {"costs": {"X11": 1, "X2": 1, "X9": 1, "X5": 1, "X6":1, "X7":1}, "variable": False},
+        2: {"costs": {"X11": 2, "X2": 3, "X9": 5, "X5": 7, "X6":9, "X7":11}, "variable": False},
+        3: {"costs": {"X11": 2, "X2": 3, "X9": 5, "X5": 7, "X6":9, "X7":11}, "variable": True},
+        4: {"costs": {"X11": 1, "X2": 1, "X9": 1, "X5": 1, "X6":1, "X7":1}, "variable": True},
     }
+    
     
     config = cost_config.get(type_cost)
     if config is None:

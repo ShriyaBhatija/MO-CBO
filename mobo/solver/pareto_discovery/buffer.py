@@ -332,8 +332,8 @@ class Buffer3D(BufferBase):
 
         # TODO: corner cases, need to check why they happen
         if len(valid_cells) == 1:
-            #raise Exception('only 1 non-empty cell in buffer, cannot do graph cut')
-            return np.array([[0, 0]])
+            raise Exception('only 1 non-empty cell in buffer, cannot do graph cut')
+            #return np.array([[0, 0]])
         elif len(valid_cells) == 2:
             return np.array([[0, 1]])
         elif len(valid_cells) == 3:

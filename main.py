@@ -25,8 +25,22 @@ def main(args, framework_args):
     # run the algorithm
     Causal_ParetoSelect(args,framework_args, graph, exploration_set, costs, interventional_data)
 
-if __name__ == '__main__': 
-    for seed in range(0,10):
-        args, framework_args = get_args()
-        args.seed = seed
-        main(args, framework_args)
+if __name__ == '__main__':
+    completed = 0 
+    for seed in range(0,40):
+        for approach in ["mo-cbo", 'mobo']:
+            try:
+                args, framework_args = get_args()
+                args.seed = seed
+                args.exp_set = approach
+                main(args, framework_args)
+                completed+=1
+                if completed == 8:
+                    break
+                with open("runs.log", "a") as f:
+                    f.write(f"Succeeded for seed {seed} and approch {approach}.")
+            
+            except Exception as e:
+                with open("runs.log", "a") as f:
+                    f.write(f"Failed for seed {seed} and approch {approach}. Due to error {str(e)}. Skipping...")
+                    continue

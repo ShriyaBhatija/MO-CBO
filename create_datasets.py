@@ -42,8 +42,21 @@ def main(seed):
         observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('Y1', []), ('Y2', []), ('Y3', []), ('control', [])])
         graph = MO_CBO3()
     elif problem == 'mo-cbo-econ':
-        graph = MO_CBO3()
-        observational_samples = {key: [] for key, val in  graph.define_SEM().items()}
+        graph = SCM_Economics()
+        observational_samples = OrderedDict([
+                                                         ('X1', []),
+                                                        ('X4', []),
+                                                        ('X3', []),
+                                                        ('X2', []),
+                                                        ('X5', []),
+                                                        ('X6', []),
+                                                        ('X7', []),
+                                                        ('Y1', []),
+                                                        ('X9', []),
+                                                        ('Y2', []),
+                                                        ('X11', []),
+                                                        ('control', [])
+                                             ])
     
 
 
@@ -117,6 +130,4 @@ def main(seed):
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    for seed in range(0,10):
-        args.seed = seed
-        main(args.seed)
+    main(args.seed)

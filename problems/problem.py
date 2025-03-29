@@ -65,6 +65,7 @@ class Problem(PymooProblem):
 
         # make the array at least 2-d - even if only one row should be evaluated
         only_single_value = len(np.shape(X)) == 1
+        print(X.shape)
         X = np.atleast_2d(X)
 
         # check the dimensionality of the problem and the given input

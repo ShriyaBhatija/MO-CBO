@@ -28,6 +28,7 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, int
         # get initial samples
         if args.mode == 'int_data':
             X_init, Y_init = interventional_data[s][-2:]
+            print("Interv. data:", X_init.shape)
 
         # initialise optimizer
         optimizer = get_algorithm('cps')(problem, set, args.n_iter, None, framework_args)

@@ -95,6 +95,7 @@ class MOBO:
         global_timer = Timer()
 
         for i in range(self.n_iter):
+
             print('========== Iteration %d ==========' % i)
 
             timer = Timer()
