@@ -40,39 +40,39 @@ class SCM_Economics(GraphStructure):
         
         def fU2(epsilon, **kwargs):
             # Electricity Consumption
-            return np.random.normal(1, 1, 1)[0]
+            return np.random.normal(1, 11, 1)[0]
         
         def fU4(epsilon, **kwargs):
-            # Electricity Consumption
-            return np.random.normal(10, 3, 1)[0]
+            # Eco Awareness
+            return np.random.normal(50, 90, 1)[0]
         
         def fU5(epsilon, **kwargs):
-            # Electricity Consumption
-            return np.random.normal(1, 1, 1)[0]
+            # Electricity Invest
+            return np.random.normal(1, 100000, 1)[0]
         
         def fU6(epsilon, **kwargs):
-            # Electricity Consumption
-            return np.random.normal(1, 1, 1)[0]
+            # Investment Other
+            return np.random.normal(1, 999999, 1)[0]
         
         def fU7(epsilon, **kwargs):
-            # Electricity Consumption
-            return np.random.normal(1, 1, 1)[0]
+            # Employment
+            return np.random.normal(0, 70, 1)[0]
         
         def fU8(epsilon, **kwargs):
-            # Electricity Consumption
-            return np.random.normal(1, 1, 1)[0]
+            # Secondary Industry
+            return np.random.normal(1, 2000, 1)[0]
         
         def fU9(epsilon, **kwargs):
-            # Electricity Consumption
-            return np.random.normal(1, 1, 1)[0]
+            # Tertiary Industry
+            return np.random.normal(1, 2000, 1)[0]
         
         def fU10(epsilon, **kwargs):
-            # Electricity Consumption
-            return np.random.normal(1, 1, 1)[0]
+            # Proportion of Non-Agriculture
+            return np.random.normal(1, 100, 1)[0]
         
         def fU11(epsilon, **kwargs):
             # Electricity Consumption
-            return np.random.normal(1, 1, 1)[0]
+            return np.random.normal(0, 100, 1)[0]
     
         def fX3(epsilon, U4, **kwargs):
             # Ecological Awareness: X3 = 0.889 * X4 + U4
@@ -97,8 +97,8 @@ class SCM_Economics(GraphStructure):
         def fY2(epsilon, X2, U4, X6, U1, U7, U8, U9, U10, U11, **kwargs):
             # Output threshold = 0.538 * X6 + 0.426 * X7 + 0.826 * X11 + 0.293 * X2 +
             #                    0.527 * X10 + 0.169 * U1 + 0.411 * X1
-            return  - (
-                    0.538 * X6 +
+            return  (
+                    0.538 * (5 - X6) - 0.538 * X6 +  # Amplified negative effect for X6
                     0.426 * (0.789 * U4 + U7) +
                     0.826 * (0.918 * U4 + U11) +
                     0.293 * X2 +

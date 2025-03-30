@@ -138,7 +138,11 @@ def main():
         plt.ylim(bottom=0)
         plt.xticks(fontname = "STIXGeneral")
         plt.yticks(np.arange(0, 21, 5), fontname = "STIXGeneral")
-
+    elif args.problem == 'mo-cbo-econ':
+        plt.xlim(100,5000)
+        plt.ylim(bottom=-20000)
+        plt.xticks(fontname = "STIXGeneral")
+        plt.yticks(np.arange(0, 21, 5), fontname = "STIXGeneral")
     
     #plt.xlabel('cumulative intervention cost', fontsize=38)
     #plt.ylabel('IGD', fontsize=38) 
