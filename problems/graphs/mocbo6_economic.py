@@ -26,72 +26,100 @@ class SCM_Economics(GraphStructure):
     #                                       Number of websites                                                                      10 thousand
     # Ecological awareness                  Investment in environmental protection                                                  0.1 billion yuan
     """
+    
 
     def define_SEM(self):
-        def fX1(epsilon, **kwargs):
-            # Energy Source Structure
-            return np.random.normal(0, 1, 1)[0]
+        # def fX1(epsilon, **kwargs):
+        #     # Energy Source Structure
+        #     return np.random.normal(0, 1, 1)[0]
         
-        def fX4(epsilon, **kwargs):
+        def fU1(epsilon, **kwargs):
             # Electricity Consumption
-            return np.random.normal(0, 1, 1)[0]
+            return np.random.normal(1, 1, 1)[0]
         
-        def fX3(epsilon, X4, **kwargs):
-            # Ecological Awareness = 0.889 * X4 + U4
-            return 0.889 * X4 + np.random.normal(17, 1, 1)[0]
+        def fU2(epsilon, **kwargs):
+            # Electricity Consumption
+            return np.random.normal(1, 1, 1)[0]
         
-        def fX2(epsilon, X4, X3, **kwargs):
-            # Informatization Level = 0.836 * X4 + 0.464 * X3 + U2
-            return 0.836 * X4 + 0.464 * X3 + np.random.normal(0, 1, 1)[0]
+        def fU4(epsilon, **kwargs):
+            # Electricity Consumption
+            return np.random.normal(1, 1, 1)[0]
         
-        def fX5(epsilon, X4, **kwargs):
-            # Electricity Investment = 0.898 * X4 + U5
-            return 0.898 * X4 + np.random.normal(0, 1, 1)[0]
+        def fU5(epsilon, **kwargs):
+            # Electricity Consumption
+            return np.random.normal(1, 1, 1)[0]
         
-        def fX6(epsilon, X5, **kwargs):
+        def fU6(epsilon, **kwargs):
+            # Electricity Consumption
+            return np.random.normal(1, 1, 1)[0]
+        
+        def fU7(epsilon, **kwargs):
+            # Electricity Consumption
+            return np.random.normal(1, 1, 1)[0]
+        
+        def fU8(epsilon, **kwargs):
+            # Electricity Consumption
+            return np.random.normal(1, 1, 1)[0]
+        
+        
+        def fU9(epsilon, **kwargs):
+            # Electricity Consumption
+            return np.random.normal(1, 1, 1)[0]
+        
+        def fU10(epsilon, **kwargs):
+            # Electricity Consumption
+            return np.random.normal(1, 1, 1)[0]
+        
+        def fU11(epsilon, **kwargs):
+            # Electricity Consumption
+            return np.random.normal(1, 1, 1)[0]
+    
+        def fX3(epsilon, U4, **kwargs):
+            # Ecological Awareness: X3 = 0.889 * X4 + U4
+            return 0.889 * U4 + U4
+    
+        def fX2(epsilon, U2, U4,X3, **kwargs):
+            # Informatization Level = 0.836 * U4 + 0.464 * X3 + U2
+            return  0.836 * U4 + 0.464 * X3 + U2
+    
+        def fX5(epsilon, U1, U4 ,U5, **kwargs):
+            return  0.898 * U4 + U5
+        
+        def fX6(epsilon, X5, U6, **kwargs):
             # Investment Other = 0.783 * X5 + U6
-            return 0.783 * X5 + np.random.normal(0, 1, 1)[0]
+            return  0.783 * X5 + U6
+
+        def fY1(epsilon, X5, X6, **kwargs):
+            # Total Investment
+            return  X5 + X6
         
-        def fX7(epsilon, X4, **kwargs):
-            # Employment = 0.789 * X4 + U7
-            return 0.789 * X4 + np.random.normal(0, 1, 1)[0]
-        
-        def fX8(epsilon, X4, X2, **kwargs):
-            # Secondary Industry = 0.566 * X4 + 0.561 * X2 + U8
-            return 0.566 * X4 + 0.561 * X2 + np.random.normal(0, 1, 1)[0]
-        
-        def fX9(epsilon, X4, X2, **kwargs):
-            # Tertiary Industry = 0.537 * X4 + 0.712 * X2 + U9
-            return 0.537 * X4 + 0.712 * X2 + np.random.normal(0, 1, 1)[0]
-        
-        def fY1(epsilon, X8, X9, X6, X2, **kwargs):
-            
+        def fX10(epsilon, U1, X6, C1, X2, Y1,  **kwargs):
             # Prop. non-agriculture = 0.731 * Y1 + 0.612 * X9 + 0.662 * X6 + 0.605 * X2 + U10
-            return 0.731 * X8 + 0.612 * X9 + 0.662 * X6 + 0.605 * X2 + np.random.normal(0, 1, 1)[0]
+            return 0.731 * X8 + 0.612 * Y1 + 0.662 * X6 + 0.605 * X2 + U10
         
-        def fX11(epsilon, X4, **kwargs):
-            # Labor Productivity = 0.918 * X4 + U11
-            return 0.918 * X4 + np.random.normal(0, 1, 1)[0]
-        
-        def fY2(epsilon, X1, X2, X4, X6, X7, Y1, X11, **kwargs):
+        def fY2(epsilon, X2, U4, X6, U1, U7, U8, U9, U10, U11, **kwargs):
             # Output threshold = 0.538 * X6 + 0.426 * X7 + 0.826 * X11 + 0.293 * X2 +
-            #                    0.527 * X10 + 0.169 * X4 + 0.411 * X1
-            return (0.538 * X6 + 0.426 * X7 + 0.826 * X11 +
-                    0.293 * X2 + 0.527 * Y1 + 0.169 * X4 + 0.411 * X1)
+            #                    0.527 * X10 + 0.169 * U1 + 0.411 * X1
+            return (0.538 * X6 + 0.426 * (0.789 * U4 + U7) + 0.826 * (0.918 * U4 + U11) + 0.293 * X2 + 
+            0.527 * (0.731 * (0.566 * U4 + 0.561 * X2 + U8) + 0.612 * (0.537 * U4 + 0.712 * X2 + U9) + 0.662 * X6 + 0.605 * X2 + U10) + 0.169 * U4 + 0.411 * U1)
         
         graph = OrderedDict([
-            ('X4', fX4),
-            ('X1', fX1),
+            ('U1', fU1),
+            ('U2', fU2),
+            ('U4', fU4),
+            ('U5', fU5),
+            ('U6', fU6),
+            ('U7', fU7),
+            ('U8', fU8),
+            ('U9', fU9),
+            ('U10', fU10),
+            ('U11', fU11),
             ('X3', fX3),
             ('X2', fX2),
             ('X5', fX5),
             ('X6', fX6),
-            ('X7', fX7),
-            ('X8', fX8),
-            ('X9', fX9),
             ('Y1', fY1),
-            ('X11', fX11),
-            ('Y2',  fY2),
+            ('Y2', fY2),
         ])
         return graph
 
@@ -100,22 +128,30 @@ class SCM_Economics(GraphStructure):
 
     def get_exploration_sets(self):
         exploration_sets = {
-            'mo-cbo': [['X2', 'X6', 'X11', 'X7'], ['X2', 'X6', 'X9']],  # placeholder
-            'mobo': [['X2', 'X9', 'X6', 'X11', 'X7']]  # placeholder
+            'mo-cbo': [['X5', 'X6'], ['X2', 'X6']],  # placeholder
+            'mobo': [['X2', 'X5', 'X6']]  # placeholder
         }
         return exploration_sets
 
     def get_set_MOBO(self):
-        return ['X2', 'X9', 'X6', 'X11', 'X7']
+        return ['X2', 'X5', 'X6']
 
     def get_interventional_ranges(self):
+        # Define the equations
+        # scm_economics_equations = [
+        #     #Eq(X4, U4),                                   # Electricity Cons.: X4 = U4 ~ N(0,100000)
+        #     Eq(X3, 0.889 * U4 + U4),                      # Ecological Awareness: X3 = 0.889 * X4 + U4
+        #     Eq(X2, 0.836 * X4 + 0.464 * X3 + U2),         # Informatization Level: X2 = 0.836 * X4 + 0.464 * X3 + U2
+        #     Eq(X5, 0.898 * X4 + U5),                      # Electricity Investment: X5 = 0.898 * X4 + U5
+        #     Eq(X6, 0.783 * X5 + U6),                      # Investment Other: X6 = 0.783 * X5 + U6
+        #     Eq(Y1, X5 + X6),                               # Total Investment: X5 = 0.898 * X4 + U5
+        #     Eq(Y2, (0.538 * X6 + 0.426 * (0.789 * X4 + U7) + 0.826 * (0.918 * X4 + U11) + 0.293 * X2 + 
+        #         0.527 * (0.731 * (0.566 * X4 + 0.561 * X2 + U8) + 0.612 * (0.537 * X4 + 0.712 * X2 + U9) + 0.662 * X6 + 0.605 * X2 + U10) + 0.169 * X4 + 0.411 * U1))  # Output threshold
+        # ]
         dict_ranges = OrderedDict([
             ('X2', [0, 100]),
-            ('X3', [0, 100]),
-            ('X6', [0, 10000000]),
-            ('X7', [0, 100]),
-            ('X9', [0, 20000]),
-            ('X11', [0, 500000])
+            ('X5', [0, 100]),
+            ('X6', [0, 100]),
         ])
         return dict_ranges
 

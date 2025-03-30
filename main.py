@@ -28,6 +28,8 @@ def main(args, framework_args):
 if __name__ == '__main__':
     completed = 0 
     for seed in range(0,40):
+        if seed == 9:
+            continue
         for approach in ["mo-cbo", 'mobo']:
             try:
                 args, framework_args = get_args()
