@@ -32,7 +32,8 @@ class SCM_Economics(GraphStructure):
         # def fX1(epsilon, **kwargs):
         #     # Energy Source Structure
         #     return np.random.normal(0, 1, 1)[0]
-        
+
+                
         def fU1(epsilon, **kwargs):
             # Electricity Consumption
             return np.random.normal(1, 1, 1)[0]
@@ -60,7 +61,6 @@ class SCM_Economics(GraphStructure):
         def fU8(epsilon, **kwargs):
             # Electricity Consumption
             return np.random.normal(1, 1, 1)[0]
-        
         
         def fU9(epsilon, **kwargs):
             # Electricity Consumption
