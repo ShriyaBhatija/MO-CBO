@@ -146,9 +146,9 @@ class SCM_Economics(GraphStructure):
         #         0.527 * (0.731 * (0.566 * X4 + 0.561 * X2 + U8) + 0.612 * (0.537 * X4 + 0.712 * X2 + U9) + 0.662 * X6 + 0.605 * X2 + U10) + 0.169 * X4 + 0.411 * U1))  # Output threshold
         # ]
         dict_ranges = OrderedDict([
-            ('X2', [0, 100]),
-            ('X5', [0, 100]),
-            ('X6', [0, 100]),
+            ('X2', [0, 5]),
+            ('X5', [0, 5]),
+            ('X6', [0, 5]),
         ])
         return dict_ranges
 
