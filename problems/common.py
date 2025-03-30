@@ -20,6 +20,9 @@ def get_cbo_options():
         #'mo-cbo-health': Health(),
         'mo-cbo-econ': SCM_Economics(),
     }
+    
+    #print(problems)
+    
     return problems
 
 
@@ -33,8 +36,8 @@ def build_problem(name, mis):
     ''' 
     try:
         problem = get_problem(graph=get_cbo_options()[name], intervention_set=mis)
-    except:
-        raise NotImplementedError('problem not supported yet!')
+    except Exception as e:
+        raise NotImplementedError('problem not supported yet!: ' + str(e))
     
     return problem
 
@@ -43,7 +46,7 @@ def calc_causal_pareto_front(name, mis):
     try:
         problem = get_problem(graph=get_cbo_options()[name], intervention_set=mis)
         pareto_front = problem.pareto_front()
-    except:
-        raise NotImplementedError('problem not supported yet!')
+    except Exception as e:
+        raise NotImplementedError('problem not supported yet!'+ str(e))
     
     return pareto_front

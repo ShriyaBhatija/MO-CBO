@@ -44,7 +44,7 @@ class SCM_Economics(GraphStructure):
         
         def fU4(epsilon, **kwargs):
             # Electricity Consumption
-            return np.random.normal(1, 1, 1)[0]
+            return np.random.normal(10, 3, 1)[0]
         
         def fU5(epsilon, **kwargs):
             # Electricity Consumption
@@ -93,10 +93,7 @@ class SCM_Economics(GraphStructure):
             # Total Investment
             return  X5 + X6
         
-        def fX10(epsilon, U1, X6, C1, X2, Y1,  **kwargs):
-            # Prop. non-agriculture = 0.731 * Y1 + 0.612 * X9 + 0.662 * X6 + 0.605 * X2 + U10
-            return 0.731 * X8 + 0.612 * Y1 + 0.662 * X6 + 0.605 * X2 + U10
-        
+
         def fY2(epsilon, X2, U4, X6, U1, U7, U8, U9, U10, U11, **kwargs):
             # Output threshold = 0.538 * X6 + 0.426 * X7 + 0.826 * X11 + 0.293 * X2 +
             #                    0.527 * X10 + 0.169 * U1 + 0.411 * X1
