@@ -97,8 +97,8 @@ class SCM_Economics(GraphStructure):
         def fY2(epsilon, X2, U4, X6, U1, U7, U8, U9, U10, U11, **kwargs):
             # Output threshold = 0.538 * X6 + 0.426 * X7 + 0.826 * X11 + 0.293 * X2 +
             #                    0.527 * X10 + 0.169 * U1 + 0.411 * X1
-            return  (
-                    0.538 * (5 - X6) - 0.538 * X6 +  # Amplified negative effect for X6
+            return  - (
+                    0.538 * X6 +
                     0.426 * (0.789 * U4 + U7) +
                     0.826 * (0.918 * U4 + U11) +
                     0.293 * X2 +
