@@ -77,7 +77,15 @@ class SCM_Economics(GraphStructure):
         def fX3(epsilon, U4, **kwargs):
             # Ecological Awareness: X3 = 0.889 * X4 + U4
             return 0.889 * U4 + U4
-    
+        
+        def fX11(epsilon, **kwargs):
+            # Informatization Level = 0.836 * U4 + 0.464 * X3 + U2
+            return np.random.normal(0.5, 0.25, 1)[0]
+        
+        def fX12(epsilon, **kwargs):
+            # Informatization Level = 0.836 * U4 + 0.464 * X3 + U2
+            return np.random.normal(0.5, 0.25, 1)[0]
+        
         def fX2(epsilon, U2, U4,X3, **kwargs):
             # Informatization Level = 0.836 * U4 + 0.464 * X3 + U2
             return  0.836 * U4 + 0.464 * X3 + U2
@@ -94,11 +102,11 @@ class SCM_Economics(GraphStructure):
             return  X5 + X6
         
 
-        def fY2(epsilon, X2, U4, X6, U1, U7, U8, U9, U10, U11, **kwargs):
+        def fY2(epsilon, X11, X12, X2, U4, X6, U1, U7, U8, U9, U10, U11, **kwargs):
             # Output threshold = 0.538 * X6 + 0.426 * X7 + 0.826 * X11 + 0.293 * X2 +
             #                    0.527 * X10 + 0.169 * U1 + 0.411 * X1
             return  (
-                    0.538 * (5 - X6) - 0.538 * X6 +  # Amplified negative effect for X6
+                    0.538 * X6 - 0.538 * X6 +  # Amplified negative effect for X6
                     0.426 * (0.789 * U4 + U7) +
                     0.826 * (0.918 * U4 + U11) +
                     0.293 * X2 +
@@ -108,7 +116,7 @@ class SCM_Economics(GraphStructure):
                         0.662 * X6 + 0.605 * X2 + U10
                     ) +
                     0.169 * U4 +
-                    0.411 * U1
+                    0.411 * (X11 + X12)
                 )
             
         graph = OrderedDict([
@@ -122,6 +130,8 @@ class SCM_Economics(GraphStructure):
             ('U9', fU9),
             ('U10', fU10),
             ('U11', fU11),
+            ('X11', fX11),
+            ('X12', fX12),
             ('X3', fX3),
             ('X2', fX2),
             ('X5', fX5),
@@ -136,13 +146,13 @@ class SCM_Economics(GraphStructure):
 
     def get_exploration_sets(self):
         exploration_sets = {
-            'mo-cbo': [['X5', 'X6'], ['X2', 'X6']],  # placeholder
-            'mobo': [['X2', 'X5', 'X6']]  # placeholder
+            'mo-cbo': [['X11', 'X12'], ['X5', 'X6']],  # placeholder
+            'mobo': [['X11', 'X12', 'X5', 'X6']]  # placeholder
         }
         return exploration_sets
 
     def get_set_MOBO(self):
-        return ['X2', 'X5', 'X6']
+        return ['X11', 'X12', 'X5', 'X6']
 
     def get_interventional_ranges(self):
         # Define the equations
@@ -157,6 +167,8 @@ class SCM_Economics(GraphStructure):
         #         0.527 * (0.731 * (0.566 * X4 + 0.561 * X2 + U8) + 0.612 * (0.537 * X4 + 0.712 * X2 + U9) + 0.662 * X6 + 0.605 * X2 + U10) + 0.169 * X4 + 0.411 * U1))  # Output threshold
         # ]
         dict_ranges = OrderedDict([
+            ('X11', [0, 100]),
+            ('X12', [0, 100]),
             ('X2', [0, 100]),
             ('X5', [0, 50]),
             ('X6', [0, 5000]),
