@@ -1,181 +1,49 @@
-import sys
-sys.path.append("..") 
-
+import numpy as np
 from collections import OrderedDict
 
-from .graph import GraphStructure
-from .mocbo6_economic_CostFunctions import define_costs
-import numpy as np
-
-class SCM_Economics(GraphStructure):
+def make_cost_function(fixed_cost, include_variable=False):
     """
-    # Observed variables                    
-    # Electricity consumption               Total electricity consumption                                                           0.1 billion kWh
-    # Economic growth                       GDP                                                                                     0.1 billion yuan
-    # Electricity investment                Fixed capital investments for electricity, thermal power, and natural gas supply        0.1 billion yuan
-    # Investments in other industries       The difference between total fixed asset investments and power industry investment      0.1 billion yuan
-    # Employment                            Total number of people who are employed                                                 10 thousand
-    # Development of the secondary industry Outputs of the secondary industry                                                       0.1 billion yuan
-    # Development of the tertiary industry  Outputs of the tertiary industry                                                        0.1 billion yuan
-    # Proportion of non-agriculture         Sum of proportions of secondary and tertiary economic sectors                           %
-    # Labor productivity                    GDP/employment                                                                          Yuan per capita
-    # 
-    # Latent variables 
-    # Energy source structure               Proportion of renewable energy                                                          %
-    # Informatization level                 Number of internet users                                                                10 thousand
-    #                                       Number of websites                                                                      10 thousand
-    # Ecological awareness                  Investment in environmental protection                                                  0.1 billion yuan
+    Returns a cost function that adds a fixed cost,
+    and optionally a variable cost (sum of absolute values).
     """
+    def cost(intervention_value, **kwargs):
+        result = fixed_cost
+        if include_variable:
+            result += np.sum(np.abs(intervention_value))
+        return result
+    return cost
+
+def define_costs(type_cost):
+    """
+    Define cost functions based on the cost type.
     
-
-    def define_SEM(self):
-        # def fX1(epsilon, **kwargs):
-        #     # Energy Source Structure
-        #     return np.random.normal(0, 1, 1)[0]
-
-                
-        def fU1(epsilon, **kwargs):
-            # Electricity Consumption
-            return np.random.normal(1, 1, 1)[0]
-        
-        def fU2(epsilon, **kwargs):
-            # Information Level
-            return np.random.normal(1, 11, 1)[0]
-        
-        def fU4(epsilon, **kwargs):
-            # Ellectricity Consumption
-            return np.random.normal(50, 100000, 1)[0]
-        
-        def fU5(epsilon, **kwargs):
-            # Electricity Invest
-            return np.random.normal(1, 999999, 1)[0]
-        
-        def fU6(epsilon, **kwargs):
-            # Investment Other
-            return np.random.normal(1, 15, 1)[0]
-        
-        def fU7(epsilon, **kwargs):
-            # Employment
-            return np.random.normal(0, 70, 1)[0]
-        
-        def fU8(epsilon, **kwargs):
-            # Secondary Industry
-            return np.random.normal(1, 2000, 1)[0]
-        
-        def fU9(epsilon, **kwargs):
-            # Tertiary Industry
-            return np.random.normal(1, 2000, 1)[0]
-        
-        def fU10(epsilon, **kwargs):
-            # Proportion of Non-Agriculture
-            return np.random.normal(1, 100, 1)[0]
-        
-        def fU11(epsilon, **kwargs):
-            # Electricity Consumption
-            return np.random.normal(0, 100, 1)[0]
+    Type mapping:
+      1: All interventions have fixed cost 1.
+      2: Different fixed costs for each intervention.
+      3: Same as type 2, but adds a variable cost component.
+      4: All interventions have fixed cost 1, plus a variable cost.
+    """
+    # Define a configuration for each cost type:
+    cost_config = {
+        1: {"costs": {"X11": 0.5, "X12": 0.5, "X2": 1, "X5": 1, "X6":1, "X3":1}, "variable": False},
+        2: {"costs": {"X11": 1, "X12": 1, "X2": 5, "X5": 7, "X6":9, "X3":11}, "variable": False},
+        3: {"costs": {"X11": 1, "X12": 1, "X2": 5, "X5": 7, "X6":9, "X3":11}, "variable": True},
+        4: {"costs": {"X11": 0.5, "X12": 0.5, "X2": 1, "X5": 1, "X6":1, "X3":1}, "variable": True},
+    }
+            #    ('X11', [0, 100]),
+            # ('X12', [0, 100]),
+            # ('X2', [0, 100]),
+            # ('X3', [0, 100]),
+            # ('X5', [0, 50]),
+            # ('X6', [0, 5000]),
+            # ('X3', [0, 100]),
     
-        def fX3(epsilon, U4, **kwargs):
-            # Ecological Awareness: X3 = 0.889 * X4 + U4
-            return 0.889 * U4 + U4
-        
-        def fX11(epsilon, **kwargs):
-            # Informatization Level = 0.836 * U4 + 0.464 * X3 + U2
-            return np.random.normal(0.5, 0.25, 1)[0]
-        
-        def fX12(epsilon, **kwargs):
-            # Informatization Level = 0.836 * U4 + 0.464 * X3 + U2
-            return np.random.normal(0.5, 0.25, 1)[0]
-        
-        def fX2(epsilon, U2, U4,X3, **kwargs):
-            # Informatization Level = 0.836 * U4 + 0.464 * X3 + U2
-            return  0.836 * U4 + 0.464 * X3 + U2
+    config = cost_config.get(type_cost)
+    if config is None:
+        raise ValueError(f"Unknown cost type: {type_cost}")
+
+    costs = OrderedDict()
+    for key, fixed_cost in config["costs"].items():
+        costs[key] = make_cost_function(fixed_cost, include_variable=config["variable"])
     
-        def fX5(epsilon, U1, U4 ,U5, **kwargs):
-            return  0.898 * U4 + U5
-        
-        def fX6(epsilon, X5, U6, **kwargs):
-            # Investment Other = 0.783 * X5 + U6
-            return  0.783 * X5 + U6
-
-        def fY1(epsilon, X5, X6, **kwargs):
-            # Total Investment
-            return  -(X5 + X6)
-        
-
-        def fY2(epsilon, X11, X12, X2, U4, X6, U1, U7, U8, U9, U10, U11, **kwargs):
-            # Output threshold = 0.538 * X6 + 0.426 * X7 + 0.826 * X11 + 0.293 * X2 +
-            #                    0.527 * X10 + 0.169 * U1 + 0.411 * X1
-            return  (
-                    0.538 * X6 +  # Amplified negative effect for X6
-                    0.426 * (0.789 * U4 + U7) +
-                    0.826 * (0.918 * U4 + U11) +
-                    0.293 * X2 +
-                    0.527 * (
-                        0.731 * (0.566 * U4 + 0.561 * X2 + U8) +
-                        0.612 * (0.537 * U4 + 0.712 * X2 + U9) +
-                        0.662 * X6 + 0.605 * X2 + U10
-                    ) +
-                    0.169 * U1 +
-                    0.411 * (X11 + X12)
-                )
-            
-        graph = OrderedDict([
-            ('U1', fU1),
-            ('U2', fU2),
-            ('U4', fU4),
-            ('U5', fU5),
-            ('U6', fU6),
-            ('U7', fU7),
-            ('U8', fU8),
-            ('U9', fU9),
-            ('U10', fU10),
-            ('U11', fU11),
-            ('X11', fX11),
-            ('X12', fX12),
-            ('X3', fX3),
-            ('X2', fX2),
-            ('X5', fX5),
-            ('X6', fX6),
-            ('Y1', fY1),
-            ('Y2', fY2),
-        ])
-        return graph
-
-    def get_targets(self):
-        return ['Y1', 'Y2']
-
-    def get_exploration_sets(self):
-        exploration_sets = {
-            'mo-cbo': [['X11', 'X12'], ['X5', 'X6']],  # placeholder
-            'mobo': [['X11', 'X12', 'X5', 'X6', 'X2', 'X3']]  # placeholder
-        }
-        return exploration_sets
-
-    def get_set_MOBO(self):
-        return ['X11', 'X12', 'X5', 'X6', 'X3', "X2"]
-
-    def get_interventional_ranges(self):
-        # Define the equations
-        # scm_economics_equations = [
-        #     #Eq(X4, U4),                                   # Electricity Cons.: X4 = U4 ~ N(0,100000)
-        #     Eq(X3, 0.889 * U4 + U4),                      # Ecological Awareness: X3 = 0.889 * X4 + U4
-        #     Eq(X2, 0.836 * X4 + 0.464 * X3 + U2),         # Informatization Level: X2 = 0.836 * X4 + 0.464 * X3 + U2
-        #     Eq(X5, 0.898 * X4 + U5),                      # Electricity Investment: X5 = 0.898 * X4 + U5
-        #     Eq(X6, 0.783 * X5 + U6),                      # Investment Other: X6 = 0.783 * X5 + U6
-        #     Eq(Y1, X5 + X6),                               # Total Investment: X5 = 0.898 * X4 + U5
-        #     Eq(Y2, (0.538 * X6 + 0.426 * (0.789 * X4 + U7) + 0.826 * (0.918 * X4 + U11) + 0.293 * X2 + 
-        #         0.527 * (0.731 * (0.566 * X4 + 0.561 * X2 + U8) + 0.612 * (0.537 * X4 + 0.712 * X2 + U9) + 0.662 * X6 + 0.605 * X2 + U10) + 0.169 * X4 + 0.411 * U1))  # Output threshold
-        # ]
-        dict_ranges = OrderedDict([
-            ('X11', [0, 50]),
-            ('X12', [0, 50]),
-            ('X2', [0, 33]),
-            ('X3', [0, 100]),
-            ('X5', [0, 20000*3]),
-            ('X6', [0, 20015*3]),
-        ])
-        return dict_ranges
-
-    def get_cost_structure(self, type_cost):
-        costs = define_costs(type_cost)
-        return costs
+    return costs
