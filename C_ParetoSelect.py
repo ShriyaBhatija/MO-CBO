@@ -66,7 +66,7 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, int
 
 
     i = 0
-    while np.sum(experiment_log['cost']) < 805:
+    while np.sum(experiment_log['cost']) < 1600:
         print('Optimization step', i)
 
         # Initialize a new row for this iteration
