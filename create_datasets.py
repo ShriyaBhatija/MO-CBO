@@ -6,7 +6,7 @@ import pandas as pd
 
 from problems import *
 from helpers import *
-
+import traceback
 
 parser = argparse.ArgumentParser(description='create_datasets')
 parser.add_argument('--problem', default = 'mo-cbo2', type = str, help = 'problem name')
@@ -57,7 +57,8 @@ def main(seed):
                                                         ('X11', []),
                                                         ('control', [])
                                              ])
-    
+    else:
+        raise ValueError(f"Problem {problem} not recognized.")
 
 
     targets = graph.Y
@@ -125,17 +126,20 @@ def main(seed):
     # Save as npy file as in the folder
     np.save('./Data/' + str(args.problem) + f'/{args.exp_set}/{seed}/' + f'interventional_data.npy', interventional_data)
 
+
 def log_to_file(msg:str):
+    print(msg)
     with open("./run_log.log", "a") as f:
         f.write(msg)
 
 if __name__ == '__main__':
     args = parser.parse_args()
     for seed in range (0, 10):
+        print(f"Running seed {seed}")
         try:
             args.seed = seed
             main(args.seed)
             log_to_file("Seed {seed}, success")
             
         except Exception as e:
-            log_to_file(f"Seed {seed} error: 'str(e)'\n")
+            log_to_file(f"Seed {seed} error: '{str(e)}'\n {traceback.format_exc()}")
