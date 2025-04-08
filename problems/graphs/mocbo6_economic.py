@@ -146,7 +146,7 @@ class SCM_Economics(GraphStructure):
 
     def get_exploration_sets(self):
         exploration_sets = {
-            'mo-cbo': [['X11', 'X12'], ['X5', 'X6']],  # placeholder
+            'mo-cbo': [['X11', 'X12','X5', 'X6']],  # placeholder
             'mobo': [['X11', 'X12', 'X5', 'X6', 'X2', 'X3']]  # placeholder
         }
         return exploration_sets
