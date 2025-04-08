@@ -3,9 +3,10 @@ sys.path.append("..")
 
 from collections import OrderedDict
 
-from .graph import GraphStructure
+from .graph import GraphStructure, CausalDiagram
 from .mocbo6_economic_CostFunctions import define_costs
 import numpy as np
+
 
 class SCM_Economics(GraphStructure):
     """
@@ -26,7 +27,22 @@ class SCM_Economics(GraphStructure):
     #                                       Number of websites                                                                      10 thousand
     # Ecological awareness                  Investment in environmental protection                                                  0.1 billion yuan
     """
-    
+        
+    def __init__(self):
+        super().__init__()
+        X4, X1, X3, X2, X5, X6, X7, X8, X9, Y1, X11, Y2 = 'X4', 'X1', 'X3', 'X2', 'X5', 'X6', 'X7', 'X8', 'X9', 'Y1', 'X10', 'Y2'
+        self.G = CausalDiagram({'X1', 'X4', 'X3', 'X2', 'X5', 'X6', 'X7', 'X8', 'X9', 'Y1', 'X10', 'Y2'}, 
+        [(X4, X3), (X4, X2), (X3, X2), (X4, X5), 
+        (X5, X6), (X4, X7),
+        (X4, X8), (X2, X8), (X4, X9), (X2, X9),
+        (X8, Y1), (X9, Y1), (X6, Y1), (X2, Y1),
+        (X1, Y2), (X2, Y2), (X4, Y2), (X6, Y2), (X7, X2), (Y1,Y2), (X11,Y2)
+        ]) 
+        # You can leave self.G like this, it is just used to compute the POMISs but if we specify the sets in et_exploration_sets(self)
+        # explicitly without using the POMISs algorithm, self.G is not used
+        self.Y = ['Y1', 'Y2']
+        self.X = ['X11', 'X12', 'X2', 'X5', 'X6'] # insert the intervenable variables
+        
 
     def define_SEM(self):
         # def fX1(epsilon, **kwargs):
@@ -39,20 +55,20 @@ class SCM_Economics(GraphStructure):
             return np.random.normal(1, 1, 1)[0]
         
         def fU2(epsilon, **kwargs):
-            # Information Level
+            # Electricity Consumption
             return np.random.normal(1, 11, 1)[0]
         
         def fU4(epsilon, **kwargs):
-            # Ellectricity Consumption
-            return np.random.normal(50, 100000, 1)[0]
+            # Eco Awareness
+            return np.random.normal(50, 90, 1)[0]
         
         def fU5(epsilon, **kwargs):
             # Electricity Invest
-            return np.random.normal(1, 999999, 1)[0]
+            return np.random.normal(1, 100000, 1)[0]
         
         def fU6(epsilon, **kwargs):
             # Investment Other
-            return np.random.normal(1, 15, 1)[0]
+            return np.random.normal(1, 999999, 1)[0]
         
         def fU7(epsilon, **kwargs):
             # Employment
@@ -95,18 +111,18 @@ class SCM_Economics(GraphStructure):
         
         def fX6(epsilon, X5, U6, **kwargs):
             # Investment Other = 0.783 * X5 + U6
-            return  0.783 * X5 + U6
+            return 0.783 * X5 + U6
 
         def fY1(epsilon, X5, X6, **kwargs):
             # Total Investment
-            return  -(X5 + X6)
+            return -(X5 + X6)
         
 
         def fY2(epsilon, X11, X12, X2, U4, X6, U1, U7, U8, U9, U10, U11, **kwargs):
             # Output threshold = 0.538 * X6 + 0.426 * X7 + 0.826 * X11 + 0.293 * X2 +
             #                    0.527 * X10 + 0.169 * U1 + 0.411 * X1
             return  (
-                    0.538 * X6 +  # Amplified negative effect for X6
+                    0.538 * (5 - X6) - 0.538 * X6 +  # Amplified negative effect for X6
                     0.426 * (0.789 * U4 + U7) +
                     0.826 * (0.918 * U4 + U11) +
                     0.293 * X2 +
@@ -115,7 +131,7 @@ class SCM_Economics(GraphStructure):
                         0.612 * (0.537 * U4 + 0.712 * X2 + U9) +
                         0.662 * X6 + 0.605 * X2 + U10
                     ) +
-                    0.169 * U1 +
+                    0.169 * U4 +
                     0.411 * (X11 + X12)
                 )
             
@@ -146,13 +162,13 @@ class SCM_Economics(GraphStructure):
 
     def get_exploration_sets(self):
         exploration_sets = {
-            'mo-cbo': [['X11', 'X12','X5', 'X6']],  # placeholder
-            'mobo': [['X11', 'X12', 'X5', 'X6', 'X2', 'X3']]  # placeholder
+            'mo-cbo': [['X11', 'X12', 'X5', 'X6']],  # placeholder
+            'mobo': [['X11', 'X12', 'X5', 'X6']]  # placeholder
         }
         return exploration_sets
 
     def get_set_MOBO(self):
-        return ['X11', 'X12', 'X5', 'X6', 'X3', "X2"]
+        return ['X11', 'X12', 'X5', 'X6']
 
     def get_interventional_ranges(self):
         # Define the equations
@@ -167,12 +183,11 @@ class SCM_Economics(GraphStructure):
         #         0.527 * (0.731 * (0.566 * X4 + 0.561 * X2 + U8) + 0.612 * (0.537 * X4 + 0.712 * X2 + U9) + 0.662 * X6 + 0.605 * X2 + U10) + 0.169 * X4 + 0.411 * U1))  # Output threshold
         # ]
         dict_ranges = OrderedDict([
-            ('X11', [0, 50]),
-            ('X12', [0, 50]),
-            ('X2', [0, 33]),
-            ('X3', [0, 100]),
-            ('X5', [0, 20000*3]),
-            ('X6', [0, 20015*3]),
+            ('X11', [0, 100]),
+            ('X12', [0, 100]),
+            ('X2', [0, 100]),
+            ('X5', [0, 50]),
+            ('X6', [0, 5000]),
         ])
         return dict_ranges
 
