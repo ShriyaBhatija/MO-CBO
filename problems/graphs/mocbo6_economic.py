@@ -3,7 +3,7 @@ sys.path.append("..")
 
 from collections import OrderedDict
 
-from .graph import GraphStructure, CausalDiagram
+from .graph import GraphStructure, CausalDiagram, bruteforce_POMISs, MISs
 from .mocbo6_economic_CostFunctions import define_costs
 import numpy as np
 
@@ -161,9 +161,15 @@ class SCM_Economics(GraphStructure):
         return ['Y1', 'Y2']
 
     def get_exploration_sets(self):
+        mo_cbo = bruteforce_POMISs(self.G, self.Y)
+        mo_cbo = sorted([sorted(list(set)) for set in mo_cbo])
+
+        mis = MISs(self.G, self.Y)
+        mis = [sorted(list(set)) for set in mis]
         exploration_sets = {
-            'mo-cbo': [['X11', 'X12', 'X5', 'X6']],  # placeholder
-            'mobo': [['X11', 'X12', 'X5', 'X6']]  # placeholder
+            'mo-cbo': mo_cbo,
+            'mis': mis,
+            'mobo': [['X11', 'X12', 'X5', 'X6', 'X2']]  # placeholder
         }
         return exploration_sets
 
