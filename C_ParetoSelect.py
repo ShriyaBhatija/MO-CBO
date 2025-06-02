@@ -3,6 +3,7 @@ import numpy as np
 from problems.common import build_problem, calc_causal_pareto_front
 from mobo.algorithms import get_algorithm
 from visualization.data_export import DataExport
+import time
 from helpers import *
 from utils import *
 
@@ -26,11 +27,10 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, int
         args.n_var, args.n_obj = problem.n_var, problem.n_obj
         
         # get initial samples
-        if args.mode == 'int_data':
-            X_init, Y_init = interventional_data[s][-2:]
+        X_init, Y_init = interventional_data[s][-2:]
 
         # initialise optimizer
-        optimizer = get_algorithm('cps')(problem, set, args.n_iter, None, framework_args)
+        optimizer = get_algorithm(args.algo)(problem, set, args.n_iter, None, framework_args)
 
         # initialise data exporter
         exporter[s] = DataExport(optimizer, X_init, Y_init, args)
@@ -56,6 +56,7 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, int
     experiment_log['previous_hv'] = [None]
     experiment_log['current_hv'] = [None]
     experiment_log['cost'] = [0]
+    experiment_log['time'] = [0]
 
     # define intervention function
     target_function_list = [None]*len(exploration_set)
@@ -65,11 +66,11 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, int
 
 
     i = 0
-    while np.sum(experiment_log['cost']) < 805:
+    while np.sum(experiment_log['cost']) < args.budget:
         print('Optimization step', i)
 
-        # Initialize a new row for this iteration
-        hv_next_row = np.zeros(len(exploration_set))
+        # runtime
+        start_time = time.time()
 
         ## Get new design samples and corresponding performance
         for s in range(len(exploration_set)):
@@ -98,9 +99,12 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, int
         exporter[index].write_csvs()
             
         # break loop if interventional budget is exhausted
-        if (np.sum(experiment_log['cost'])+current_cost[index]) > 805:
+        if (np.sum(experiment_log['cost'])+current_cost[index]) > args.budget:
             break
-        
+
+        end_time = time.time()
+        runtime = end_time - start_time
+
         # log iteration
         experiment_log['step'].append(i+1)
         experiment_log['intervened_set'].append(get_intervention_set_name(exploration_set[index]))
@@ -108,6 +112,7 @@ def Causal_ParetoSelect(args, framework_args, graph, exploration_set, costs, int
         experiment_log['previous_hv'].append(hv_next_list[i,index])
         experiment_log['current_hv'].append(hv_next_list[i+1,index])
         experiment_log['cost'].append(current_cost[index])
+        experiment_log['time'].append(runtime)
         save_experiment_log(args, experiment_log)
 
         # next iteration

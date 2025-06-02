@@ -24,7 +24,7 @@ def main():
     pareto_points = []
 
     for intervention_set in intervention_sets:
-        csv_folder = f'{problem_dir}/{args.mode}/{args.exp_set}/{args.seed}/{intervention_set}/'
+        csv_folder = f'{problem_dir}/{args.exp_set}/{args.algo}/{args.seed}/{intervention_set}/'
 
         if intervention_set == 'empty':
             points = pd.read_csv(csv_folder + 'sample.csv')
@@ -45,7 +45,6 @@ def main():
 
     
     # Extract x, y values and colors from the filtered points
-    print(colours)
     pareto_f1_values = [point[1][0] for point in pareto_points]
     paretp_f2_values = [point[1][1] for point in pareto_points]
     if n_targets == 3:

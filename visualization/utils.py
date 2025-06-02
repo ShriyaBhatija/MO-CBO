@@ -12,10 +12,10 @@ def get_intervention_set_name(intervention_variables):
 
 def get_result_dir(args):
     '''
-    Get directory of result location (result/problem/mode/exp_set/seed/)
+    Get directory of result location (result/problem/exp_set/seed/)
     '''
     top_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'result')
-    result_dir = os.path.join(top_dir, args.problem, args.mode, args.exp_set, str(args.seed))
+    result_dir = os.path.join(top_dir, args.problem, args.exp_set, args.algo, str(args.seed))
     os.makedirs(result_dir, exist_ok=True)
     return result_dir
 
@@ -35,8 +35,7 @@ def get_intervention_sets(args):
     
     result_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'result')
     problem_dir = os.path.join(result_dir, args.problem)
-
-    directory_path = f'{problem_dir}/{args.mode}/{args.exp_set}/{args.seed}/'
+    directory_path = f'{problem_dir}/{args.exp_set}/{args.algo}/{args.seed}/'
     all_contents = os.listdir(directory_path)
 
     get_intervention_sets = [name for name in all_contents if os.path.isdir(os.path.join(directory_path, name))]

@@ -40,7 +40,7 @@ def get_result_dir(args):
     Get directory of result location (result/problem/algo/seed/)
     '''
     top_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'result')
-    result_dir = os.path.join(top_dir, args.problem, args.mode, args.exp_set, str(args.seed))
+    result_dir = os.path.join(top_dir, args.problem, args.exp_set, args.algo, str(args.seed)) 
     os.makedirs(result_dir, exist_ok=True)
     return result_dir
 

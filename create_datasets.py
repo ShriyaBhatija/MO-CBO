@@ -9,8 +9,8 @@ from helpers import *
 
 
 parser = argparse.ArgumentParser(description='create_datasets')
-parser.add_argument('--problem', default = 'mo-cbo2', type = str, help = 'problem name')
-parser.add_argument('--exp-set', type=str, default='mo-cbo', choices=['mo-cbo', 'mis', 'mobo'], help='exploration set')
+parser.add_argument('--problem', default = 'mo-cbo-credit', type = str, help = 'problem name')
+parser.add_argument('--exp-set', type=str, default='mobo', choices=['mo-cbo', 'mis', 'mobo'], help='exploration set')
 parser.add_argument('--seed', default = 0, type = int, help = 'random seed')
 parser.add_argument('--obs_num_samples', default=100, type=int, help='number of observational samples to be generated')
 parser.add_argument('--int_num_samples', default=5, type=int, help='number of interventional samples to be generated')
@@ -28,23 +28,25 @@ def main(seed):
 
     # Create save folder if it doesn't exist
     pathlib.Path('Data/' + str(args.problem) + f'/{args.exp_set}/{seed}').mkdir(parents=True, exist_ok=True)
-
     if problem == 'mo-cbo1':
         observational_samples = OrderedDict([('X1', []), ('X2', []), ('X3', []), ('X4', []), ('Y1', []), ('Y2', [])])
         graph = MO_CBO1()
 
-    if problem == 'mo-cbo2':
+    elif problem == 'mo-cbo2':
         observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('X4', []), ('Y1', []), ('Y2', [])])
         graph = MO_CBO2()
 
-    if problem == 'mo-cbo-health':
-        observational_samples = OrderedDict([('age', []), ('bmi', []), ('statin', []), ('aspirin', []), ('cancer', []), ('psa', []), ('control', [])])
+    elif problem == 'mo-cbo-health':
+        observational_samples = OrderedDict([('ci', []), ('bmr', []), ('height', []), ('age', []), ('weight', []), ('bmi', []), ('Y_statin', []), ('aspirin', []), ('cancer', []), ('Y_psa', [])])
         graph = Health()
 
-    if problem == 'mo-cbo3':
-        observational_samples = OrderedDict([('U', []), ('X1', []), ('X2', []), ('X3', []), ('Y1', []), ('Y2', []), ('Y3', []), ('control', [])])
-        graph = MO_CBO3()
+    elif problem == 'mo-cbo-credit':
+        observational_samples = OrderedDict([('X1', []), ('X2', []), ('X3', []), ('X4', []), ('Y1', []), ('X6', []), ('X7', []), ('Y2', [])])
+        graph = Credit()
 
+    elif problem == 'mo-cbo-econ':
+        graph = Econ()
+        observational_samples = OrderedDict([('X1', []), ('X2', []), ('X3', []), ('X4', []), ('X5', []), ('X6', []), ('X7', []), ('X8', []), ('Y1', []), ('Y2', [])])
 
     targets = graph.Y
     exploration_set = graph.get_exploration_sets()[args.exp_set]
@@ -62,7 +64,6 @@ def main(seed):
     observational_samples.to_pickle('./Data/' + str(args.problem) + f'/{args.exp_set}/{seed}/' + 'observations.pkl', protocol=4)
     
     interventional_data = [] 
-
     for index, variables in enumerate(exploration_set):
         interventional_data.append([])
         interventional_data[index].append(len(variables))
@@ -114,5 +115,7 @@ def main(seed):
 
 
 if __name__ == '__main__':
-    args = parser.parse_args()
-    main(args.seed)
+    for seed in range(0,10):
+        args = parser.parse_args()
+        args.seed = seed
+        main(args.seed)

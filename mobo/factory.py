@@ -10,9 +10,12 @@ Factory for importing different components of the MOBO framework by name
 '''
 
 def get_surrogate_model(name):
-    from .surrogate_model import GaussianProcess
+    from .surrogate_model import GaussianProcess, ThompsonSampling
     
-    surrogate_model = {'gp': GaussianProcess}
+    surrogate_model = {
+        'gp': GaussianProcess,
+        'ts': ThompsonSampling
+    }
 
     surrogate_model['default'] = GaussianProcess
 
@@ -20,9 +23,12 @@ def get_surrogate_model(name):
 
 
 def get_acquisition(name):
-    from .acquisition import IdentityFunc
+    from .acquisition import IdentityFunc, EI
 
-    acquisition = {'identity': IdentityFunc}
+    acquisition = {
+        'identity': IdentityFunc,
+        'ei': EI
+    }
 
     acquisition['default'] = IdentityFunc
 
@@ -30,9 +36,14 @@ def get_acquisition(name):
 
 
 def get_solver(name):
-    from .solver import ParetoDiscoverySolver
+    from .solver import NSGA2Solver, MOEADSolver, ParetoDiscoverySolver, ParEGOSolver
 
-    solver = {'discovery': ParetoDiscoverySolver}
+    solver = {
+        'nsga2': NSGA2Solver,
+        'discovery': ParetoDiscoverySolver,
+        'moead': MOEADSolver,
+        'parego': ParEGOSolver,
+    }
 
     solver['default'] = ParetoDiscoverySolver
 
@@ -40,11 +51,16 @@ def get_solver(name):
 
 
 def get_selection(name):
-    from .selection import CPS_Select
+    from .selection import HVI, DGEMOSelect, Random, MOEADSelect
 
-    selection = {'cps': CPS_Select}
+    selection = {
+        'hvi': HVI,
+        'dgemo': DGEMOSelect, 
+        'random': Random,
+        'moead': MOEADSelect,
+    }
 
-    selection['default'] = CPS_Select
+    selection['default'] = DGEMOSelect
 
     return selection[name]
 

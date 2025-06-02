@@ -11,28 +11,50 @@ from .mobo import MOBO
 High-level algorithm specifications by providing config
 '''
 
-class Causal_ParetoSelect(MOBO):
+class DGEMO(MOBO):
     '''
-    Causal ParetoSelect (CPS)
+    DGEMO
     '''
     config = {
         'surrogate': 'gp',
         'acquisition': 'identity',
         'solver': 'discovery',
-        'selection': 'cps',
+        'selection': 'dgemo',
     }
 
 
-'''
-Define new algorithms here
-'''
-
-
-class Custom(MOBO):
+class TSEMO(MOBO):
     '''
-    Totally rely on user arguments to specify each component
+    TSEMO
     '''
-    config = None
+    config = {
+        'surrogate': 'ts',
+        'acquisition': 'identity',
+        'solver': 'nsga2',
+        'selection': 'hvi',
+    }
+
+class ParEGO(MOBO):
+    '''
+    ParEGO
+    '''
+    config = {
+        'surrogate': 'gp',
+        'acquisition': 'ei',
+        'solver': 'parego',
+        'selection': 'random',
+    }
+
+class MOEAD_EGO(MOBO):
+    '''
+    MOEA/D-EGO
+    '''
+    config = {
+        'surrogate': 'gp',
+        'acquisition': 'ei',
+        'solver': 'moead',
+        'selection': 'moead',
+    }
 
 
 def get_algorithm(name):
@@ -40,7 +62,9 @@ def get_algorithm(name):
     Get class of algorithm by name
     '''
     algo = {
-        'cps': Causal_ParetoSelect,
-        'custom': Custom,
+        'dgemo': DGEMO,
+        'tsemo': TSEMO,
+        'moead-ego': MOEAD_EGO,
+        'parego': ParEGO
     }
     return algo[name]

@@ -8,6 +8,10 @@ from C_ParetoSelect import Causal_ParetoSelect
 
 
 def main(args, framework_args):
+
+    if args.exp_set == 'mo-cbo' and args.algo != 'dgemo':
+        raise NotImplementedError('Only dgemo is implemented for the mo-cbo algorithm.')
+
     # set global seed
     np.random.seed(args.seed)
 
@@ -27,7 +31,7 @@ def main(args, framework_args):
     Causal_ParetoSelect(args,framework_args, graph, exploration_set, costs, interventional_data)
 
 if __name__ == '__main__': 
-    for seed in range(0,10):
+    for seed in range(0,1):
         args, framework_args = get_args()
         args.seed = seed
         main(args, framework_args)

@@ -8,8 +8,24 @@ import numpy as np
 from .graph import GraphStructure
 from .health_CostFunctions import define_costs
 
+from ..causal_models.model import CausalDiagram
+from ..causal_models.where_do import MISs, bruteforce_POMISs
+
 
 class Health(GraphStructure):
+    def __init__(self):
+      super().__init__()
+      ci, bmr, height, age, weight, bmi, aspirin, cancer, Y_statin, Y_psa = 'ci', 'bmr', 'height', 'age', 'weight', 'bmi', 'aspirin', 'cancer', 'Y_statin', 'Y_psa'
+      self.G = CausalDiagram({'ci', 'bmr', 'height', 'age', 'weight', 'bmi', 'aspirin', 'cancer', 'Y_statin', 'Y_psa'}, 
+                         [(bmr, weight), (age, weight), (height, weight), (ci, weight), 
+                          (weight, bmi), (height, bmi),
+                          (age, aspirin), (bmi, aspirin), (age, Y_statin), (bmi, Y_statin),
+                          (age, cancer), (bmi, cancer), (aspirin, cancer), (Y_statin, cancer),
+                          (age, Y_psa), (bmi, Y_psa), (aspirin, Y_psa), (Y_statin, Y_psa), (cancer, Y_psa)
+                          ])
+      self.Y = [Y_statin, Y_psa]
+      self.X = [ci, weight, bmi, aspirin]
+
     
     def define_SEM(self):
         
@@ -41,11 +57,11 @@ class Health(GraphStructure):
         def f_statin(epsilon, age, bmi, **kwargs):
           return 1 / (1 + np.exp(-1*(-13.0 + 0.10*age + 0.20*bmi)))
 
-        def f_cancer(epsilon, age, bmi, aspirin, statin, **kwargs):
-          return 1 / (1 + np.exp(-1*(2.2 - 0.05*age + 0.01*bmi - 0.04*statin + 0.02*aspirin)))
+        def f_cancer(epsilon, age, bmi, aspirin, Y_statin, **kwargs):
+          return 1 / (1 + np.exp(-1*(2.2 - 0.05*age + 0.01*bmi - 0.04*Y_statin + 0.02*aspirin)))
 
-        def f_psa(epsilon, age, bmi, aspirin, statin, cancer, **kwargs):
-          return 6.8 + 0.04*age - 0.15*bmi - 0.60*statin + 0.55*aspirin + 1.0*cancer + np.random.normal(0, 0.4, 1)[0]
+        def f_psa(epsilon, age, bmi, aspirin, Y_statin, cancer, **kwargs):
+          return 6.8 + 0.04*age - 0.15*bmi - 0.60*Y_statin + 0.55*aspirin + 1.0*cancer + np.random.normal(0, 0.4, 1)[0]
         
 
         graph = OrderedDict ([
@@ -55,33 +71,24 @@ class Health(GraphStructure):
           ('age', f_age),
           ('weight', f_weight),
           ('bmi', f_bmi),
-          ('statin', f_statin),
+          ('Y_statin', f_statin),
           ('aspirin', f_aspirin),
           ('cancer', f_cancer),
-          ('psa', f_psa)
+          ('Y_psa', f_psa)
             ])
 
         return graph
     
 
-    def get_targets(self):
-        return ['statin', 'psa'] 
-    
-
     def get_exploration_sets(self):
       mo_cbo = [['bmi', 'aspirin']]
-      manipulative_variables = [['ci', 'weight', 'bmi', 'aspirin']]
+      manipulative_variables = [self.X]
 
       exploration_sets = {
           'mo-cbo': mo_cbo,
           'mobo': manipulative_variables
       }
       return exploration_sets
-    
-
-    def get_set_MOBO(self):
-      manipulative_variables = ['ci', 'weight', 'bmi', 'aspirin']
-      return manipulative_variables
     
 
     def get_interventional_ranges(self):

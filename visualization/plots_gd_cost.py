@@ -15,24 +15,24 @@ def calculate_metrics(args, problem_dir, true_front, exp_set, n_targets):
 
     # Determine the minimum number of iterations across all seeds
     min_n_iter = np.inf
-    for seed in range(0, 10):
+    for seed in range(0,9):
         args.seed = seed
-        experiment_log = pd.read_csv(f'{problem_dir}/{args.mode}/{args.exp_set}/{args.seed}/' + 'experiment_log.csv')[1:]
+        experiment_log = pd.read_csv(f'{problem_dir}/{args.exp_set}/{args.algo}/{args.seed}/' + 'experiment_log.csv')[1:]
         min_n_iter = min(min_n_iter, len(experiment_log))
 
     # Initialize arrays
-    gd = np.zeros((min_n_iter+1, 10))
-    igd = np.zeros((min_n_iter+1, 10))
-    costs = np.zeros((min_n_iter+1, 10))
+    gd = np.zeros((min_n_iter+1, 9))
+    igd = np.zeros((min_n_iter+1, 9))
+    costs = np.zeros((min_n_iter+1, 9))
 
-    for seed in range(0,10):
+    for seed in range(0,9):
         args.seed = seed
         cost = 0
 
         count: Dict[str, int] = {}
         all_pareto_points = []
 
-        experiment_log = pd.read_csv(f'{problem_dir}/{args.mode}/{args.exp_set}/{args.seed}/' + 'experiment_log.csv')
+        experiment_log = pd.read_csv(f'{problem_dir}/{args.exp_set}/{args.algo}/{args.seed}/' + 'experiment_log.csv')
 
         for iterID in range(0, min_n_iter+1):
 
@@ -40,7 +40,7 @@ def calculate_metrics(args, problem_dir, true_front, exp_set, n_targets):
                  # Before any iteration, go over all sets and get the initial Pareto points
                 intervention_sets = set(np.asarray((experiment_log['intervened_set']))[1:])
                 for i_set in intervention_sets:
-                    csv_folder = f'{problem_dir}/{args.mode}/{args.exp_set}/{args.seed}/{i_set}/'
+                    csv_folder = f'{problem_dir}/{args.exp_set}/{args.algo}/{args.seed}/{i_set}/'
                     paretoEval = pd.read_csv(csv_folder + 'ParetoFrontEvaluated.csv')
                     # Get the points from the Pareto front of the last iteration (i.e. the complete approximation)
                     points = paretoEval[paretoEval['iterID'] == iterID]
@@ -55,7 +55,7 @@ def calculate_metrics(args, problem_dir, true_front, exp_set, n_targets):
                 count[intervention_set] = count.get(intervention_set, 0) + 1
 
                 for i_set, n in count.items():
-                    csv_folder = f'{problem_dir}/{args.mode}/{args.exp_set}/{args.seed}/{i_set}/'
+                    csv_folder = f'{problem_dir}/{args.exp_set}/{args.algo}/{args.seed}/{i_set}/'
                     paretoEval = pd.read_csv(csv_folder + 'ParetoFrontEvaluated.csv')
             
                     # Get the points from the Pareto front of the last iteration (i.e. the complete approximation)
@@ -96,7 +96,7 @@ def main():
     for spine in plt.gca().spines.values():
         spine.set_linewidth(1.5)
 
-    for exp_set in ['mo-cbo', 'mobo']:
+    for exp_set in ['mobo']:
         gd, igd, costs = calculate_metrics(args, problem_dir, true_front, exp_set, n_targets)
 
         gd_avg, gd_std = np.mean(gd, axis=1), np.std(gd, axis=1)
@@ -147,7 +147,7 @@ def main():
     plt.rcParams['font.family'] = 'STIXGeneral'
     plt.legend(fontsize=40) 
     plt.tick_params(axis='both', which='major', labelsize=38)
-    plt.show()
+    #plt.show()
 
 
 if __name__ == '__main__':

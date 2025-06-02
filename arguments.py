@@ -14,20 +14,24 @@ def get_general_args(args=None):
     '''
     parser = ArgumentParser()
 
-    parser.add_argument('--problem', type=str, default='mo-cbo2', 
+    parser.add_argument('--problem', type=str, default='mo-cbo-credit', 
         help='optimization problem')
     parser.add_argument('--exp-set', type=str, default='mo-cbo', choices=['mo-cbo', 'mis', 'mobo'], 
         help='exploration set')
-    parser.add_argument('--type_cost', default = 1, type = int, help = 'cost structure')
+    parser.add_argument('--type_cost', default=1, type = int, help = 'cost structure')
     parser.add_argument('--n-init-sample-int', type=int, default=5, 
         help='number of initial interventional samples')
     parser.add_argument('--n-iter', type=int, default=100, 
         help='number of optimization iterations')
-    parser.add_argument('--mode', type=str, default='int_data', choices=['causal_prior', 'int_data'], 
-        help='which samples to do the initial iteration with')
+    parser.add_argument('--budget', default = 10000, type = int, help = 'interventional budget')
     
     parser.add_argument('--seed', type=int, default=0, 
         help='random seed')
+    
+    parser.add_argument('--algo', type=str, default='dgemo',
+        choices=['dgemo', 'parego', 'moead-ego', 'tsemo'],
+        help='type of algorithm to use with some predefined arguments, or custom arguments')
+
 
     args, _ = parser.parse_known_args(args)
     return args

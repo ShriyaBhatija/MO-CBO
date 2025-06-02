@@ -29,15 +29,15 @@ def cost_bmi_fix_different(intervention_value, **kwargs):
     return fix_cost
 
 def cost_weight_fix_different(intervention_value, **kwargs):
-    fix_cost = 2.
+    fix_cost = 3.
     return fix_cost
 
 def cost_ci_fix_different(intervention_value, **kwargs):
-    fix_cost = 8.
+    fix_cost = 1.
     return fix_cost
 
 def cost_aspirin_fix_different(intervention_value, **kwargs):
-    fix_cost = 5.
+    fix_cost = 1.
     return fix_cost
 
 
